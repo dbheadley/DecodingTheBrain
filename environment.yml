@@ -1,0 +1,16 @@
+name: decode_brain
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - scikit-image
+  - pip
+  - jupyter-book
+  - pip:
+    - notebook
+    - matplotlib
