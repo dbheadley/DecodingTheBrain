@@ -1,0 +1,19 @@
+{
+  "InstitutionAddress": "Polo III - Health Sciences Campus • Azinhaga Santa Comba, Celas • 3000-548 Coimbra | PORTUGAL ",
+  "InstitutionName": "University of Coimbra",
+  "InstitutionalDepartmentName": "CIBIT-ICNAS, iCBR, Faculty of Medicine",
+  "PowerLineFrequency": 50,
+  "ManufacturersModelName": "EEG acquired with 64-channels Quik-Cap, Neuroscan Compumedics. Pupillography acquired with iView X Hi-Speed 1250 system from SMI",
+  "TaskName": "passive",
+  "ECGChannelCount": 1,
+  "EEGChannelCount": 61,
+  "EOGChannelCount": 2,
+  "EEGReference": "between_Cz_and_CPz",
+  "RecordingType": "continuous",
+  "RecordingDuration": 258.08,
+  "SamplingFrequency": 500,
+  "SubjectArtefactDescription": "Bad channels = AF3 F6 ",
+  "Instructions": "Fixate the fixation cross in the centre of the screen and passively pay attention to the sound presented.",
+  "EMGChannelCount": 0,
+  "SoftwareFilters": "n/a"
+}
