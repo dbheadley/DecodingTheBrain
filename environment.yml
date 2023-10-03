@@ -1,19 +1,19 @@
 name: decode_brain
 channels:
   - defaults
-  - conda-forge
 dependencies:
-  - scikit-learn
-  - pip
-  - numpy
-  - python=3.9
   - scikit-image
-  - scipy
+  - scikit-learn
   - pandas
-  - mne
   - mne-base
+  - python=3.9
+  - numpy
+  - pip
+  - scipy
+  - openpyxl
+  - torchvision
+  - pytorch
   - pip:
     - notebook
     - matplotlib
     - mne-bids
-prefix: /Users/drewheadley/anaconda3/envs/decode_brain
