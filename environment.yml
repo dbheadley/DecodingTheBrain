@@ -18,3 +18,5 @@ dependencies:
     - matplotlib
     - mne-bids
     - torchviz
+    - nilearn
+    - nimare
