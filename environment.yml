@@ -1,0 +1,22 @@
+name: decode_brain
+channels:
+  - defaults
+dependencies:
+  - scikit-image
+  - scikit-learn
+  - pandas
+  - mne-base
+  - python=3.9
+  - numpy
+  - pip
+  - scipy
+  - openpyxl
+  - torchvision
+  - pytorch
+  - pip:
+    - notebook
+    - matplotlib
+    - mne-bids
+    - torchviz
+    - nilearn
+    - nimare
