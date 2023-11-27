@@ -22,7 +22,7 @@ def zscore(x, axis=None):
 
 
 # create function to epoch data
-def epoch_data(data, fs, event_t, pre_t, post_t):
+def epoch_data(data, event_idxs=None, pre_len=0, post_len=1):
     '''
     Epoch data around events
     
@@ -30,36 +30,37 @@ def epoch_data(data, fs, event_t, pre_t, post_t):
     ----------
     data : array
         Data to epoch. Can be N-dimensional, with last dimension corresponding to time
-    fs : int
-        Sampling rate of data
-    event_t : array
-        Array of event times in seconds
-    pre_t : float
-        Time in seconds to include before event time
-    post_t : float
-        Time in seconds to include after event time
+    event_idxs : array
+        Array of event times in samples. If None, return empty array
+    pre_len : float
+        Samples include before events. Default is 0
+    post_len : float
+        Samples to include after events. Default is 1
         
     Returns
     -------
+    rel_idxs : array
+        Array of event indices relative to the event_idx of the epoch
     epoched_data : array
         Data epoched around event times. Will have one additional dimension appended to the beginning,
         corresponding to the epoch number
 
     '''
-    # convert pre/post event times to samples
-    pre_len = int(pre_t*fs)
-    post_len = int(post_t*fs)
-    event_ind = np.round(event_t*fs).astype(int)
     
+    # if no event indices are provided, return empty array
+    if event_idxs is None:
+        return np.array([])
+
     # initialize epoched data array
-    epoched_data = np.zeros([event_t.size, *data.shape[:-1], pre_len+post_len])
+    epoched_data = np.zeros([event_idxs.size, *data.shape[:-1], pre_len+post_len])
+    rel_idxs = np.arange(-pre_len, post_len)
 
     # loop through events and epoch data
-    for i, event in enumerate(event_ind):
+    for i, event in enumerate(event_idxs):
         # indexing with '...,' means to take all indices in all dimensions except the last one
-        epoched_data[i] = data[..., (event-pre_len):(event+post_len)]
+        epoched_data[i] = data[..., event+rel_idxs]# (event-pre_len):(event+post_len)]
     
-    return epoched_data
+    return rel_idxs, epoched_data
 
 
 # plot time series data as stacked lines
