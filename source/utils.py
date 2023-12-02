@@ -51,6 +51,9 @@ def epoch_data(data, event_idxs=None, pre_len=0, post_len=1):
     if event_idxs is None:
         return np.array([])
 
+    # ensure event indices are a flattened numpy array of integers
+    event_idxs = np.array(event_idxs).reshape(-1,1).astype(int)
+
     # initialize epoched data array
     epoched_data = np.zeros([event_idxs.size, *data.shape[:-1], pre_len+post_len])
     rel_idxs = np.arange(-pre_len, post_len)

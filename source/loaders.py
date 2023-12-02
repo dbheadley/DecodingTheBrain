@@ -124,10 +124,11 @@ class EcogFingerData():
         event_ts : array_like
             Array of event times in seconds. If None, entire session is returned
         pre_t : float
-            Time before event to include in signal (in seconds). Default is 0.
+            Time before event to include in signal (in seconds). Default is 0. Overridden
+            if event_ts is None.
         post_t : float
             Time after event to include in signal (in seconds). Default is None, which
-            returns a single time sample at event_times.
+            returns a single time sample at event_times. Overridden if event_ts is None.
 
             
         Returns
@@ -153,16 +154,6 @@ class EcogFingerData():
         if freq_max is None: # if no max frequency specified, use highest
             freq_max = self.spec_f[-1]
 
-        if event_ts is None: # if no event times specified, use entire session
-            event_idxs = int(0)
-            pre_len = int(0)
-            post_len = self.spec.shape[2]
-        else:
-            # get differences between event times and spectrogram times
-            event_diffs = np.abs(event_ts.reshape(-1,1) - self.spec_t.reshape(1,-1))
-            # get indices of event times in spectrogram
-            event_idxs = np.argmin(event_diffs, axis=1)
-
         if post_t is None: # if no post time specified, use single time sample
             post_len = 1
         else:
@@ -172,6 +163,16 @@ class EcogFingerData():
             pre_len = 0
         else:
             pre_len = int(pre_t*self.spec_fs)
+
+        if event_ts is None: # if no event times specified, use entire session
+            event_idxs = int(0)
+            pre_len = int(0)
+            post_len = self.spec.shape[2]
+        else:
+            # get differences between event times and spectrogram times
+            event_diffs = np.abs(event_ts.reshape(-1,1) - self.spec_t.reshape(1,-1))
+            # get indices of event times in spectrogram
+            event_idxs = np.argmin(event_diffs, axis=1)
 
         freq_idxs = np.where((self.spec_f >= freq_min) & (self.spec_f <= freq_max))[0]
         rel_idxs, spec = epoch_data(self.spec[chans, freq_idxs[np.newaxis,:], :], event_idxs=event_idxs,

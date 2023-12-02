@@ -1,6 +1,55 @@
 import torch
 import numpy as np
+from .loaders import EcogFingerData
+from sklearn.metrics import balanced_accuracy_score
 from torch.utils.data import Dataset, DataLoader
+
+def format_ecogfinger_data(data=None, finger='thumb'):
+    """Format ECoGFinger data for decoding.
+    
+    Parameters
+    ----------
+    data : EcogFingerData
+        Data to format.
+    finger : str
+        Finger to decode.
+
+    Returns
+    -------
+    X : array, shape (n_epochs, n_features)
+        Features for each epoch.
+    y : array, shape (n_epochs,)
+        Labels for each epoch.
+    """
+
+    # get flexion event times
+    flex_events = data.detect_flex_onsets(finger)
+
+    # get movement and null spec epochs, 1 s after each thumb flexion event
+    _,_,flexes = data.get_spec(event_ts=flex_events, pre_t=0.2, post_t=0.2, freq_max=200)
+    _,_,nulls = data.get_spec(event_ts=flex_events-1, pre_t=0.2, post_t=0.2, freq_max=200)
+
+    # mean power across time for each epoch
+    flexes = np.mean(flexes, axis=3)
+    nulls = np.mean(nulls, axis=3)
+
+    # z-score each frequency and channel
+    _,_,total_data = data.get_spec(freq_max=200)
+    z_mean = np.mean(total_data, axis=3).squeeze() # squeeze to remove singleton epoch dimension
+    z_std = np.std(total_data, axis=3).squeeze() 
+    flexes = (flexes - z_mean) / z_std
+    nulls = (nulls - z_mean) / z_std
+
+    # create labels for thumb movements and nulls
+    lbls = np.hstack((np.ones(flexes.shape[0]), np.zeros(nulls.shape[0])))
+
+    # stack flexes and thumb_nulls along first dimension
+    feats = np.vstack((flexes, nulls))
+
+    # reformat features so that each trial is a row and each column is a feature
+    feats = feats.reshape(feats.shape[0],-1)
+
+    return feats, lbls
 
 class ECoGData(Dataset):
     def __init__(self, ecog_feat, ecog_lbl, transform=None, target_transform=None):
@@ -57,8 +106,8 @@ class LogRegPT():
         #     Learning rate for gradient descent
         # epochs : int, optional
         #     Number of epochs to train for
-        # n_folds : int, optional
-        #     Number of folds for cross-validation
+        # train_prop : float, optional
+        #     Proportion of data to use for training
         # batch_size : int, optional
         #     Number of samples per batch
         # lam : float, optional
@@ -69,9 +118,11 @@ class LogRegPT():
         self.train_prop = train_prop
         self.batch_size = batch_size
         self.lam = lam
-        self.logreg_ = None
+        self._logreg = None
+        self.train_idxs = None
+        self.test_idxs = None
     
-    def create_logreg_(self, input_dim):
+    def _create_logreg(self, input_dim):
         # Parameters
         # ----------
         # input_dim : int
@@ -90,15 +141,15 @@ class LogRegPT():
             lin_layer,
             sig_layer
         )
-        self.logreg_ = logreg
+        self._logreg = logreg
     
-    def create_loss_(self):
+    def _create_loss(self):
         # initialize loss function
         return torch.nn.BCELoss(reduction='mean')
 
-    def create_optim_(self):
+    def _create_optim(self):
         # initialize optimizer
-        return torch.optim.SGD(self.logreg_.parameters(), lr=self.lr)
+        return torch.optim.SGD(self._logreg.parameters(), lr=self.lr)
     
     def fit(self, X, y):
         # Parameters
@@ -117,41 +168,41 @@ class LogRegPT():
 
         # initialize model and fitting
         feat_num = X.shape[1]
-        self.create_logreg_(feat_num)
-        optim = self.create_optim_()
-        loss_fn = self.create_loss_()
+        self._create_logreg(feat_num)
+        optim = self._create_optim()
+        loss_fn = self._create_loss()
         
         # split data into train and test sets
         train_num = int(self.train_prop*X.shape[0])
-        train_idxs = np.random.permutation(X.shape[0])[:train_num]
-        test_idxs = np.setdiff1d(np.arange(X.shape[0]), train_idxs)
+        self.train_idxs = np.random.permutation(X.shape[0])[:train_num]
+        self.test_idxs = np.setdiff1d(np.arange(X.shape[0]), self.train_idxs)
 
-        if train_idxs.size < self.batch_size:
+        if self.train_idxs.size < self.batch_size:
             raise ValueError('Number of training samples smaller than batch size')
         
         # create data loaders for train and test sets
-        train_ds = ECoGData(X[train_idxs,:], y[train_idxs])
+        train_ds = ECoGData(X[self.train_idxs,:], y[self.train_idxs])
         train_dl = DataLoader(train_ds, batch_size=self.batch_size, shuffle=True)
-        test_ds = ECoGData(X[test_idxs,:], y[test_idxs])
+        test_ds = ECoGData(X[self.test_idxs,:], y[self.test_idxs])
         
         # train model
-        self.logreg_.train()
+        self._logreg.train()
         for epoch in range(self.epochs):
             for feat, lbl in train_dl:
                 optim.zero_grad()
-                pred = self.logreg_(feat)
+                pred = self._logreg(feat)
                 loss = loss_fn(pred, lbl.float().reshape(-1,1))
 
                 # add L1 regularization
-                loss += self.lam*torch.sum(torch.abs(self.logreg_[0].weight)) 
+                loss += self.lam*torch.sum(torch.abs(self._logreg[0].weight)) 
                 
                 loss.backward()
                 optim.step()
             
         # get predictions for test set
-        self.logreg_.eval()
+        self._logreg.eval()
         with torch.no_grad():
-            pred = self.logreg_(torch.tensor(test_ds.ecog_feat.astype(np.float32)))
+            pred = self._logreg(torch.tensor(test_ds.ecog_feat.astype(np.float32)))
             pred = pred.squeeze().numpy()
             pred[pred>=0.5] = 1
             pred[pred<0.5] = 0
@@ -159,7 +210,7 @@ class LogRegPT():
 
         # get predictions for train set
         with torch.no_grad():
-            pred = self.logreg_(torch.tensor(train_ds.ecog_feat.astype(np.float32)))
+            pred = self._logreg(torch.tensor(train_ds.ecog_feat.astype(np.float32)))
             pred = pred.squeeze().numpy()
             pred[pred>=0.5] = 1
             pred[pred<0.5] = 0
@@ -168,6 +219,30 @@ class LogRegPT():
         # return test and train scores for evaluating model generalization
         return score_test*100, score_train*100
 
+    def predict_proba(self, X):
+        # Parameters
+        # ----------
+        # X : array-like
+        #     Array of features, where each row is a trial and each column is a feature
+
+        # Returns
+        # -------
+        # pred : array-like
+        #     Predicted probability of each sample being in class 1
+
+        if self._logreg is None:
+            raise ValueError('Logistic regression model has not been fit yet.')
+        
+        self._logreg.eval()
+
+        X = torch.tensor(X.astype(np.float32))
+        
+        with torch.no_grad():
+            pred = self._logreg(X)
+            pred = pred.squeeze().numpy()
+
+        return pred
+    
     def predict(self, X):
         # Parameters
         # ----------
@@ -179,15 +254,15 @@ class LogRegPT():
         # pred : array-like
         #     Predicted labels
 
-        if self.logreg_ is None:
+        if self._logreg is None:
             raise ValueError('Logistic regression model has not been fit yet.')
         
-        self.logreg_.eval()
+        self._logreg.eval()
 
         X = torch.tensor(X.astype(np.float32))
         
         with torch.no_grad():
-            pred = self.logreg_(X)
+            pred = self._logreg(X)
             pred = pred.squeeze().numpy()
             pred[pred>=0.5] = 1
             pred[pred<0.5] = 0
@@ -199,12 +274,12 @@ class LogRegPT():
         # coefs : array-like
         #     Coefficients for each feature
 
-        if self.logreg_ is None:
+        if self._logreg is None:
             raise ValueError('Logistic regression model has not been fit yet.')
         
-        self.logreg_.eval()
+        self._logreg.eval()
         with torch.no_grad():
-            coefs = self.logreg_[0].weight.numpy().squeeze()
+            coefs = self._logreg[0].weight.numpy().squeeze()
         return coefs
     
     def get_intercept(self):
@@ -213,10 +288,10 @@ class LogRegPT():
         # intercept : float
         #     Intercept value
 
-        if self.logreg_ is None:
+        if self._logreg is None:
             raise ValueError('Logistic regression model has not been fit yet.')
         
-        self.logreg_.eval()
+        self._logreg.eval()
         with torch.no_grad():
-            intercept = self.logreg_[0].bias.numpy().squeeze()
+            intercept = self._logreg[0].bias.numpy().squeeze()
         return intercept
