@@ -58,7 +58,7 @@ class ECoGData(Dataset):
         # ecog_feat : array-like
         #     Array of features, where each row is a trial and each column is a feature
         # ecog_lbl : array-like
-        #     Array of labels, where each element is the label for the corresponding row in ecog_feat
+        #     Array of labels, where each row is dummy coded indicator of finger for the corresponding row in ecog_feat
         # transform : callable, optional
         #     Optional transform to be applied to the ecog data
         # target_transform : callable, optional
@@ -143,9 +143,26 @@ class LogRegPT():
         )
         self._logreg = logreg
     
-    def _create_loss(self):
-        # initialize loss function
-        return torch.nn.BCELoss(reduction='mean')
+    def loss(self, pred, lbl):
+        # Parameters
+        # ----------
+        # pred : array-like
+        #     Predicted probability of each sample being in class 1
+        # lbl : array-like
+        #     Array of labels, where each element is the label for the corresponding row in X
+
+        # Returns
+        # -------
+        # loss : float
+        #     Loss value
+
+        loss_fn = torch.nn.BCELoss(reduction='mean')
+
+        # calculate loss
+        loss = loss_fn(pred, lbl)
+        loss += self.lam*torch.sum(torch.abs(self._logreg[0].weight)) # add L1 regularization
+
+        return loss
 
     def _create_optim(self):
         # initialize optimizer
@@ -170,7 +187,6 @@ class LogRegPT():
         feat_num = X.shape[1]
         self._create_logreg(feat_num)
         optim = self._create_optim()
-        loss_fn = self._create_loss()
         
         # split data into train and test sets
         train_num = int(self.train_prop*X.shape[0])
@@ -191,33 +207,21 @@ class LogRegPT():
             for feat, lbl in train_dl:
                 optim.zero_grad()
                 pred = self._logreg(feat)
-                loss = loss_fn(pred, lbl.float().reshape(-1,1))
-
-                # add L1 regularization
-                loss += self.lam*torch.sum(torch.abs(self._logreg[0].weight)) 
-                
+                loss = self.loss(pred, lbl.float())
                 loss.backward()
                 optim.step()
-            
-        # get predictions for test set
-        self._logreg.eval()
-        with torch.no_grad():
-            pred = self._logreg(torch.tensor(test_ds.ecog_feat.astype(np.float32)))
-            pred = pred.squeeze().numpy()
-            pred[pred>=0.5] = 1
-            pred[pred<0.5] = 0
-            score_test = balanced_accuracy_score(test_ds.ecog_lbl, pred)
+        
+        
+        # get predictions for train and test sets
+        if self.train_prop < 1.0:
+            score_test = self.score(test_ds.ecog_feat, test_ds.ecog_lbl)
+        else:
+            score_test = np.nan
 
-        # get predictions for train set
-        with torch.no_grad():
-            pred = self._logreg(torch.tensor(train_ds.ecog_feat.astype(np.float32)))
-            pred = pred.squeeze().numpy()
-            pred[pred>=0.5] = 1
-            pred[pred<0.5] = 0
-            score_train = balanced_accuracy_score(train_ds.ecog_lbl, pred)
+        score_train = self.score(train_ds.ecog_feat, train_ds.ecog_lbl)
         
         # return test and train scores for evaluating model generalization
-        return score_test*100, score_train*100
+        return score_test, score_train
 
     def predict_proba(self, X):
         # Parameters
@@ -295,3 +299,20 @@ class LogRegPT():
         with torch.no_grad():
             intercept = self._logreg[0].bias.numpy().squeeze()
         return intercept
+    
+    def score(self, X, y):
+        # Parameters
+        # ----------
+        # X : array-like
+        #     Array of features, where each row is a trial and each column is a feature
+        # y : array-like
+        #     Array of labels, where each row is the dummy coded label for the corresponding row in X
+
+        # Returns
+        # -------
+        # score : float
+        #     Balanced accuracy score
+
+        pred = self.predict(X)
+        score = balanced_accuracy_score(y, pred)
+        return score*100
