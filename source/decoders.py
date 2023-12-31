@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from .loaders import EcogFingerData
 from sklearn.metrics import balanced_accuracy_score
+from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import Dataset, DataLoader
 
 def format_ecogfinger_data(data=None, finger='thumb'):
@@ -41,7 +42,7 @@ def format_ecogfinger_data(data=None, finger='thumb'):
     nulls = (nulls - z_mean) / z_std
 
     # create labels for thumb movements and nulls
-    lbls = np.hstack((np.ones(flexes.shape[0]), np.zeros(nulls.shape[0])))
+    lbls = np.hstack((np.ones(flexes.shape[0]), np.zeros(nulls.shape[0])))[:, np.newaxis]
 
     # stack flexes and thumb_nulls along first dimension
     feats = np.vstack((flexes, nulls))
@@ -189,9 +190,11 @@ class LogRegPT():
         optim = self._create_optim()
         
         # split data into train and test sets
-        train_num = int(self.train_prop*X.shape[0])
-        self.train_idxs = np.random.permutation(X.shape[0])[:train_num]
-        self.test_idxs = np.setdiff1d(np.arange(X.shape[0]), self.train_idxs)
+        #train_num = int(self.train_prop*X.shape[0])
+        strat = StratifiedKFold(n_splits=int(1/(1-self.train_prop)), shuffle=True)
+        self.train_idxs, self.test_idxs = strat.split(X, y).__next__()
+        #self.train_idxs = np.random.permutation(X.shape[0])[:train_num]
+        #self.test_idxs = np.setdiff1d(np.arange(X.shape[0]), self.train_idxs)
 
         if self.train_idxs.size < self.batch_size:
             raise ValueError('Number of training samples smaller than batch size')
