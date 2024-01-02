@@ -100,7 +100,7 @@ class ECoGData(Dataset):
         return feat, lbl
     
 class LogRegPT():
-    def __init__(self, lr=0.01, epochs=100, train_prop=0.8, batch_size=5, lam=0.0):
+    def __init__(self, lr=0.01, epochs=100, train_prop=0.8, batch_size=5, lam=0.0, shuffle_seed=None):
         # Parameters
         # ----------
         # lr : float, optional
@@ -113,6 +113,10 @@ class LogRegPT():
         #     Number of samples per batch
         # lam : float, optional
         #     Regularization parameter for L1 norm
+        # shuffle_seed : int, optional
+        #     Seed for shuffling data before splitting into train and test sets
+        #     Ensures same train and test sets are used across models. 
+        #     Default is None, which will result in different train and test sets for each model.
 
         self.lr = lr
         self.epochs = epochs
@@ -122,6 +126,7 @@ class LogRegPT():
         self._logreg = None
         self.train_idxs = None
         self.test_idxs = None
+        self._shuffle_seed = shuffle_seed
     
     def _create_logreg(self, input_dim):
         # Parameters
@@ -190,11 +195,8 @@ class LogRegPT():
         optim = self._create_optim()
         
         # split data into train and test sets
-        #train_num = int(self.train_prop*X.shape[0])
-        strat = StratifiedKFold(n_splits=int(1/(1-self.train_prop)), shuffle=True)
+        strat = StratifiedKFold(n_splits=int(1/(1-self.train_prop)), shuffle=True, random_state=self._shuffle_seed)
         self.train_idxs, self.test_idxs = strat.split(X, y).__next__()
-        #self.train_idxs = np.random.permutation(X.shape[0])[:train_num]
-        #self.test_idxs = np.setdiff1d(np.arange(X.shape[0]), self.train_idxs)
 
         if self.train_idxs.size < self.batch_size:
             raise ValueError('Number of training samples smaller than batch size')
