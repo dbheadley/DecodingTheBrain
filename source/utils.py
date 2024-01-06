@@ -9,7 +9,7 @@ def zscore(x, axis=None):
     Parameters
     ----------
     x : array
-        Data to z-score. Can be N-dimensional, with last dimension corresponding to time
+        Data to z-score. Can be N-dimensional.
     axis : int, optional
         Axis along which to z-score data. If None, z-score over all dimensions
     
