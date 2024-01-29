@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 # create zscore function with dimension parameter
@@ -97,3 +98,28 @@ def plot_stacked_signals(sig, t, sep=5, ax=None, **kwargs):
     ax.set_xlabel('Time (s)')
     ax.legend()
     return ax
+
+# get dataframe of spike times from Allen Institute cache
+def spikes_to_df(sess):
+    """
+    Converts spike_times from session object to a dataframe
+
+    Parameters
+    ----------
+    sess: session object
+
+    Returns
+    -------
+    spikes: dataframe of spike times
+    """
+
+    # get all spike times in a session
+    spike_times = sess.spike_times
+
+    # Create a dataframe from dictionary of spike_times and restrict to units in VISp
+    spikes = pd.Series(spike_times) # convert to series since we only have one column of data right now
+    spikes.index.name = 'unit_id' # name the index column, same as the index column in units_visp
+    spikes.name = 'times' # name the data column
+    spikes = spikes.to_frame() # convert to dataframe so we can add additional columns later
+
+    return spikes
