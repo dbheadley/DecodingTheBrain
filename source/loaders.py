@@ -215,6 +215,17 @@ class EcogFingerData():
         # 4. combine events spaced too closely together
         events = sn.binary_closing(events, structure=np.ones([1,max_spacing]))
         
+        # 5. for each flexion epoch, keep only the channel with the largest amplitude
+        epochs = np.any(events, axis=0).astype(int)
+        epochs = np.concatenate(([0], epochs, [0])) # pad with False
+        onsets = np.where(np.diff(epochs) == 1)[0]+1
+        offsets = np.where(np.diff(epochs) == -1)[0]+1
+
+        for onset, offset in zip(onsets, offsets):
+            max_chan = np.argmax(np.mean(z_sig[:,onset:offset], axis=1))
+            events[:, onset:offset] = 0
+            events[max_chan, onset:offset] = 1
+
         return events.astype(int) # convert to int for numpy operations
 
     def detect_flex_onsets(self, finger='thumb', **kwargs):
