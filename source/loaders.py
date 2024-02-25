@@ -83,7 +83,7 @@ class EcogFingerData():
         
         if chans is None: # if no channels specified, use all
             chans = np.arange(self._ch_num).reshape(-1,1)
-        else: # otherwise convert, or ensure, it is a numpy array
+        else:
             chans = np.array(chans).reshape(-1,1)
         
         if event_times is None: # if no event times specified, use entire session
@@ -124,11 +124,10 @@ class EcogFingerData():
         event_ts : array_like
             Array of event times in seconds. If None, entire session is returned
         pre_t : float
-            Time before event to include in signal (in seconds). Default is 0. Overridden
-            if event_ts is None.
+            Time before event to include in signal (in seconds). Default is 0.
         post_t : float
             Time after event to include in signal (in seconds). Default is None, which
-            returns a single time sample at event_times. Overridden if event_ts is None.
+            returns a single time sample at event_times.
 
             
         Returns
@@ -144,25 +143,20 @@ class EcogFingerData():
         
 
         if chans is None: # if no channels specified, use all
-            chans = np.arange(self._ch_num).reshape(-1,1)
+            chans = np.arange(self._ch_num).flatten()
         else: # otherwise convert, or ensure, it is a numpy array
-            chans = np.array(chans).reshape(-1,1)
+            chans = np.array(chans).flatten()
 
         if freq_min is None: # if no min frequency specified, use lowest
-            freq_min = self.spec_f[0]
+            freq_min_idx = 0
+        else:
+            freq_min_idx = np.where(self.spec_f >= freq_min)[0][0]
+
 
         if freq_max is None: # if no max frequency specified, use highest
-            freq_max = self.spec_f[-1]
-
-        if post_t is None: # if no post time specified, use single time sample
-            post_len = 1
+            freq_max_idx = len(self.spec_f) 
         else:
-            post_len = int(post_t*self.spec_fs)
-
-        if pre_t is None: # if no pre time specified, start at event time
-            pre_len = 0
-        else:
-            pre_len = int(pre_t*self.spec_fs)
+            freq_max_idx = np.where(self.spec_f <= freq_max)[0][-1]
 
         if event_ts is None: # if no event times specified, use entire session
             event_idxs = int(0)
@@ -174,17 +168,26 @@ class EcogFingerData():
             # get indices of event times in spectrogram
             event_idxs = np.argmin(event_diffs, axis=1)
 
-        freq_idxs = np.where((self.spec_f >= freq_min) & (self.spec_f <= freq_max))[0]
-        rel_idxs, spec = epoch_data(self.spec[chans, freq_idxs[np.newaxis,:], :], event_idxs=event_idxs,
+        if post_t is None: # if no post time specified, use single time sample
+            post_len = 1
+        else:
+            post_len = int(post_t*self.spec_fs)
+
+        if pre_t is None: # if no pre time specified, start at event time
+            pre_len = 0
+        else:
+            pre_len = int(pre_t*self.spec_fs)
+        
+        rel_idxs, spec = epoch_data(self.spec[chans, freq_min_idx:freq_max_idx, :], event_idxs=event_idxs,
                             pre_len=pre_len, post_len=post_len)
 
-        f = self.spec_f[freq_idxs]
+        f = self.spec_f[freq_min_idx:freq_max_idx]
         rel_t = rel_idxs/self.spec_fs
 
         return f, rel_t, spec
 
     
-    def detect_flex_events(self, thresh=2, min_duration=200, max_spacing=500):
+    def detect_flex_events(self, thresh=1.5, min_duration=500, max_spacing=500):
         """
         Detects events in a flex signal.
         
@@ -209,11 +212,11 @@ class EcogFingerData():
         # 2. detect when signal crosses a threshold
         events = z_sig > thresh
 
-        # 3. remove events shorter than min duration
-        events = sn.binary_opening(events, structure=np.ones([1,min_duration]))
-
-        # 4. combine events spaced too closely together
+        # 3. combine events spaced too closely together
         events = sn.binary_closing(events, structure=np.ones([1,max_spacing]))
+
+        # 4. remove events shorter than min duration
+        events = sn.binary_opening(events, structure=np.ones([1,min_duration]))
         
         # 5. for each flexion epoch, keep only the channel with the largest amplitude
         epochs = np.any(events, axis=0).astype(int)
