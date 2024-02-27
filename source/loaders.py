@@ -158,16 +158,6 @@ class EcogFingerData():
         else:
             freq_max_idx = np.where(self.spec_f <= freq_max)[0][-1]
 
-        if event_ts is None: # if no event times specified, use entire session
-            event_idxs = int(0)
-            pre_len = int(0)
-            post_len = self.spec.shape[2]
-        else:
-            # get differences between event times and spectrogram times
-            event_diffs = np.abs(event_ts.reshape(-1,1) - self.spec_t.reshape(1,-1))
-            # get indices of event times in spectrogram
-            event_idxs = np.argmin(event_diffs, axis=1)
-
         if post_t is None: # if no post time specified, use single time sample
             post_len = 1
         else:
@@ -177,6 +167,16 @@ class EcogFingerData():
             pre_len = 0
         else:
             pre_len = int(pre_t*self.spec_fs)
+            
+        if event_ts is None: # if no event times specified, use entire session
+            event_idxs = int(0)
+            pre_len = int(0)
+            post_len = self.spec.shape[2]
+        else:
+            # get differences between event times and spectrogram times
+            event_diffs = np.abs(event_ts.reshape(-1,1) - self.spec_t.reshape(1,-1))
+            # get indices of event times in spectrogram
+            event_idxs = np.argmin(event_diffs, axis=1)
         
         rel_idxs, spec = epoch_data(self.spec[chans, freq_min_idx:freq_max_idx, :], event_idxs=event_idxs,
                             pre_len=pre_len, post_len=post_len)
