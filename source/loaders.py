@@ -82,9 +82,9 @@ class EcogFingerData():
         """
         
         if chans is None: # if no channels specified, use all
-            chans = np.arange(self._ch_num).reshape(-1,1)
+            chans = np.arange(self._ch_num).flatten()
         else:
-            chans = np.array(chans).reshape(-1,1)
+            chans = np.array(chans).flatten()
         
         if event_times is None: # if no event times specified, use entire session
             event_idxs = int(0)
