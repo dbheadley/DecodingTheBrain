@@ -5,7 +5,7 @@ from sklearn.metrics import balanced_accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import Dataset, DataLoader
 
-def format_ecogfinger_data(data=None, finger='thumb'):
+def format_ecogfinger_data(data=None, flex_events=None, **kwargs):
     """Format ECoGFinger data for decoding.
     
     Parameters
@@ -14,6 +14,11 @@ def format_ecogfinger_data(data=None, finger='thumb'):
         Data to format.
     finger : str
         Finger to decode.
+    flex_events : array
+        Flexion event times
+    kwargs : dict
+        Additional keyword arguments to pass to data.get_spec.
+
 
     Returns
     -------
@@ -22,9 +27,6 @@ def format_ecogfinger_data(data=None, finger='thumb'):
     y : array, shape (n_epochs,)
         Labels for each epoch.
     """
-
-    # get flexion event times
-    flex_events = data.detect_flex_onsets(finger)
 
     # get movement and null spec epochs, 1 s after each thumb flexion event
     _,_,flexes = data.get_spec(event_ts=flex_events, pre_t=0.2, post_t=0.2, freq_max=200)
@@ -36,13 +38,14 @@ def format_ecogfinger_data(data=None, finger='thumb'):
 
     # z-score each frequency and channel
     _,_,total_data = data.get_spec(freq_max=200)
+    
     z_mean = np.mean(total_data, axis=3).squeeze() # squeeze to remove singleton epoch dimension
     z_std = np.std(total_data, axis=3).squeeze() 
     flexes = (flexes - z_mean) / z_std
     nulls = (nulls - z_mean) / z_std
 
     # create labels for thumb movements and nulls
-    lbls = np.hstack((np.ones(flexes.shape[0]), np.zeros(nulls.shape[0])))[:, np.newaxis]
+    lbls = np.hstack((np.ones(flexes.shape[0]), np.zeros(nulls.shape[0])))
 
     # stack flexes and thumb_nulls along first dimension
     feats = np.vstack((flexes, nulls))
@@ -92,7 +95,7 @@ class ECoGData(Dataset):
         #     Trial label for the selected sample
         
         feat = self.ecog_feat[idx].astype(np.float32) # get the ECoG data for the selected sample
-        lbl = self.ecog_lbl[idx] #.astype(np.float32).reshape(-1,1) # get the trial label for the selected sample
+        lbl = self.ecog_lbl[idx, np.newaxis] #.astype(np.float32).reshape(-1,1) # get the trial label for the selected sample
         if self.transform is not None: # apply the transform to the ECoG data
             feat = self.transform(feat)
         if self.target_transform is not None: # apply the transform to the trial label
