@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.special import factorial
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -98,3 +99,29 @@ def plot_stacked_signals(sig, t, sep=5, ax=None, **kwargs):
     ax.set_xlabel('Time (s)')
     ax.legend()
     return ax
+
+
+def poisson_pdf(k, lamb):
+    """
+    Computes the Poisson probability mass function
+
+    Parameters
+    ----------
+    k : array
+        Array of counts to evaluate the Poisson PMF
+    lamb : float
+        Poisson parameter, mean number of counts
+
+    Returns
+    -------
+    pdf : array
+        Array of Poisson probabilities
+    """
+
+    # ensure k is an integer
+    k = k.astype(int)
+
+    # compute the Poisson probability mass function
+    pdf = (np.power(lamb,k)*np.exp(-lamb)) / factorial(k)
+
+    return pdf
