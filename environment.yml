@@ -13,6 +13,7 @@ dependencies:
   - torchvision
   - pytorch
   - h5py
+  - ffmpeg
   - pip:
     - notebook
     - matplotlib
@@ -20,6 +21,6 @@ dependencies:
     - torchviz
     - nilearn
     - nimare
-    - allensdk
+#    - allensdk
     - threadpoolctl==3.1.0
     - quarto
