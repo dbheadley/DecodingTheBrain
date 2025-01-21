@@ -1,0 +1,22 @@
+project:
+  type: website
+  render:
+    - Week1.qmd
+  output-dir: docs
+
+website:
+  title: "Decoding The Brain"
+  navbar:
+    background: primary
+    left:
+      - href: index.qmd
+        text: Home
+      - Week1.qmd
+      - about.qmd
+
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true

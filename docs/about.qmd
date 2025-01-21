@@ -1,0 +1,5 @@
+---
+title: "About"
+---
+
+These are the course notes for Decoding the Brain (21:219:470)
