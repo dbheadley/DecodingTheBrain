@@ -2,6 +2,7 @@ project:
   type: website
   render:
     - Week1.qmd
+    - Week2.qmd
   output-dir: docs
 
 website:
@@ -12,6 +13,7 @@ website:
       - href: index.qmd
         text: Home
       - Week1.qmd
+      - Week2.qmd
       - about.qmd
 
 
