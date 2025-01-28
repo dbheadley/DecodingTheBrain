@@ -5,7 +5,57 @@ from sklearn.metrics import balanced_accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import Dataset, DataLoader
 
-def format_ecogfinger_data(data=None, flex_events=None, **kwargs):
+def format_ecogfinger_data_raw(data=None, flex_events=None, **kwargs):
+    """Format ECoGFinger data for decoding.
+    
+    Parameters
+    ----------
+    data : EcogFingerData
+        Data to format.
+    finger : str
+        Finger to decode.
+    flex_events : array
+        Flexion event times
+    kwargs : dict
+        Additional keyword arguments to pass to data.get_spec.
+
+
+    Returns
+    -------
+    X : array, shape (n_epochs, n_features)
+        Features for each epoch.
+    y : array, shape (n_epochs,)
+        Labels for each epoch.
+    """
+
+    # get movement and null spec epochs, 1 s after each thumb flexion event
+    _,_,flexes = data.get_spec(event_ts=flex_events, pre_t=0.2, post_t=0.2, freq_max=200)
+    _,_,nulls = data.get_spec(event_ts=flex_events-1, pre_t=0.2, post_t=0.2, freq_max=200)
+
+    # mean power across time for each epoch
+    flexes = np.mean(flexes, axis=3)
+    nulls = np.mean(nulls, axis=3)
+
+    # z-score each frequency and channel
+    _,_,total_data = data.get_spec(freq_max=200)
+    
+    z_mean = np.mean(total_data, axis=3).squeeze() # squeeze to remove singleton epoch dimension
+    z_std = np.std(total_data, axis=3).squeeze() 
+    flexes = (flexes - z_mean) / z_std
+    nulls = (nulls - z_mean) / z_std
+
+    # create labels for thumb movements and nulls
+    lbls = np.hstack((np.ones(flexes.shape[0]), np.zeros(nulls.shape[0])))
+
+    # stack flexes and thumb_nulls along first dimension
+    feats = np.vstack((flexes, nulls))
+
+    # reformat features so that each trial is a row and each column is a feature
+    feats = feats.reshape(feats.shape[0],-1)
+
+    return feats, lbls
+
+def format_ecogfinger_data_spec(data=None, flex_events=None, **kwargs):
     """Format ECoGFinger data for decoding.
     
     Parameters

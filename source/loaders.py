@@ -1,8 +1,9 @@
 import os.path as op
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
-from scipy.signal import spectrogram
+from scipy.signal import spectrogram, convolve, butter, filtfilt, iirnotch, find_peaks
 import scipy.ndimage as sn
 from nilearn import plotting
 from nimare import utils
@@ -290,3 +291,219 @@ class EcogFingerData():
     
 
 
+class EEG:
+    def __init__(self, eeg_file, chan_file):
+        """
+        A class for loading and plotting EEG data
+
+        Parameters
+        ----------
+        eeg_file : str, path to the .set file
+        chan_file : str, path to the _channels.tsv file
+        """
+
+        # load the eeg data
+        self._eeg = loadmat(eeg_file)
+        data = self._eeg['data']
+        self.srate = self._eeg['srate'][0,0]
+        self.data = data
+        self.nchan = self.data.shape[0]
+        self.nsamp = self.data.shape[1]
+        self.dur = self.nsamp/self.srate
+
+        # load the channel info and integrate with locations
+        chan_info = self._eeg['chaninfo'][0,0][1]
+        chan_names = [name.split()[0] for name in chan_info]
+        chan_locs = np.array([name.split()[2:] for name in chan_info], dtype=float)
+        chan_info = pd.DataFrame({'name': chan_names, 
+                                    'ml': chan_locs[:,0], 
+                                    'ap': chan_locs[:,1], 
+                                    'dv': chan_locs[:,2]})
+        chans = pd.read_csv(chan_file, sep='\t')
+        chans = pd.merge(chans, chan_info, how='left', on='name')
+        chans.index.name = 'idx'
+        self.chans = chans
+
+        # get reference electrode position
+        ref_elec = self._eeg['ref'][0]
+        near_ref_names = [ref for ref in ref_elec.split('_') if ref in chans['name'].tolist()]
+        near_ref_chans = chans[chans['name'].isin(near_ref_names)]
+        near_ref_coords = near_ref_chans[['ml', 'ap', 'dv']].to_numpy()
+        self.ref_coord = np.mean(near_ref_coords, axis=0)
+
+    def get_data(self, chans=None, start_t=0, dur_t=None, scale='absolute'):
+        """
+        Extract EEG data from the EEG object
+
+        Parameters
+        ----------
+        chans : list of str, the channels to extract
+        start_t : numeric array, the start times in seconds
+        dur_t : float, the duration in seconds
+        scale : str, 'absolute' or 'relative'
+
+        Returns
+        -------
+        data_epochs : 3d array, the eeg data
+        tpts : 1d array, the time vector
+        chans : list of str, the channels extracted
+        """
+
+        # ensure proper formatting of inputs
+        if not chans:
+            chans = self.chans['name']
+        elif chans == 'eeg' or chans == ['eeg']: # only extract eeg channels
+            chans = self.chans[self.chans['type']=='EEG']['name'].values
+        elif type(chans) == str:
+            chans = [chans]
+        
+        if not dur_t:
+            dur_t = self.dur-start_t
+        start_t = np.array(start_t)
+        start_t = start_t.ravel()
+        epoch_num = start_t.size
+
+        # convert times to indices
+        start_idxs = (start_t*self.srate).astype(int)
+        dur_idx = (dur_t*self.srate).astype(int)
+        end_idxs = start_idxs + dur_idx
+
+        # get the channel indices
+        chan_idxs = [np.where(self.chans['name']==sel_ch)[0][0] for sel_ch in chans]
+
+        # extract the eeg data, one epoch at a time
+        data_epochs = np.zeros((dur_idx, len(chan_idxs), epoch_num)) # this also ensures changes to the data don't affect the original
+        for i in range(epoch_num):
+            data_epochs[:,:,i] = self.data[chan_idxs, start_idxs[i]:end_idxs[i]].T
+
+        # get the time vector
+        if scale == 'absolute':
+            tpts = start_t + np.arange(0, dur_idx)/self.srate
+        elif scale == 'relative':
+            tpts = np.arange(0, dur_idx)/self.srate
+        
+        return data_epochs, tpts, chans
+
+    def plot_scalp(self, ax=None, colors='b'):
+        """
+        Plot the channel locations on the scalp
+        """
+
+        # ensure proper formatting of inputs
+        if not ax:
+            fig, ax = plt.subplots()
+        
+        chans = self.chans[self.chans['type']=='EEG']
+
+        # plot the channel locations
+        ax.scatter(chans['ml'], chans['ap'], c=colors)
+        for ind, name in enumerate(chans['name']):
+            ax.text(chans['ml'][ind], chans['ap'][ind], name)
+        
+        # plot the reference electrode
+        ax.scatter(self.ref_coord[0], self.ref_coord[1], c='k', s=100)
+        
+        ax.set_xlabel('Medial-lateral')
+        ax.set_ylabel('Anterior-posterior')
+        ax.set_aspect('equal')
+
+        return ax
+    
+## Preprocessing code for EEG data
+# a function to remove baseline drift
+def remove_baseline_drift(eeg, w=8):
+    # eeg: an EEG object
+    # w: window size in seconds
+    # returns: an EEG object with baseline drift removed
+
+    # convert window size to number of samples
+    w = int((w/2) * eeg.srate)
+
+    # create convolution kernel
+    kernel = np.ones((1, 2*w+1)) / (2*w+1)
+
+    # determine which channels are EEG
+    eeg_chans = eeg.chans['type'] == 'EEG'
+
+    # pad data with edge values <-- HERE IS A CHANGE
+    data_pad = np.pad(eeg.data[eeg_chans,:], ((0,0), (w,w)), 'edge')
+
+    # convolve kernel with EEG data using scipy.signal.convolve
+    # (mode='valid' to keep output the same size as the input after padding) <-- HERE IS A CHANGE
+    baseline = convolve(data_pad, kernel, mode='valid')
+
+    # subtract baseline from EEG data
+    eeg.data[eeg_chans,:] = eeg.data[eeg_chans,:] - baseline
+
+# function to remove EMG artifacts from EEG data
+def remove_emg(eeg, cut_freq=60):
+    # eeg: EEG data
+    # cut_freq: cutoff frequency
+    
+    # create a bandpass filter
+    b, a = butter(4, cut_freq, 'low', fs=eeg.srate)
+    
+    # determine which channels are EEG
+    eeg_chans = eeg.chans['type'] == 'EEG'
+
+    # apply the filter to the data
+    eeg.data[eeg_chans,:] = filtfilt(b, a, eeg.data[eeg_chans,:], axis=1)
+
+# function to remove AC noise from EEG data
+def remove_ac(eeg, ac_freq=60): 
+    # eeg: EEG data
+    # ac_freq: frequency of the AC noise (default: 60 Hz because we're in the US)
+    
+    # create a bandpass filter
+    b, a = iirnotch(ac_freq, 15, fs=eeg.srate)
+    
+    # determine which channels are EEG
+    eeg_chans = eeg.chans['type'] == 'EEG'
+
+    # apply the filter to the data
+    eeg.data[eeg_chans,:] = filtfilt(b, a, eeg.data[eeg_chans,:], axis=1)
+
+def detect_blinks(eeg, eog_chan='HEO', threshold=40, ibi=0.5):
+    """
+    Detect blinks in the EEG signal.
+
+    Parameters
+    ----------
+    eeg : our EEG object
+    eog_chan : str
+        The name of the EOG channel. Defaults to 'HEO'.
+    threshold : float
+        The threshold for detecting blinks. Defaults to 40.
+    ibi : float
+        The minimum inter-blink interval (in seconds). Defaults to 0.5.
+
+    Returns
+    -------
+    blink_times : array of floats
+        The times of the blinks in seconds.
+    blink_heights : array of floats
+        The height of the blinks.   
+    """
+    # Format inputs
+    ibi = ibi * eeg.srate
+
+    # Find the EOG channel
+    eog_data, eog_t, _ = eeg.get_data(chans=eog_chan)
+
+    # Format EOG data for peak finding
+    eog_data = -eog_data.squeeze()
+
+    # Filter drifting baseline and EMG out of the EOG data
+    b, a = butter(2, [1, 50], 'bandpass', fs=eeg.srate)
+    eog_data = filtfilt(b, a, eog_data)
+
+    # Find the blinks
+    blink_times, blink_props = find_peaks(eog_data, height=threshold, distance=ibi)
+
+    # Convert blink_times to seconds
+    blink_times = eog_t[blink_times]
+
+    # Get the blink heights
+    blink_heights = -blink_props['peak_heights']
+
+    return blink_times, blink_heights
