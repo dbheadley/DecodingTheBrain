@@ -1,6 +1,9 @@
+/.quarto/
 .DS_Store
 *.epub
-.pyc
+*.pyc
 papers/
 data/
 assignments/
+*_Completed.ipynb
+__pychache__/
