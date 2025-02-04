@@ -180,6 +180,10 @@ window.Quarto = {
     <a class="nav-link active" href="./Week2.html" aria-current="page"> 
 <span class="menu-text">Week 2</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week3.html"> 
+<span class="menu-text">Introduction to Classification with Logistic Regression</span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="./about.qmd"> 
 <span class="menu-text"></span></a>
@@ -250,7 +254,7 @@ window.Quarto = {
 <li>Preprocessing and cleaning them</li>
 <li>Extracting event-related potentials</li>
 </ol>
-<div id="8e82d1cc" class="cell" data-execution_count="1">
+<div id="8d82ef70" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path <span class="im">as</span> op</span>
@@ -362,7 +366,7 @@ window.Quarto = {
 <p>Each dataset is organized as a collection of nested directories. In the top most directory we have a README file that gives details about how the EEG was recorded and the tasks that subjects performed during the recording. For the <a href="https://openneuro.org/datasets/ds003690/versions/1.0.0">one</a> we will work with over the next few weeks, they recorded responses to auditory and visual stimuli under under a variety of conditions.</p>
 <p>Each subject will have their own subdirectory, which contains directories for different aspects of the experiment. There should be one labeled ‘eeg’, where the eeg data is. Sometimes you also see a ‘beh’ folder, which has the behavior of the subject. Within the eeg folder we will focus on the *.set files. These are produced by the EEGLAB toolbox in MATLAB and contain both the EEG data and additional data about electrode names, referencing, etc.</p>
 <p>To load the set file, we use the <code>loadmat</code> method in the Scipy IO package.</p>
-<div id="84ff387f" class="cell" data-execution_count="2">
+<div id="180a727b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the a .set file</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'sub-AB58'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> [<span class="st">'.'</span>, <span class="st">'data'</span>, <span class="st">'eeg'</span>, <span class="st">'ds003690'</span>, subj, <span class="st">'eeg'</span>, <span class="st">'</span><span class="sc">{}</span><span class="st">_task-passive_run-1_eeg.set'</span>.<span class="bu">format</span>(subj)]</span>
@@ -373,18 +377,18 @@ window.Quarto = {
 <p>In the course directory we have a folder ‘data’ , which contains all the data files for this course.</p>
 <p>Another thing to notice is that the file names are descriptive. For the .set file above, the subject name (‘sub-AB58’), task (‘task-passive’), and experimental run (‘run-1’), and data type (‘eeg’) are given. These are separated by underscores. This standard formulation makes it easier to quickly look at the files in a directory and determine which ones are relevant to us and write code that automatically accesses files from specific subjects or tasks.</p>
 <p>Once the eeg data is loaded in, we should inspect it to determine its data type and contents.</p>
-<div id="39008f82" class="cell" data-execution_count="3">
+<div id="df556f5f" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data type</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(eeg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>dict</code></pre>
 </div>
 </div>
 <p>The eeg data returned by the <code>loadmat</code> function is a dictionary type. Just to refresh, a dictionary is a data type in python containing a collection of <em>keys</em>, where each key is associated with a <em>value</em>.</p>
-<div id="2d2e35bb" class="cell" data-execution_count="4">
+<div id="ab2496ce" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get keys</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eeg.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>dict_keys(['__header__', '__version__', '__globals__', 'setname', 'filename', 'filepath', 'subject', 'group', 'condition', 'session', 'comments', 'nbchan', 'trials', 'pnts', 'srate', 'xmin', 'xmax', 'times', 'data', 'icaact', 'icawinv', 'icasphere', 'icaweights', 'icachansind', 'chanlocs', 'urchanlocs', 'chaninfo', 'ref', 'event', 'urevent', 'eventdescription', 'epoch', 'epochdescription', 'reject', 'stats', 'specdata', 'specicaact', 'splinefile', 'icasplinefile', 'dipfit', 'history', 'saved', 'etc', 'datfile', 'run'])</code></pre>
 </div>
 </div>
@@ -396,7 +400,7 @@ window.Quarto = {
 <li>‘ref’ - where the reference channel is</li>
 </ul>
 <p>Let’s see what their data types are and their values. We will create a simple function, <code>var_inspector</code>, to display the data type and values of each variable.</p>
-<div id="03920685" class="cell" data-execution_count="5">
+<div id="f9b01964" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> var_inspector(var):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Type: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="bu">type</span>(var)))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(var)</span>
@@ -410,11 +414,11 @@ window.Quarto = {
 </div>
 </div>
 <p><em>srate</em> is a 2-D numpy array with a single value. To pull out just the numeric value, we index into the numpy array:</p>
-<div id="18108964" class="cell" data-execution_count="6">
+<div id="eafa9e53" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>srate <span class="op">=</span> srate[<span class="dv">0</span>,<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next we will get the <em>chaninfo</em> data.</p>
-<div id="5c5fbdca" class="cell" data-execution_count="7">
+<div id="7f1e8336" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>chan_info <span class="op">=</span> eeg[<span class="st">'chaninfo'</span>]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>var_inspector(chan_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -491,7 +495,7 @@ window.Quarto = {
 </div>
 </div>
 <p>It is a bit more complicated. This is a numpy array of numpy arrays of strings.</p>
-<div id="9393cc07" class="cell" data-execution_count="8">
+<div id="c5d85512" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the channel names</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>chan_info <span class="op">=</span> chan_info[<span class="dv">0</span>,<span class="dv">0</span>][<span class="dv">1</span>]</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>var_inspector(chan_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -568,7 +572,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Each channel is given as a string, with its name followed by a string of numbers, which represent the 3D position of each electrode on the scalp (X, Y, Z). We can break these out using the built in <code>split</code> method associated with the python string object (by the way, to see all the methods available for a string, you can pass the string variable to the <code>dir</code> method).</p>
-<div id="de2cce7d" class="cell" data-execution_count="9">
+<div id="d8994b07" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use split the strings in chan_names by white space</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>chan_names <span class="op">=</span> [name.split()[<span class="dv">0</span>] <span class="cf">for</span> name <span class="kw">in</span> chan_info]</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>var_inspector(chan_names)</span>
@@ -580,7 +584,7 @@ Channel number: 68</code></pre>
 </div>
 </div>
 <p>These names should be familiar from our discussion of electrode placement. What about the locations of the channels?</p>
-<div id="ffda2344" class="cell" data-execution_count="10">
+<div id="ef1ddb4b" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the channel positions on the scalp</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>chan_locs <span class="op">=</span> [name.split()[<span class="dv">2</span>:] <span class="cf">for</span> name <span class="kw">in</span> chan_info]</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># convert chan_locs to numeric data type in a numpy array</span></span>
@@ -659,7 +663,7 @@ Channel number: 68</code></pre>
 </div>
 </div>
 <p>Since these were strings, we had to convert them to a numeric data type, especially if we want to eventually use them for plotting.</p>
-<div id="20926ab9" class="cell" data-execution_count="11">
+<div id="0eade38f" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_scalp(chan_locs, chan_names, subj):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    ax.scatter(chan_locs[:,<span class="dv">0</span>], chan_locs[:,<span class="dv">1</span>])</span>
@@ -680,7 +684,7 @@ Channel number: 68</code></pre>
 </div>
 </div>
 <p>Another useful piece of info in the <em>eeg</em> data is ‘ref’, which tells us the position of the reference electrode.</p>
-<div id="14b770b4" class="cell" data-execution_count="12">
+<div id="01c54727" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ref_elec <span class="op">=</span> eeg[<span class="st">'ref'</span>]</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>var_inspector(ref_elec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -689,7 +693,7 @@ Channel number: 68</code></pre>
 </div>
 </div>
 <p>This is another numpy array with a string inside. Let’s extract the channels the reference was between, and then use their coordinates to plot where the reference was.</p>
-<div id="ff7d9dd7" class="cell" data-execution_count="13">
+<div id="b09de8ba" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># split the reference string at underscores and return the channel names</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>near_ref_names <span class="op">=</span> [ref <span class="cf">for</span> ref <span class="kw">in</span> ref_elec[<span class="dv">0</span>].split(<span class="st">'_'</span>) <span class="cf">if</span> ref <span class="kw">in</span> chan_names]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -715,7 +719,7 @@ Coordinates of electrodes near reference: [[ 1.03  3.91  8.48]
  [ 0.63 -0.01  8.41]]
 Coordinates of reference: [0.83 1.95 8.44]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>Text(0.82986, 1.9503460000000001, 'REF')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -727,7 +731,7 @@ Coordinates of reference: [0.83 1.95 8.44]</code></pre>
 </div>
 </div>
 <p>With all this out of the way, let’s inspect the EEG data itself.</p>
-<div id="277281cd" class="cell" data-execution_count="14">
+<div id="6902bf74" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>eeg_data <span class="op">=</span> eeg[<span class="st">'data'</span>]</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>var_inspector(eeg_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -748,7 +752,7 @@ Coordinates of reference: [0.83 1.95 8.44]</code></pre>
 </div>
 </div>
 <p>Another numpy array, but this one contains a lot of numeric data. We can get the number of channels and time points that were recorded.</p>
-<div id="639037cd" class="cell" data-execution_count="15">
+<div id="1e95bfe9" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nchan <span class="op">=</span> eeg_data.shape[<span class="dv">0</span>]</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>nsamp <span class="op">=</span> eeg_data.shape[<span class="dv">1</span>]</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of samples: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(nsamp))</span>
@@ -761,7 +765,7 @@ Number of channels: 66</code></pre>
 </div>
 </div>
 <p>Uh oh, the number of channels, 66, does not match the number given in chaninfo, 68. Perhaps we can find the correct values in the file ‘*_channels.tsv’.</p>
-<div id="74b3092b" class="cell" data-execution_count="16">
+<div id="8f1cba01" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the a *_channels.tsv file</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'sub-AB58'</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>chan_dir <span class="op">=</span> [<span class="st">'.'</span>, <span class="st">'data'</span>, <span class="st">'eeg'</span>, <span class="st">'ds003690'</span>, subj, <span class="st">'eeg'</span>, <span class="st">'</span><span class="sc">{}</span><span class="st">_task-passive_run-1_channels.tsv'</span>.<span class="bu">format</span>(subj)]</span>
@@ -794,7 +798,7 @@ Number of channels: 66</code></pre>
 </figure>
 </div>
 <p>It is difficult to compare the list of recording sites in chaninfo and those listed in the channels .tsv file by eye, but we can write some code to solve that problem.</p>
-<div id="9ebf1c93" class="cell" data-execution_count="17">
+<div id="c6244063" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pull the channel names from the channels tsv file</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>chan_names_tsv <span class="op">=</span> channels[<span class="st">'name'</span>].tolist()</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -806,14 +810,14 @@ Number of channels: 66</code></pre>
 </div>
 </div>
 <p>We should set <em>chan_names</em> to the list in the channels .tsv file and match those with the electrode locations from the eeg .set file.</p>
-<div id="ae08caa2" class="cell" data-execution_count="18">
+<div id="d1529aa1" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>chan_info <span class="op">=</span> pd.DataFrame({<span class="st">'name'</span>: chan_names, </span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'ML'</span>: chan_locs[:,<span class="dv">0</span>], </span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'AP'</span>: chan_locs[:,<span class="dv">1</span>], </span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'DV'</span>: chan_locs[:,<span class="dv">2</span>]})</span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>channels <span class="op">=</span> pd.merge(channels, chan_info, how<span class="op">=</span><span class="st">'left'</span>, on<span class="op">=</span><span class="st">'name'</span>)</span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>channels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="50">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -938,13 +942,13 @@ Number of channels: 66</code></pre>
 </div>
 <p>Note that there are a few extra channels with names that are not part of the EEG site naming scheme given above. ‘VEO’ and ‘HEO’ are electrodes placed near the left eye and can detect eye movements (discussed below). ‘EKG’ is from an electrode place near the heart and gives the <em>electrocardiogram</em>, which captures the electrical activity associated with heart beats. Lastly, ‘R-Dia-X-(mm)’ and ‘R-Dia-Y-(mm)’ are measures of pupil diameter made by a video camera trained on the eye.</p>
 <p>And now we can replot the EEG electrodes, with the missing channels removed.</p>
-<div id="4ff278f4" class="cell" data-execution_count="19">
+<div id="b8d1e034" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>chan_names <span class="op">=</span> channels[<span class="st">'name'</span>].values</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>chan_locs <span class="op">=</span> channels[[<span class="st">'ML'</span>, <span class="st">'AP'</span>, <span class="st">'DV'</span>]].values</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plot_scalp(chan_locs, chan_names, subj)</span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(ref_coord[<span class="dv">0</span>], ref_coord[<span class="dv">1</span>], c<span class="op">=</span><span class="st">'r'</span>, s<span class="op">=</span><span class="dv">100</span>)</span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.text(ref_coord[<span class="dv">0</span>], ref_coord[<span class="dv">1</span>], <span class="st">'REF'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="51">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>Text(0.82986, 1.9503460000000001, 'REF')</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -966,14 +970,14 @@ posx and posy should be finite values</code></pre>
 <p>The next thing to inspect is the EEG signal itself. The EEG signal is an array of voltages, <span class="math inline">EEG</span>, sampled at each channel, <span class="math inline">ch</span> and time point, <span class="math inline">t</span>. A single sample can be written as <span class="math inline">EEG_{ch,t}</span>. If we want the voltage across all channels at a specific time that would be the vector <span class="math inline">EEG_{t}</span>. The entire time series of voltages from a single channel is expressed as <span class="math inline">EEG_{ch}</span>. The term <em>time series</em> is important to keep in mind. Virtually all the data we will work with is time series data, meaning that it is the values generated by some process that is sampled at regular intervals. In the case of our present EEG signal, this would be the uV potentials recorded from an electrode at the sample rate (<code>srate</code>) of 500 Hz.</p>
 <p>To begin exploring this data, lets plot the voltage detected on channel O1 (an electrode over the occiptal lobe on the left hemisphere) between 50 and 52 seconds. We will express this as: <span class="math display"> EEG_{O1}[50\leq t \le 52] </span></p>
 <p>First, we identify the index for the row containing data from channel O1.</p>
-<div id="a016849a" class="cell" data-execution_count="20">
+<div id="5e4074b4" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select channel to plot</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>sel_chan <span class="op">=</span> <span class="st">'O1'</span></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>chan_ind <span class="op">=</span> channels.index[channels[<span class="st">'name'</span>]<span class="op">==</span>sel_chan]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Using the <code>channels</code> dataframe we generated above, we find the row where the ‘name’ column is equal to O1, and then return the index of that row. The indices in the <code>channels</code> dataframe range from 0 to 65, with each corresponding to a row in <code>eeg_data</code>.</p>
 <p>Next we need to find the time points that were sampled between 50 and 52 seconds into the recording.</p>
-<div id="e7a758cc" class="cell" data-execution_count="21">
+<div id="c4d9a425" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the times we wish to plot</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>start_t <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>end_t <span class="op">=</span> <span class="dv">52</span></span>
@@ -981,12 +985,12 @@ posx and posy should be finite values</code></pre>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>end_idx <span class="op">=</span> (end_t<span class="op">*</span>srate).astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Since our recording starts at time point 0 seconds and was recorded with <code>srate</code> number of samples per second, we can find the indices of the start and stop times by multiplying those times in seconds by the <code>srate</code> (<code>start_t*srate</code> and <code>end_t*srate</code>). Since these will be used to index into an array, we ensure that they have integer values by forcing them to an integer datatype using the numpy <code>astype</code> function.</p>
-<div id="0c893ffe" class="cell" data-execution_count="22">
+<div id="7f10171d" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the eeg data we wish to plot</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>eeg_epoch <span class="op">=</span> eeg_data[chan_ind, start_idx:end_idx].squeeze() <span class="co"># squeeze removes the extra dimension</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>An ‘epoch’ is a period of time, and when we pull out a contiguous set of values from a time series will refer to that as an epoch. When plotting that data, we need to pass both the eeg signal and their corresponding time points to the plotting function. These can either be <em>absolute</em> or <em>relative</em>. For absolute, the time values are taken with respect to the entire recording, so in our case they would start at 50 sec and end just before 52 sec.&nbsp;For relative time, the times at taken with respect to a specific event (usually the beginning of our epoch, but not always). In that case, they would start at 0 sec and end just before 2 sec.&nbsp;Calculating either is straightforward:</p>
-<div id="c7335f59" class="cell" data-execution_count="23">
+<div id="339e398b" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># time on an absolute scale</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>t_abs_epoch <span class="op">=</span> start_t <span class="op">+</span> np.arange(<span class="dv">0</span>, eeg_epoch.size)<span class="op">/</span>srate</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -994,7 +998,7 @@ posx and posy should be finite values</code></pre>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>t_rel_epoch <span class="op">=</span> np.arange(<span class="dv">0</span>, eeg_epoch.size)<span class="op">/</span>srate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s plot on both time scales, just for show.</p>
-<div id="3c62252e" class="cell" data-execution_count="24">
+<div id="92b4c2fd" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(t_abs_epoch, eeg_epoch) <span class="co"># we transpose to make the data the right shape for plotting</span></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'Absolute time (s)'</span>)</span>
@@ -1014,7 +1018,7 @@ posx and posy should be finite values</code></pre>
 </div>
 <p>This is the electrical activity recorded on the scalp over the left occipital cortex, an area of the brain involved in visual processing. The signal has a somewhat noisy appearance, though it is unclear what is really ‘noise.’</p>
 <p>Before we move on, let’s create a class for loading the EEG data from a file and giving us access to it. This will encompass all the operations we performed above, making it easier to load data from other subjects with the same format.</p>
-<div id="d1f9978d" class="cell" data-execution_count="25">
+<div id="4687b46e" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EEG:</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, eeg_file, chan_file):</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
@@ -1135,7 +1139,7 @@ posx and posy should be finite values</code></pre>
 <span id="cb41-118"><a href="#cb41-118" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ax</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s give this class a try. It should shorten all the code we did above.</p>
-<div id="d25b1595" class="cell" data-execution_count="26">
+<div id="8f768c7f" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get file paths</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'sub-AB58'</span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>chan_dir <span class="op">=</span> [<span class="st">'.'</span>, <span class="st">'data'</span>, <span class="st">'eeg'</span>, <span class="st">'ds003690'</span>, subj, <span class="st">'eeg'</span>, <span class="st">'</span><span class="sc">{}</span><span class="st">_task-passive_run-1_channels.tsv'</span>.<span class="bu">format</span>(subj)]</span>
@@ -1184,7 +1188,7 @@ posx and posy should be finite values</code></pre>
 <section id="time-series-statistics" class="level3">
 <h3 class="anchored" data-anchor-id="time-series-statistics">Time series statistics</h3>
 <p>Now that we can easily load in EEG data, let’s explore some of the statistics we use to summarize it. Since the EEG signal is a series of voltages sampled at evenly spaced time intervals, we will make use of the statistical measures used for time series data more generally. To start, we will reload the EEG epoch we started with using our new EEG data class.</p>
-<div id="b5b47069" class="cell" data-execution_count="27">
+<div id="31e2981f" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>eeg_data, eeg_t, eeg_chan <span class="op">=</span> eeg.get_data(chans<span class="op">=</span>[<span class="st">'O1'</span>], start_t<span class="op">=</span><span class="dv">50</span>, dur_t<span class="op">=</span><span class="dv">2</span>, scale<span class="op">=</span><span class="st">'absolute'</span>)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>eeg_data <span class="op">=</span> eeg_data.ravel() <span class="co"># ravel flattens the array</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1193,7 +1197,7 @@ posx and posy should be finite values</code></pre>
 <p>Time series data is often considered to be the repeated sampling of an ongoing process. The values given off by that process will have a distribution, and if that distribution is normal then the two measures that characterize that distribution are its <em>mean</em> and <em>variance</em>.</p>
 <p><span class="math display"> Mean = E[X] = \frac{1}{n}\sum_{t=1}^{n}X_{t} </span></p>
 <p>To translate, the mean can be written as a function <span class="math inline">E[X]</span>, which stands for the <strong>E</strong>xpected value of <span class="math inline">X</span>. The expected value is equal to the sum (<span class="math inline">\sum</span>) from the first (<span class="math inline">t=1</span>) to the last (<span class="math inline">n</span>) value of each individual (<span class="math inline">t</span>) time point of <span class="math inline">X</span>, expressed as <span class="math inline">X_{t}</span>, divided by the number of time points (<span class="math inline">n</span>). The corresponding explicit code for this is:</p>
-<div id="d2e9274d" class="cell" data-execution_count="28">
+<div id="4737cd5c" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that explicitly expresses how to calculate the mean in base python</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean(x):</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">sum</span> <span class="op">=</span> <span class="dv">0</span></span>
@@ -1204,7 +1208,7 @@ posx and posy should be finite values</code></pre>
 <span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span> <span class="op">/</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Assuming our data has a normal distribution, the mean tells us which value is most likely to be expressed at any given moment. In the case of the EEG epoch we have above, this value is:</p>
-<div id="f60b8e0b" class="cell" data-execution_count="29">
+<div id="c75c9b2c" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>eeg_data_mean <span class="op">=</span> mean(eeg_data)</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Mean of the EEG epoch: </span><span class="sc">{:.2f}</span><span class="st"> uV'</span>.<span class="bu">format</span>(eeg_data_mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1216,7 +1220,7 @@ posx and posy should be finite values</code></pre>
 <h4 class="anchored" data-anchor-id="variance">Variance</h4>
 <p>Besides them mean, we also want a measure of the variability in the voltage around the mean. A measure frequently used is the <em>variance</em>. It is calculated as: <span class="math display"> Variance = Var[X] = E[(X-E[X])^2] = \frac{1}{n}\sum_{t=1}^{n}(X_{t}-E[X])^2 </span></p>
 <p>The variance is the mean of the squared difference between the values in our time series and the mean value. We can cast this explicitly in code also:</p>
-<div id="8febfe85" class="cell" data-execution_count="30">
+<div id="2910f425" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that explicitly expresses how to calculate variance in base python</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> variance(x):</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">sum</span> <span class="op">=</span> <span class="dv">0</span></span>
@@ -1237,7 +1241,7 @@ posx and posy should be finite values</code></pre>
 <section id="standard-deviation" class="level4">
 <h4 class="anchored" data-anchor-id="standard-deviation">Standard deviation</h4>
 <p>Notice that the variance is in units of uV<sup>2</sup>. Since we analyze EEG in units of uV, it is difficult for us to directly interpret the variance. Instead, we can take its square root, giving us a measure the of the variability in the EEG signal that is in units of uV. The square root of the variance is the familiar <em>standard deviation</em>. If we measure the standard deviation of our EEG epoch, we get:</p>
-<div id="18d29164" class="cell" data-execution_count="31">
+<div id="51d9d40a" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that explicitly expresses how to calculate standard deviation in base python</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sd(x):</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> variance(x)<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
@@ -1253,7 +1257,7 @@ posx and posy should be finite values</code></pre>
 <h4 class="anchored" data-anchor-id="the-normal-distribution">The normal distribution</h4>
 <p>If a signal is normally distributed, then all we need to approximate its distribution is its expected value and variance. The normal distribution is captured by the curve: <span class="math display"> p(X_{i}) = \frac{1}{\sqrt{Var[X]2\pi}}exp\left[{-\frac{(X_{i}-E[X])^{2}}{2Var[X]}}\right]</span></p>
 <p>Translating this into code we get:</p>
-<div id="c2d0abde" class="cell" data-execution_count="32">
+<div id="2de63003" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that explicitly expresses how to calculate the probability of a </span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># data point being observed given a normal distribution</span></span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normal(x, x_i):</span>
@@ -1263,7 +1267,7 @@ posx and posy should be finite values</code></pre>
 <span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    shape_factor <span class="op">=</span> np.exp(<span class="op">-</span>((x_i <span class="op">-</span> e_x)<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>v_x)) <span class="co"># sets the width of the curve</span></span>
 <span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> scale_factor <span class="op">*</span> shape_factor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="39cc2eb9" class="cell" data-execution_count="33">
+<div id="8bd82c89" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>samp_vals <span class="op">=</span> np.linspace(np.<span class="bu">min</span>(eeg_data), np.<span class="bu">max</span>(eeg_data), <span class="dv">50</span>)</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>norm_vals <span class="op">=</span> [normal(eeg_data, samp) <span class="cf">for</span> samp <span class="kw">in</span> samp_vals]</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1282,7 +1286,7 @@ posx and posy should be finite values</code></pre>
 </div>
 </div>
 <p>How does this predicted distribution compare with the actual distribution of values? To answer this question, we need to plot the probability of a particular value occurring in our EEG epoch. We could try plotting the values as hatch marks at the bottom of the graph, and see if their density is highest near the center of the normal curve.</p>
-<div id="12968fcb" class="cell" data-execution_count="34">
+<div id="2665092c" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the normal distribution, and short vertical lines on the x-axis where each data point from eeg_epoch is</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>ax.plot(samp_vals, norm_vals, c<span class="op">=</span><span class="st">'r'</span>)</span>
@@ -1300,7 +1304,7 @@ posx and posy should be finite values</code></pre>
 </div>
 </div>
 <p>In this graph, each voltage sample is represented as a single vertical line (which we will refer to as hatch marks), with its position on the voltage axis determined by its value. It appears that they are clustered near the center of the normal distribution. Indeed, the density of hatch marks there is so high that they fuse together into a single black mass. It would be better if we could estimate the density of hatch marks along the voltage axis. To do this, we will calculate a <em>histogram</em>, which divides the voltage axis into a series of <em>bins</em> and measures the number of data points in each bin. These counts are then scaled by the number of data points, <span class="math inline">n</span>, and the length of the bin to give us probability density. Here is how we can code this:</p>
-<div id="07c6230b" class="cell" data-execution_count="35">
+<div id="4ffa2f87" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that explicitly expresses how to calculate a probability density histogram</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> histogram(x, bin_num):</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(x)</span>
@@ -1317,7 +1321,7 @@ posx and posy should be finite values</code></pre>
 <span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>        bin_centers[i] <span class="op">=</span> (bin_edges[i] <span class="op">+</span> bin_width<span class="op">/</span><span class="dv">2</span>)</span>
 <span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bin_centers, bin_heights</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9857c283" class="cell" data-execution_count="36">
+<div id="635eee70" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the empirical distribution of the EEG data</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>bin_centers, bin_heights <span class="op">=</span> histogram(eeg_data, <span class="dv">20</span>)</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1347,7 +1351,7 @@ posx and posy should be finite values</code></pre>
 <p>What we want is a measure of the similarity between samples in our time series as a function of how apart they are in time. If adjacent samples tend to both be above or below the mean, we want our measure to be high, and we want to it to be near zero when they are unrelated. The autocovariance function behaves this way.</p>
 <p><span class="math display"> ACov[\tau] = E[(X_{t}-E[X])(X_{t+\tau}-E[X])]</span></p>
 <p>Put in words, we create a new time series, <span class="math inline">(X_{t}-E[X])(X_{t+\tau}-E[X])</span>, by multiplying a mean subtracted version of our time series by itself at some fixed time lag (<span class="math inline">\tau</span>), and then measure the mean value of this new time series. We do this for a range of lags. In code, this looks like:</p>
-<div id="104091e2" class="cell" data-execution_count="37">
+<div id="0b9c4b74" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that explicitly expresses how to calculate the autocovariance of a signal</span></span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> autocovariance(x, lag):</span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(x)</span>
@@ -1357,7 +1361,7 @@ posx and posy should be finite values</code></pre>
 <span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">sum</span> <span class="op">+=</span> (x[t] <span class="op">-</span> e_x)<span class="op">*</span>(x[t<span class="op">+</span>lag] <span class="op">-</span> e_x)</span>
 <span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span> <span class="op">/</span> (n<span class="op">-</span>lag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ee6fd496" class="cell" data-execution_count="38">
+<div id="4f465ed0" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate autocovariance for lags 0 to 20</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>lags <span class="op">=</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">50</span>)</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>autocov <span class="op">=</span> [autocovariance(eeg_data, lag) <span class="cf">for</span> lag <span class="kw">in</span> lags]</span>
@@ -1392,7 +1396,7 @@ Using built-in Numpy functions
 </div>
 <div class="callout-body-container callout-body">
 <p>Note that the Numpy package has methods for calculating the mean (<code>np.mean</code>), variance (<code>np.var</code>), and standard deviation (<code>np.std</code>). These offer far greater control over how these operations are carried out with multidimensional arrays, and so you should use them. As an example, let’s rewrite the autocovariance function using Numpy methods, since Numpy does not have one built-in.</p>
-<div id="2b6570b1" class="cell" data-execution_count="39">
+<div id="a79333c2" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that calculates the autocovariance of a signal using numpy methods</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> autocovariance(x, lag):</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(x)</span>
@@ -1419,7 +1423,7 @@ Using built-in Numpy functions
 </figure>
 </div>
 <p>To see how much the skin potential can drift, take a look at a single EEG recording channel for the entire recording duration.</p>
-<div id="9801ae6a" class="cell" data-execution_count="40">
+<div id="7c0be8e9" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load entire O1 channel EEG recording</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>eeg_data_full, eeg_t_full, eeg_chan_full <span class="op">=</span> eeg.get_data(chans<span class="op">=</span>[<span class="st">'O1'</span>])</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>eeg_data_full <span class="op">=</span> eeg_data_full.ravel()</span>
@@ -1441,7 +1445,7 @@ Using built-in Numpy functions
 </div>
 <p>The level of the EEG varies greatly over the 4 minutes of the recording. It’s offset starts around -14,650 uV, and drifts down to -14,850 uV, spanning a range of 200 uV. This far exceeds the standard deviation of the signal, which we calculated over a short segment above at ~8.5 uV.</p>
 <p>This is only on a single electrode. How heterogeneous are these offsets and drifts across electrodes?</p>
-<div id="d2a1dc24" class="cell" data-execution_count="41">
+<div id="95eea820" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load all eeg data</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>eeg_data_full, eeg_t_full, eeg_chan_full <span class="op">=</span> eeg.get_data(chans<span class="op">=</span><span class="st">'eeg'</span>)</span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1471,7 +1475,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>There is a wide range of mean voltages across the channels, from -22.5 mV to 8.9 mV. How do they change with time? We saw that site O1 drifted towards more negative voltages, but was that also the case for the other channels? Let’s look at a few channels spread across the scalp.</p>
-<div id="026d1fe1" class="cell" data-execution_count="42">
+<div id="fbf32797" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>drift_chans <span class="op">=</span> [<span class="st">'F1'</span>, <span class="st">'C1'</span>, <span class="st">'P1'</span>, <span class="st">'O1'</span>]</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the eeg data for the drift channels</span></span>
@@ -1498,7 +1502,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <p><span class="math display"> Y_{t} = \frac{1}{2w+1}\sum_{\tau=-w}^{w}{X_{t+\tau}} \tag{1}</span></p>
 <p>The size of the window we use is specified by <span class="math inline">w</span>. The larger <span class="math inline">w</span> we choose, the more data points we average together and moving average will reflect slower trends in the time series. At the limits, if <span class="math inline">w</span> is equal to 0, then we get the exact same time series back. This is useless for our purposes, because if we subtract it from the original time series we are left with nothing. On the other hand, as we increase <span class="math inline">w</span> the values in our moving average time series approach its mean value. This would capture the offset, but it would miss the trend. Thus, we want to set <span class="math inline">w</span>, which we will now refer to as our <em>window size</em>, to a value that is small enough to capture the drift in our time series, but not so small that it just recapitulates the time series and eliminates the signals we care about.</p>
 <p>To explore these issues, we can code a moving average function with a parameter that controls window size.</p>
-<div id="406b62a4" class="cell" data-execution_count="43">
+<div id="b329df08" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A method that calculates a moving average</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> moving_average(x, w):</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(x)</span>
@@ -1513,7 +1517,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Before we apply this function to our data, a quick comment about how this code handles the beginning and end of the signal. Our window spans time points from <code>-w</code> to <code>w</code>, so if we are at the start of the signal then the samples from <code>-w</code> that would have gone into our average are not available, and likewise for the end of the signal with points on the <code>w</code> end. The approach taken here was to just take the mean of the points we did have. Another approach is to <em>pad</em> the edges of the signal, place a number <code>w</code> times at the beginning and end. If the number is 0, it is called <em>zero padding</em>. A problem with zero padding is that the mean will be distorted by those zeros early and late in the signal. Those distortions are referred to as <em>edge effects</em>. Alternative padding strategies can mitigate edge effects. For instance, instead of padding with zero you can use the value for the first or last sample, and pad with that. Or, you can reflect the signal at the edges.</p>
-<div id="a007671d" class="cell" data-execution_count="44">
+<div id="2176152e" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try out the moving average function with different windows</span></span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">125</span>, <span class="dv">2000</span>, <span class="dv">40000</span>, <span class="dv">132000</span>]</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">5</span>,figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>), sharey<span class="op">=</span><span class="st">'row'</span>)</span>
@@ -1536,7 +1540,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>The top row shows the original signal in black, with the moving average overlaid on top in red. The bottom row of graphs with blue lines is the difference between the original EEG signal and the moving average, referred to as the <em>residual</em>. The most obvious change, which holds for all the window sizes, is that the voltage offset is removed. Our residual signals are now centered on 0 uV. Looking at the red and black lines, it is apparent that as we lengthen the duration of the window, the moving average line becomes smoother. For short durations, it follows the EEG signal closely. At our shortest window, it follows the signal so closely that the resulting residual is much smaller compared with the longer windows. At the other end of the spectrum, our longest window size fails to remove slow trends in the EEG, since you can see that its residual still has slow drift. The 0.5 second and 8 second windows seems to have equivalent effects. Seeing the difference between them will require looking at the data on a shorter time scale.</p>
-<div id="37d70f33" class="cell" data-execution_count="45">
+<div id="92385e65" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> [<span class="dv">125</span>, <span class="dv">2000</span>]</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>t_start_idx <span class="op">=</span> <span class="dv">50</span><span class="op">*</span>eeg.srate</span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>t_end_idx <span class="op">=</span> <span class="dv">55</span><span class="op">*</span>eeg.srate</span>
@@ -1562,7 +1566,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 <p>The half-second window seems to follow the EEG a bit too closely, while the 8 second window is more even. Given all this, the 8 second window looks the best.</p>
 <p>We can now create a function that takes the <code>EEG</code> object and returns a version of it with the baseline subtracted.</p>
-<div id="512c213a" class="cell" data-execution_count="46">
+<div id="d8bc5ae9" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a function to remove baseline drift</span></span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_baseline_drift(eeg, w<span class="op">=</span><span class="dv">8</span>):</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># eeg: an EEG object</span></span>
@@ -1592,7 +1596,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </figure>
 </div>
 <p>Let’s see how our baseline removal function performs.</p>
-<div id="93bf5855" class="cell" data-execution_count="47">
+<div id="6682ddc3" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run slow drift removal</span></span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>remove_baseline_drift(eeg)</span>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1618,7 +1622,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>Uh oh, it appears that we have edge effects. At the beginning and end of the time series there are distortions. This is because the scipy convolve function zero-pads the time series. To mitigate this, we can change the padding. Instead of using zeros, we will just take the signal value at the edges.</p>
-<div id="8585f10b" class="cell" data-execution_count="48">
+<div id="48ac0ceb" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a function to remove baseline drift</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_baseline_drift(eeg, w<span class="op">=</span><span class="dv">8</span>):</span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># eeg: an EEG object</span></span>
@@ -1645,7 +1649,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb68-24"><a href="#cb68-24" aria-hidden="true" tabindex="-1"></a>    eeg.data[eeg_chans,:] <span class="op">=</span> eeg.data[eeg_chans,:] <span class="op">-</span> baseline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To check if our fix worked, we will load a fresh version of the <code>eeg</code> object and try baseline removal again.</p>
-<div id="49efb031" class="cell" data-execution_count="49">
+<div id="afad01c7" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an EEG object</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>eeg <span class="op">=</span> EEG(eeg_file, chan_file)</span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1679,7 +1683,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <section id="muscle-artifacts" class="level4">
 <h4 class="anchored" data-anchor-id="muscle-artifacts">Muscle artifacts</h4>
 <p>Your muscles are electrochemical devices that put out their own potentials, called <em>electromyographic</em> activity, abbreviated EMG. When a muscle is depolarized, it can produce a strong Na<sup>+</sup> and Ca<sup>2+</sup> action potential. Muscle contraction is driven by a barrage of these fast potentials, which can be picked up on electrodes many centimeters away. EMG will be most associated with mouth, forehead, and neck movements. This activity will be very fast relative to the slower activities detected in EEG. You can see EMG in the EEG signals shown above around 200 sec into the recording. Here is a closeup:</p>
-<div id="6a0957b4" class="cell" data-execution_count="50">
+<div id="8f5e17d3" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the eeg data centered on a burst of EMG</span></span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">4</span>,<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">7</span>))</span>
 <span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>):</span>
@@ -1721,13 +1725,13 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <p>When we talk about slow and fast parts of the signal, we formally define those by their <em>frequency</em>. We will discuss these in far greater detail in later lectures, but for now you can think of frequency as representing the time scale of the signal. Formally, frequency is measured in events per second, Hertz. If a signal fluctuates 10 times per second, then we say it has a frequency of 10 Hz. The <em>cutoff frequency</em> is the frequency that below which signals are allowed pass for a low pass filter, or which signals are above which are allowed to pass for high pass filters. EMG power tends to be present above 60 Hz. The range of frequencies that are relatively unattenuated by the filter are referred to as the <em>pass band</em>.</p>
 <p>Filters are generally not perfect, they do not block all signals on one side of the cutoff frequency, and allow all signals on the other side to pass unimpeded. To sharpen the cutoff transition, you can increase the <em>order</em> of the filter. However, this can introduce distortions into the signal, which usually inclines us to keep the order low.</p>
 <p>Let’s create a low pass filter using the Scipy Signals package to remove the EMG component from our EEG signal.</p>
-<div id="82b07a7d" class="cell" data-execution_count="51">
+<div id="2d8b1b75" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a low pass filter</span></span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>b, a <span class="op">=</span> ss.butter(<span class="dv">4</span>, <span class="dv">60</span>, <span class="st">'low'</span>, fs<span class="op">=</span>eeg.srate) <span class="co"># create the filter coefficients</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The function <code>butter</code> takes parameters that specify the properties of the filter, and returns the filter’s <em>coefficients</em>, <code>b</code> and <code>a</code>. The <code>b</code> term is analogous to the kernel we used in when calculating the moving average, while the <code>a</code> term is a kernel applied to the previous values of the filter’s output. If you generate a filter just with the <code>b</code> values (you can use <code>scipy.signal.firwin</code>), it is referred to as a <em>finite impulse response</em> (FIR) filter. If your filter has <code>b</code> and <code>a</code> kernels, then it is an <em>infinite impulse response</em> (IIR) filter. IIR filters have dramatically improved performance over FIR. But how do we evaluate the performance of a filter? An easy way to visualize this is to pass signals with different frequencies through the filter, and measure how much they are attenuated. Signals in the filter’s pass band should have little or no attenuation, while those outside it should be strongly suppressed.</p>
 <p>The Scipy Signals package provides a function, <code>freqz</code> for doing this. Here is how to use it:</p>
-<div id="80b53278" class="cell" data-execution_count="52">
+<div id="8f432447" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the frequency response of the filter</span></span>
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>w, h <span class="op">=</span> ss.freqz(b, a, fs<span class="op">=</span>eeg.srate)</span>
 <span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>freq_resp <span class="op">=</span> <span class="dv">20</span><span class="op">*</span>np.log10(<span class="bu">abs</span>(h)) <span class="co"># convert to dB</span></span>
@@ -1751,7 +1755,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>The cutoff frequency is marked with a green vertical line. To see how the filter works, lets pass a type of periodic signal called a sine wave through it. As we increase the frequency of the sine wave above the cutoff, we should see a dramatic decrease in its amplitude.</p>
-<div id="5762d86a" class="cell" data-execution_count="53">
+<div id="6e184ca2" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>sin_freqs <span class="op">=</span> [<span class="dv">20</span>, <span class="dv">45</span>, <span class="dv">60</span>, <span class="dv">80</span>]</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>t_vals <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.002</span>)</span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1775,7 +1779,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>The blue lines are the original sine waves, while the orange is the filtered version. As we increase the frequency of the sine wave, the filter attenuates it more. At the cutoff frequency, 60 Hz, it is attenuated to approximately 70% of its original amplitude, which is known as the -3dB cutoff. You can also see that the filtered signal is shifted. This is known as <em>phase distortion</em> and varies as a function of the frequency. Using the output from the <code>freqz</code> function, we can visualize how this distortion varies systematically with frequency.</p>
-<div id="1a51eb71" class="cell" data-execution_count="54">
+<div id="a42561d9" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the phase distortion of the butterworth filter</span></span>
 <span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>plt.plot(w, np.angle(h)) <span class="co"># h is an array of complex numbers, where the phase-shift is the angle of the complex number</span></span>
 <span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Butterworth filter phase response'</span>)</span>
@@ -1793,7 +1797,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>Edge effects are also present. At the start of the signal the shape of the filtered version is different from its shape later on, which appears to stabilize. This is due to the zero-padding done by the function <code>lfilter</code>, similar to the issue we ran into with our moving average calculation. Also noteworthy is the lack of an edge effect at the end of the signal. This is because the filter kernels are slid across the signal from left to right, and the kernels are not symmetric. Unlike the moving average kernel, which was applied to data points before and after each sample in a time series, <code>b</code> and <code>a</code> are only applied to the samples before. This is also why we have a phase distortion, because the filter is applied in one direction, from past values to the present. When doing a BCI that has data streaming in real-time, this is the only option (you cannot know what brain activity will look like in the future). However, an offline BCI does not have this limitation. To slide the filter both direction, forwards, and then backwards, we can use <code>scipy.signals.filtfilt</code>.</p>
-<div id="c9e5e1aa" class="cell" data-execution_count="55">
+<div id="9920b6cc" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot original sine wave and its filtered version</span></span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, freq <span class="kw">in</span> <span class="bu">enumerate</span>(sin_freqs):</span>
@@ -1815,7 +1819,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 <p>Using <code>filtfilt</code> improved things! It virtually eliminated the phase distortion. Frequency selectivity is also better now, with frequencies outside the pass band showing greater reduction in amplitude. This is because the filter is applied twice, effectively increasing its order. On the other hand, there is still an edge effect, but it is most prominent for frequencies outside the pass band.</p>
 <p>Now that we are familiar with filters, we can apply them to removing EMG activity from the EEG signal. Let’s create a function similar to our <code>remove_baseline_drift</code> to do that.</p>
-<div id="eaa69f00" class="cell" data-execution_count="56">
+<div id="37eac9e0" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to remove EMG artifacts from EEG data</span></span>
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_emg(eeg, cut_freq<span class="op">=</span><span class="dv">60</span>):</span>
 <span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># eeg: EEG data</span></span>
@@ -1862,7 +1866,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <section id="ac-power-line-noise" class="level4">
 <h4 class="anchored" data-anchor-id="ac-power-line-noise">AC power line noise</h4>
 <p>Even with excellent referencing, AC power interference can still leak into recordings and must be dealt with. In the US this is at 60 Hz, while in Europe, where this recording comes from, it is at 50 Hz. What does this signal look like? In our recording, channel FCz exhibited prominent 50 Hz AC noise.</p>
-<div id="60f63fd8" class="cell" data-execution_count="57">
+<div id="30c020c8" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get an EEG epoch with a lot of AC noise</span></span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>eeg_data_ac, eeg_t_ac, eeg_chan_ac <span class="op">=</span> eeg.get_data(chans<span class="op">=</span>[<span class="st">'FCz'</span>], start_t<span class="op">=</span><span class="dv">200</span>, dur_t<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1872,7 +1876,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (sec)'</span>)</span>
 <span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Voltage (uV)'</span>)</span>
 <span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'EEG data at FCz'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="89">
+<div class="cell-output cell-output-display" data-execution_count="57">
 <pre><code>Text(0.5, 1.0, 'EEG data at FCz')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -1885,7 +1889,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 <p>Notice that the EEG oscillates at a regular rate, and that this masks the underlying irregular EEG activity that presumably arises from neural sources.</p>
 <p>There are two filtering strategies we can use. The easiest way to eliminate it is to filter out any signals in the EEG that are at or above the frequency of the AC signal. For this we could apply the same filtering strategy we used for the EMG. But, keep in mind that if we set the cutoff frequency of the filter to the AC frequency, it will only attenuate it moderately. To further suppress the AC signal, we would need to set the cutoff to a lower frequency, perhaps 30 Hz in the case of our 50 Hz AC noise. This runs the risk of eliminating activity we care about, but let’s try it anyway.</p>
-<div id="ecf3310c" class="cell" data-execution_count="58">
+<div id="7e217cc7" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load EEG signal with AC noise</span></span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>eeg_data_ac, eeg_t_ac, eeg_chan_ac <span class="op">=</span> eeg.get_data(chans<span class="op">=</span>[<span class="st">'FCz'</span>], start_t<span class="op">=</span><span class="dv">200</span>, dur_t<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1914,7 +1918,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <p>That certainly reduces the 50 Hz noise. However, the signal has now lost much of its sharpness because the cutoff for the low pass filter was set to 30 Hz. We are throwing out a lot of signal that may arise from neural sources.</p>
 <p>The second filtering option is to use a <em>notch filter</em>. It suppresses frequencies centered on a specific value, such as 50 Hz, while allowing others to pass, whether they be higher or lower, to pass through unimpeded. This is useful for AC noise because its frequency is specific to just one value.</p>
 <p>A notch filter is specified by two parameters. Its center frequency, <span class="math inline">\omega_0</span> (<code>w0</code> in the code below), sets frequency at which the maximum attenuation occurs. The depth of this attenuation and its spread to adjacent frequencies is determined by its Q (for quality) factor. A higher Q will decrease the attenuation at <span class="math inline">\omega_0</span> and its spread to adjacent frequencies. Thus, there is a trade off. The filter can strongly attenuate the frequency you want to reject, but at the cost of impacting other nearby frequencies. If you want to minimize that impact, you can lower Q, but at the cost of attenuating the center frequency less. Let’s use the <code>iirnotch</code> function to create a notch filter at 50 Hz with a moderate Q.</p>
-<div id="f37e1257" class="cell" data-execution_count="59">
+<div id="2b690334" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create notch filter coeffients</span></span>
 <span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>b_nc, a_nc <span class="op">=</span> ss.iirnotch(w0<span class="op">=</span><span class="dv">50</span>, Q<span class="op">=</span><span class="dv">15</span>, fs<span class="op">=</span>eeg.srate)</span>
 <span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1939,7 +1943,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>The notch filter allows higher frequencies to get through, while still attenuating the 50 Hz noise. It is good to see a difference in filter performance by eye on the signals we want to process, but a more systematic approach would be to characterize the frequency response properties of the filters.</p>
-<div id="8ec28a92" class="cell" data-execution_count="60">
+<div id="15d1b1dd" class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate frequency responses of filters</span></span>
 <span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>w_lp, h_lp <span class="op">=</span> ss.freqz(b_lp, a_lp, fs<span class="op">=</span>eeg.srate)</span>
 <span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>w_nc, h_nc <span class="op">=</span> ss.freqz(b_nc, a_nc, fs<span class="op">=</span>eeg.srate)</span>
@@ -1976,7 +1980,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 <p>At the AC frequency, the attenuation from both the low pass and notch are equivalent. However, the drawback of the low pass is apparent due to it attenuating signals beyond the AC frequency. Moreover, the low pass filter introduces substantial phase distortion in the pass band, which contains EEG signals we care about. This is not a problem if we are analyzing the data offline and can run the filter forwards and backwards with <code>filtfilt</code>, but would be a serious issue this was for a real-time BCI application that can only run in the forward direction.</p>
 <p>Given that, let’s create a function for removing AC noise from the EEG using a notch filter.</p>
-<div id="47d40a35" class="cell" data-execution_count="61">
+<div id="0f0cf0cf" class="cell" data-execution_count="61">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to remove AC noise from EEG data</span></span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_ac(eeg, ac_freq<span class="op">=</span><span class="dv">60</span>): </span>
 <span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># eeg: EEG data</span></span>
@@ -2024,7 +2028,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <h4 class="anchored" data-anchor-id="eye-blinks-and-movement-artifacts">Eye blinks and movement artifacts</h4>
 <p>Your eyeball is polarized, with large potential difference between the cornea and retina. This potential, referred to as the <a href="https://pubmed.ncbi.nlm.nih.gov/31277871"><em>electrooculogram</em></a>(EOG)affects electrodes on the scalp, with those at frontal sites just above the eyes, such as F or Fp, picking it up most strongly. So long as the eye remains motionless, this just causes a constant offset in the voltage at an EEG electrode. But eyes move, a lot, especially when subjects are engaged in the kinds of activities we want to relate back to the brain. Your eyes constantly dart around, called <em>saccading</em>, between different spots in your field of view. When the eye moves or blinks, the voltages at your EEG sites change. Since each EEG electrode will pick this up differently, one cannot just rely on referencing to eliminate. The signal on the reference electrode will look different from that on other electrodes. The simplest way to deal with these is to measure the eye movements directly by placing electrodes adjacent to the subject’s eyes, and then exclude periods when eye movements were present from subsequent analysis. More sophisticated approaches (e.g.&nbsp;independent component analysis) can isolate and remove the contribution of eye blinks to the EEG, allowing one to analyze periods where they occurred. These are beyond the purview of this course.</p>
 <p>To detect eye blinks, investigators place recording electrodes near the subject’s eyes. This gives a relatively pure measure of the EOG. Our recording has two channels for this, VEO and HEO.</p>
-<div id="e4734126" class="cell" data-execution_count="62">
+<div id="c665b09e" class="cell" data-execution_count="62">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get EOG signal</span></span>
 <span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>eog_data, eog_t, eog_chans <span class="op">=</span> eeg.get_data(chans<span class="op">=</span>[<span class="st">'VEO'</span>, <span class="st">'HEO'</span>])</span>
 <span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2044,7 +2048,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>Well, looks like we have drifting baselines in our EOG signals. If you look closely at the HEO trace, you can see little occasional ticks. These reflect eye blinks. They are not so apparent on the VEO trace. Remove the baseline from the HEO signal and zoom in on one of those eye blink events. (This recording is a little funny because eye blinks are usually best detected on the VEO channel positioned above the eye. It might be a mistake in how the channels were labeled or connected by the experimenter.)</p>
-<div id="90920316" class="cell" data-execution_count="63">
+<div id="27ca820a" class="cell" data-execution_count="63">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>heo <span class="op">=</span> eog_data[:, <span class="dv">1</span>, <span class="dv">0</span>].copy()</span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="co"># moving average window</span></span>
@@ -2056,7 +2060,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (s)'</span>)</span>
 <span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'HEO (uV)'</span>)</span>
 <span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Eyeblink events'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="95">
+<div class="cell-output cell-output-display" data-execution_count="63">
 <pre><code>Text(0.5, 1.0, 'Eyeblink events')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -2068,7 +2072,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>Each eyeblink is associated with a large voltage deflection (&gt;150 uV) that, at least near the eye, which dwarfs the EEG potentials we record from the scalp (~20 uV). To see how the EEG channels pick up the EOG, we will plot the same time period from some example EEG channels, which range from the front to the back of the scalp.</p>
-<div id="30d7fa44" class="cell" data-execution_count="64">
+<div id="4ac93263" class="cell" data-execution_count="64">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>eeg_data, eeg_t, eeg_chans <span class="op">=</span> eeg.get_data(chans<span class="op">=</span>example_chans, start_t <span class="op">=</span> <span class="dv">112</span>, dur_t<span class="op">=</span><span class="dv">6</span>)</span>
 <span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each eeg data channel in a separate axis with the heo signal underneath</span></span>
@@ -2099,7 +2103,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <li><code>distance</code>: the minimum distance allowed between two peaks</li>
 </ul>
 <p>Notice that our EOG signal is negative-going, so we will have to negative the EOG signal we pass to <code>findpeaks</code> to ensure that it works properly. Given the example trace above, it appears that a height of 100 uV and a distance of 0.5 seconds should work.</p>
-<div id="ce60ff7b" class="cell" data-execution_count="65">
+<div id="50c62ef1" class="cell" data-execution_count="65">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>blink_h <span class="op">=</span> <span class="dv">100</span> <span class="co"># minimum height of the blink peak in uV</span></span>
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>blink_d <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span>eeg.srate <span class="co"># minimum time between blinks in samples</span></span>
 <span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2119,7 +2123,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb87-17"><a href="#cb87-17" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (s)'</span>)</span>
 <span id="cb87-18"><a href="#cb87-18" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'HEO (uV)'</span>)</span>
 <span id="cb87-19"><a href="#cb87-19" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Detected blink peaks'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="97">
+<div class="cell-output cell-output-display" data-execution_count="65">
 <pre><code>Text(0.5, 1.0, 'Detected blink peaks')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -2131,7 +2135,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>The detection algorithm seems to be working pretty well. The only time where there may be problems is around 110 seconds, where a small peak is missed and a bunch of blinks have clustered close together, with one possibly evading detection. Let’s look closer:</p>
-<div id="ec823f8f" class="cell" data-execution_count="66">
+<div id="27b2b7b6" class="cell" data-execution_count="66">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replot the figure above, but zoomed in on the potentially problematic region</span></span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>plt.figure(fig)</span>
 <span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">108</span>,<span class="dv">118</span>)</span>
@@ -2145,7 +2149,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>Fortunately, it appears that our detection algorithm worked great during the cluster of eye blinks between 114 and 117 seconds. However, it did miss the small (partial?) blink at 110 seconds. To detect that, we would need to lower our threshold. Lets give that a try.</p>
-<div id="3f05d77e" class="cell" data-execution_count="67">
+<div id="0663c79f" class="cell" data-execution_count="67">
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>blink_h <span class="op">=</span> <span class="dv">30</span> <span class="co"># minimum height of the blink peak in uV</span></span>
 <span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the blinks using findpeaks from the scipy.signal package</span></span>
@@ -2164,7 +2168,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb90-16"><a href="#cb90-16" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (s)'</span>)</span>
 <span id="cb90-17"><a href="#cb90-17" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'HEO (uV)'</span>)</span>
 <span id="cb90-18"><a href="#cb90-18" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Detected blink peaks'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="99">
+<div class="cell-output cell-output-display" data-execution_count="67">
 <pre><code>Text(0.5, 1.0, 'Detected blink peaks')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -2176,7 +2180,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 </div>
 <p>Much better. It has even picked up on a cluster of weak blinks around 200 seconds that escaped my attention before. Just to be careful, let’s check those out and make sure they are detected properly and nothing has been missed.</p>
-<div id="95facab5" class="cell" data-execution_count="68">
+<div id="990c9be5" class="cell" data-execution_count="68">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replot the figure above, but zoomed in on the potentially problematic region</span></span>
 <span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>plt.figure(fig)</span>
 <span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">190</span>,<span class="dv">210</span>)</span>
@@ -2198,7 +2202,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <li>Find peaks</li>
 </ol>
 <p>Steps 3 and 4 are both filtering operations, with removal of baseline drift a high pass filter with a very low frequency cutoff (~1 Hz), and EMG removal a low pass filter with a cutoff around 50 Hz. Instead of splitting these into two separate filtering steps, we can implement them as one filter, called a <em>band pass</em> filter. A band pass filter has a low and high frequency cutoff, and allows signals to pass between those. Let’s design our <code>detect_blinks</code> function with one of those.</p>
-<div id="12646247" class="cell" data-execution_count="69">
+<div id="509268ba" class="cell" data-execution_count="69">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_blinks(eeg, eog_chan<span class="op">=</span><span class="st">'HEO'</span>, threshold<span class="op">=</span><span class="dv">40</span>, ibi<span class="op">=</span><span class="fl">0.5</span>):</span>
 <span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Detect blinks in the EEG signal.</span></span>
@@ -2253,7 +2257,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <span id="cb93-52"><a href="#cb93-52" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (s)'</span>)</span>
 <span id="cb93-53"><a href="#cb93-53" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'HEO (uV)'</span>)</span>
 <span id="cb93-54"><a href="#cb93-54" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Detected blink peaks'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="101">
+<div class="cell-output cell-output-display" data-execution_count="69">
 <pre><code>Text(0.5, 1.0, 'Detected blink peaks')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -2292,7 +2296,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 <section id="calculating-erps" class="level3">
 <h3 class="anchored" data-anchor-id="calculating-erps">Calculating ERPs</h3>
 <p>For the data set we loaded, there was an auditory stimulus presented. To calculate the ERP, we need to know the times it occurred. These are stored in a file with the name ‘*_events.tsv’. We already covered how to read .tsv files when we loaded the channel information. Let’s do the same for the events data.</p>
-<div id="deaaa9e1" class="cell" data-execution_count="70">
+<div id="7394afbe" class="cell" data-execution_count="70">
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the a *_channels.tsv file</span></span>
 <span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'sub-AB58'</span></span>
 <span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>evt_dir <span class="op">=</span> [<span class="st">'.'</span>, <span class="st">'data'</span>, <span class="st">'eeg'</span>, <span class="st">'ds003690'</span>, subj, <span class="st">'eeg'</span>, <span class="st">'</span><span class="sc">{}</span><span class="st">_task-passive_run-1_events.tsv'</span>.<span class="bu">format</span>(subj)]</span>
@@ -2336,11 +2340,11 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 <p>There are two columns we care about here. The ‘onset’ column gives the time when a stimulus was presented. These are the times we need to determine which epochs we want to record from. The other is ‘trial_type’, which indicates the type of stimulus given. For this data set, subjects were exposed to the same stimulus 30 times. The final event, ‘task end’, is just the end of the session.</p>
 <p>It is the cue evoked ERP we want to calculate, so let’s pull out their times.</p>
-<div id="a84d0a21" class="cell" data-execution_count="71">
+<div id="c3d293f2" class="cell" data-execution_count="71">
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>cue_times <span class="op">=</span> events[<span class="st">'onset'</span>][events[<span class="st">'trial_type'</span>] <span class="op">==</span> <span class="st">'cue'</span>].values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The README file for this data set does not specify the time between cue stimuli, so let’s calculate that. This will tell us what the maximum epoch duration we can use to avoid having two stimuli in one epoch.</p>
-<div id="04ab9678" class="cell" data-execution_count="72">
+<div id="2190c51c" class="cell" data-execution_count="72">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate iternval between cue times</span></span>
 <span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>cue_iti <span class="op">=</span> np.diff(cue_times)</span>
 <span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2360,7 +2364,7 @@ Maximum mean voltage: 8960.47 uV</code></pre>
 </div>
 <p>The ITIs range from 7 to 9 seconds, so we have nothing to worry about since our ERP will probably last no longer than 0.5 seconds. For our cue epochs, we will set the time windows to start 100 ms before the cue till 500 ms after.</p>
 <p>Now that we have a cue window decided, we have to check whether any eye blinks overlap with our cue epochs. For those that do, we must remove them from analysis. Since blinks can last a couple hundred milliseconds, we will block out any epochs where a blink happened within 1 second of the stimulus.</p>
-<div id="c093a7b9" class="cell" data-execution_count="73">
+<div id="8253f938" class="cell" data-execution_count="73">
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>excl_period <span class="op">=</span> <span class="fl">0.6</span> <span class="co"># exclusion period in seconds</span></span>
 <span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_blink_epochs(epoch_times, blink_times, excl_period<span class="op">=</span>excl_period):</span>
@@ -2404,7 +2408,7 @@ Kept 83.33 of epochs</code></pre>
 </div>
 </div>
 <p>We lose just under 20% of our cues because of blinks, which is substantial but not so much that it would seriously impact our averaging. We can use the <code>get_data</code> method of our EEG class to load the EEG at all sites during the blink-free cue presentations.</p>
-<div id="3b213df5" class="cell" data-execution_count="74">
+<div id="facb3148" class="cell" data-execution_count="74">
 <div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># window settings</span></span>
 <span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>pre_window <span class="op">=</span> <span class="fl">0.1</span></span>
 <span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>post_window <span class="op">=</span> <span class="fl">0.5</span></span>
@@ -2433,10 +2437,10 @@ cue_ch has the shape: (61,)</code></pre>
 <p>We set the time scale to ‘relative’ because we care about the time of the EEG signal only with respect to cue delivery. Since the <code>get_data</code> function returns times with respect to <code>start_t</code>, and we have that set 100 ms before the cue, we subtract those 100 ms from the relative time. This way, the cue onset is at time 0, and time points before the cue have negative values, while those after the cue have positive values.</p>
 <p><code>cue_data</code> contains our EEG signal as a tensor (a multidimensional array) with 3 dimensions: time, channel, and trial. Each row is a different time point with respect to cue onset. Each column is a different channel. And each ‘sheet’ (3rd dimension) is a different cue delivery epoch.</p>
 <p>Since we are not sure which recording site to focus on at first, we will calculate the average response across all sites. This is easy to do using numpy’s <code>mean</code> function. When calling it, we can indicate the dimensions along which we want the mean to be taken. To get the mean across all trials and channels, we set the <code>axis</code> parameter to (1,2), which corresponds to the channel and trial dimensions.</p>
-<div id="3cc9b334" class="cell" data-execution_count="75">
+<div id="336f693f" class="cell" data-execution_count="75">
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>cue_erp_all <span class="op">=</span> np.mean(cue_data,axis<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
 <span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>cue_erp_all.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="107">
+<div class="cell-output cell-output-display" data-execution_count="75">
 <pre><code>(300,)</code></pre>
 </div>
 </div>
@@ -2447,7 +2451,7 @@ cue_ch has the shape: (61,)</code></pre>
     \end{split}
 </span></p>
 <p>Next we want to see what the shape of our average ERP across all channels looks like. In addition, we want to know the latency for its strongest component.</p>
-<div id="fc8643be" class="cell" data-execution_count="76">
+<div id="77c82a11" class="cell" data-execution_count="76">
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get peak time of the cue ERP</span></span>
 <span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>erp_max_idx <span class="op">=</span> np.argmax(cue_erp_all)</span>
 <span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>erp_peak_time <span class="op">=</span> cue_t[erp_max_idx]</span>
@@ -2473,7 +2477,7 @@ cue_ch has the shape: (61,)</code></pre>
 </div>
 <p>Here we have a robust ERP in response to the visual cue. It’s first component starts around 90 ms following the cue, and peaks at 120 ms. It is followed by a couple smaller components of opposite polarity.</p>
 <p>With the peak time for the first, and strongest component, we can look across all electrodes to see where that component is strongest. A simple way to this is to get the mean ERP across trials for each channel, and then plot the ERP amplitude at that peak time across the scalp. To facilitate this, we created a <code>plot_scalp</code> method for our EEG class that allows us to color the EEG sites based on their voltage.</p>
-<div id="a06b814a" class="cell" data-execution_count="77">
+<div id="89b237e5" class="cell" data-execution_count="77">
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate mean ERP for each channel</span></span>
 <span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>cue_erp_ch <span class="op">=</span> np.mean(cue_data, axis<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'cue_erp_ch has the shape </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(cue_erp_ch.shape))</span>
@@ -2487,7 +2491,7 @@ cue_scalp has the shape (61,)</code></pre>
 </div>
 </div>
 <p>When taking the mean of <code>cue_data</code> along the 2nd axis, the trial axis, we get a an array <code>cue_erp_ch</code> that has the ERP for each EEG channel. To find the ERP voltage at each channel for the peak time we identified above, we just get the values from the corresponding row. This gives a vector with with a size equal to the number of channels. We can pass this to the <code>plot_scalp</code> method to visualize the distribution of the first component strengths across the scalp.</p>
-<div id="28c71f2d" class="cell" data-execution_count="78">
+<div id="36423a63" class="cell" data-execution_count="78">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the ERP scalp topography</span></span>
 <span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>scalp_ax <span class="op">=</span> eeg.plot_scalp(colors<span class="op">=</span>cue_scalp)</span>
 <span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>plt.colorbar(scalp_ax.collections[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'Amplitude (uV)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2501,7 +2505,7 @@ cue_scalp has the shape (61,)</code></pre>
 </div>
 <p>Amplitudes are colored from yellow to blue, with yellow being the most positive values and blue the lowest/most negative. There is an obvious gradient across the scalp, with sites over the occipital and parietal cortices (O, PO, and P) showing the strongest amplitudes. Those areas where most early visual processing takes place, however the cue stimulus was a sound. Auditory processing tends to occur in the temporal lobe, but the T sites that lie nearest to that structure do not show the strongest response! This underscores the complex relationship between ERP components and the neural activations that underlie them. The expression of a neural activity as scalp potentials depends on the timing and location of that activity, how it is oriented with respect to the curved surface of the cortex, its synchrony with other activities across the cortex, and the its smearing by the dura, cerebrospinal fluid, skull, and skin of the scalp. In theory, if you know all of these things you should be able to perfectly predict the ERP distribution on the scalp, in practice you often only know a few of these factors. Thus, when analyzing ERPs components it is safest to avoid making direct neural inferences about them, e.g.&nbsp;a component over occipital cortex does not necessarily reflect activation of occipital cortex.</p>
 <p>Let’s now plot the ERP for the channel it showed its strongest signal. It is hard to tell which one is that from the scalp map above, so instead we will create a list of channels sorted by the strength of their ERP peak voltage from strongest to weakest.</p>
-<div id="04039443" class="cell" data-execution_count="79">
+<div id="98dd631d" class="cell" data-execution_count="79">
 <div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get sorted indices of cue_scalp</span></span>
 <span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>max_ch_idx <span class="op">=</span> np.argsort(<span class="op">-</span>cue_scalp) <span class="co"># negate to sort in descending order</span></span>
 <span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>max_ch <span class="op">=</span> cue_ch[max_ch_idx]</span>
@@ -2518,7 +2522,7 @@ cue_scalp has the shape (61,)</code></pre>
 </div>
 <p>Notice that M1 and M2, the mastoid sites, came out on top. These are frequently used as reference sites, and so we will instead go to the next strongest site, PO7.</p>
 <p>We will plot the ERP on PO7, along with each individual trial so we can visualize the variability of the ERP.</p>
-<div id="a16aa175" class="cell" data-execution_count="80">
+<div id="460012fa" class="cell" data-execution_count="80">
 <div class="sourceCode cell-code" id="cb111"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get PO7 index</span></span>
 <span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a>sel_chan <span class="op">=</span> <span class="st">'PO7'</span></span>
 <span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a>po7_idx <span class="op">=</span> np.where(cue_ch <span class="op">==</span> sel_chan)[<span class="dv">0</span>][<span class="dv">0</span>]</span>
@@ -2547,7 +2551,7 @@ cue_scalp has the shape (61,)</code></pre>
 <section id="intersubject-variability" class="level2">
 <h2 class="anchored" data-anchor-id="intersubject-variability">Intersubject variability</h2>
 <p>An ERP can be consistent across trials and sessions when taken from the same subject, but between subjects there may be a great deal of variability. This goes back to the complex relationship between patterns of brain activation, geometry of the brain surface and skull, and their reflection on the scalp. Any variations in these factors between individuals that affect that relationship can impact the expression of the ERP. As a consequence, it is important to examine the ERP within each subject separately. Now that we have all the code worked out for loading, preprocessing, and extracting ERPs, we can quickly apply them to a new subject.</p>
-<div id="0ed6f93a" class="cell" data-execution_count="81">
+<div id="c266a4d0" class="cell" data-execution_count="81">
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get EEG file names for subject AB64</span></span>
 <span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="co"># get file paths</span></span>
 <span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>subj2 <span class="op">=</span> <span class="st">'sub-AB64'</span></span>
@@ -2639,7 +2643,7 @@ cue_scalp has the shape (61,)</code></pre>
 </div>
 <p>The time course of the ERP in this subject is substantially different from the previous one. Here we only see one prominent peak, and at a longer latency (~100 ms later). On the other hand, the scalp topography of that component is similar, with the strongest sites being occipital and parietal. The ERP does appear more lateralized, however, with the ERP stronger in the left hemisphere.</p>
 <p>Let’s not waste this hard work, we should try to save our data for use in Week 3. Fortunately, Numpy arrays can be saved as their own files.</p>
-<div id="e31de17f" class="cell" data-execution_count="82">
+<div id="97b831c5" class="cell" data-execution_count="82">
 <div class="sourceCode cell-code" id="cb114"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>save_dir <span class="op">=</span> os.path.join(<span class="op">*</span>[<span class="st">'.'</span>, <span class="st">'Week3'</span>, <span class="st">'data'</span>, <span class="st">'ds003690'</span>])</span>
 <span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Only write out the data if the directory doesn't exist</span></span>

@@ -303,7 +303,7 @@ class EEG:
         """
 
         # load the eeg data
-        self._eeg = loadmat(eeg_file)
+        self._eeg = loadmat(eeg_file, appendmat=False)
         data = self._eeg['data']
         self.srate = self._eeg['srate'][0,0]
         self.data = data
