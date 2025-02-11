@@ -4,6 +4,7 @@ project:
     - Week1.qmd
     - Week2.qmd
     - Week3.qmd
+    - Week4.qmd
   output-dir: docs
 
 website:
@@ -16,6 +17,7 @@ website:
       - Week1.qmd
       - Week2.qmd
       - Week3.qmd
+      - Week4.qmd
       - about.qmd
 
 
