@@ -105,7 +105,7 @@ for i, (finger, spec) in enumerate(S_on_mean_z.items()):
                   extent=(f[0], f[-1], 0, spec.shape[0]))
     ax[i].set_title(finger)
     ax[i].set_xlabel('Frequency (Hz)')
-    ax[i].set_ylabel('Power (z-score)')
+    ax[i].set_ylabel('Channel')
 
 fig.tight_layout()
 ```
@@ -149,7 +149,7 @@ index_spec_low = np.mean(S_on_z['index'][:,:,low_freqs,:], axis=(2,3))
 index_spec_high = np.mean(S_on_z['index'][:,:,high_freqs,:], axis=(2,3))
 
 # identify top two channels for high frequency power
-top_chans = np.argsort(np.mean(index_spec_high, axis=1))[-2:]
+top_chans = np.argsort(np.mean(index_spec_high, axis=0))[-2:]
 
 
 # function for scatter plot with best fit line and correlation coefficient
@@ -180,7 +180,7 @@ fig.suptitle('Index Finger')
 fig.tight_layout()
 ```
 
-Focusing on the two sites with the strongest high frequency activity during index finger movements, we can see that they are correlated, but not perfectly. In the top left plot, where we compare high frequency activity between both top sites, we can see that they have a correlation coefficient around 0.33. This means that on any given index finger movement the sites are not providing redundant information, so it makes sense to combine them. A similar trend is seen for low frequency power (lower right plot). In addition, low and high frequency power was partially anticorrelated at each site. Altogether, the lack of perfect correlations (r = 1) means that we should try to combine these measures when estimating whether an index finger was moved. This requires that our logistic decoder accepts multiple features.
+Focusing on the two sites with the strongest high frequency activity during index finger movements, we can see that they are only weakly correlated. In the top left plot, where we compare high frequency activity between both top sites, we can see that they have a correlation coefficient around 0.08. This means that on any given index finger movement the sites are not providing redundant information, so it makes sense to combine them. A similar trend is seen for low frequency power (lower right plot). In addition, low and high frequency power was only weakly correlated or anticorrelated at each site. Altogether, the lack of perfect correlations (r = 1) means that we should try to combine these measures when estimating whether an index finger was moved. This requires that our logistic decoder accepts multiple features.
 
 ## Multifeature logistic decoder
 
@@ -190,7 +190,7 @@ $$ \sigma(x) = \frac{1}{1+e^{-(b+wx)}} $$
 
 Here $x$ represents the one feature, along with $w$ being the weight for that feature. If we want to include multiple features, we can write the equation as:
 
-$$ \sigma(x) = \frac{1}{1+e^{-(b+w_1x_1+w_2x_2+...w_nx_2)}} $$
+$$ \sigma(x) = \frac{1}{1+e^{-(b+w_1x_1+w_2x_2+...w_nx_n)}} $$
 
 where there are $n$ different features. Alternatively, we can write it using the summation symbol as:
 
@@ -1349,4 +1349,4 @@ print('Mean test accuracy: {:.2f} %'.format(np.mean(scores_test)))
 print('Mean validation accuracy: {:.2f} %'.format(np.mean(scores_val)))
 ```
 
-As we had seen previously, performance on the training data tended to exceed that on the test data. In addition, when we examine how the cross-validation optimized model performs on the held out validation data, we find performance to be worse. This suggests that the process of selecting the optimal hyperparameter via cross-validation causes some leakage of information about the testing data, or is otherwise biased towards better performance on it. By holding the validation data in reserve after all fitting and hyperparameter optimization has been performed, we obtain a better estimate of how our model will perform on newly acquired data. Ultimately, this better reflects the actual BCI use case.
+As we had seen previously, performance on the training data tended to exceed that on the test data. In addition, when we examine how the cross-validation optimized model performs on the held out validation data, we find performance to be worse. This suggests that the process of selecting the optimal hyperparameter via cross-validation causes some leakage of information about the testing data, or is otherwise biased towards better performance on it. By holding the validation data in reserve after all fitting and hyperparameter optimization has been performed, we obtain a better estimate of how our model will perform on newly acquired data. Ultimately, this better reflects the actual BCI use case
