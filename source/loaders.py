@@ -507,3 +507,33 @@ def detect_blinks(eeg, eog_chan='HEO', threshold=40, ibi=0.5):
     blink_heights = -blink_props['peak_heights']
 
     return blink_times, blink_heights
+
+def remove_blink_epochs(epoch_times, blink_times, excl_period=0.6):
+    """Removes epochs from cue_times that are within excl_period of a blink.
+    
+    Parameters
+    ----------
+    epoch_times : 1d array
+        Epoch times in seconds.
+    blink_times : 1d array
+        Blink times in seconds.
+    excl_period : float
+        Exclusion period in seconds.
+    
+    Returns
+    -------
+    valid_epoch_times : 1d array
+        Epoch times that are not within excl_period of a blink.
+    percent_valid : float
+        Percentage of epochs that are valid.
+    """
+    valid_epoch_times = []
+    for time in epoch_times:
+        # gets us the times of blink relative to cue onset
+        rel_blink_times = blink_times - time 
+
+        # if none of the blinks are within the exclusion period, keep the epoch
+        if not np.any(np.abs(rel_blink_times) < excl_period):
+            valid_epoch_times.append(time)
+    
+    return np.array(valid_epoch_times), len(valid_epoch_times)/len(epoch_times)*100

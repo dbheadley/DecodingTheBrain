@@ -1,4 +1,5 @@
 import torch
+import copy
 import numpy as np
 from .loaders import EcogFingerData
 from sklearn.metrics import balanced_accuracy_score
@@ -155,7 +156,7 @@ class ECoGData(Dataset):
 
 class LogRegPT():
     def __init__(self, lr=0.01, epochs=100, train_prop=0.8, batch_size=5, lam=0.0, 
-                 reg_layer=-2, shuffle_seed=None):
+                 shuffle_seed=None, verbose=False):
         # Parameters
         # ----------
         # lr : float, optional
@@ -168,38 +169,38 @@ class LogRegPT():
         #     Number of samples per batch
         # lam : float, optional
         #     Regularization parameter for L1 norm
-        # reg_layer : int, optional
-        #     Layer to apply regularization to. Default is -2, which is the linear
-        #     layer for logistic regression.
         # shuffle_seed : int, optional
         #     Seed for shuffling data before splitting into train and test sets
         #     Ensures same train and test sets are used across models. 
         #     Default is None, which will result in different train and test sets 
         #     for each model.
+        # verbose : bool, optional
+        #     Whether to print progress during training. Default is False.
 
         self.lr = lr
         self.epochs = epochs
         self.train_prop = train_prop
         self.batch_size = batch_size
         self.lam = lam
-        self.reg_layer = reg_layer
         self._model = None
         self.train_idxs = None
         self.test_idxs = None
+        self._score_test = []
+        self._score_train = []
+        self._X_shape = None
+        self._y_shape = None
+        self._classes = None
+        self._n_classes = None
         self._shuffle_seed = shuffle_seed
-    
-    def _create_model(self, X, y):
-        # Parameters
-        # ----------
-        # X : array-like
-        #     Array of features, where each row is a trial and each column is a feature.
-        #     Used to determine the input dimension of the model.
-        # y : array-like
-        #     Array of labels, where each element is the label for the corresponding row in X
-        #     Used to determine the number of classes in the model. Not important for binary classification.
+        self.verbose = verbose
 
-        # input size is the number of features, input will be flattened
-        input_size = np.prod(X.shape[1:])
+    def _create_model(self):
+
+        # layer where regularization is applied
+        self.reg_layer = 0
+
+        # input size is the number of features
+        input_size = self._X_shape[1]
 
         # linear layer is the weights and bias
         # input_dim is the number of input features and 1 is the number of output features
@@ -211,38 +212,19 @@ class LogRegPT():
 
         # logistic regression model is a sequential combination of linear and sigmoid layers
         model = torch.nn.Sequential(
-            torch.nn.BatchNorm1d(X.shape[1]), # normalize the input features of each channel (aids with convergence)
-            torch.nn.Flatten(1), # flatten the input so that each trial is a row and each column is a feature
             lin_layer,
             sig_layer
         )
         self._model = model
-    
-    def loss(self, pred, act):
-        # Parameters
-        # ----------
-        # pred : array-like
-        #     Predicted probability of each sample being in class 1
-        # act : array-like
-        #     Array of labels, where each element is the label for the corresponding row in X
 
-        # Returns
-        # -------
-        # loss : float
-        #     Loss value
-
-        act = act.float()
+    def _loss(self, pred, lbl):
+        # create loss function
         loss_fn = torch.nn.BCELoss(reduction='mean')
 
-        # calculate loss
-        loss = loss_fn(pred, act)
-
-        if self.lam > 0:
-            # add L1 regularization
-            loss += self.lam*torch.sum(torch.abs(self._model[self.reg_layer].weight))
+        loss = loss_fn(pred, lbl.float())
 
         return loss
-
+    
     def _create_optim(self):
         # initialize optimizer
         return torch.optim.SGD(self._model.parameters(), lr=self.lr)
@@ -263,9 +245,15 @@ class LogRegPT():
         #     Balanced accuracy score for training data
 
         # initialize model and fitting
-        self._create_model(X, y)
+
+        self._X_shape = X.shape
+        self._y_shape = y.shape
+        self._classes = np.unique(y)
+        self._n_classes = len(self._classes)
+
+        self._create_model()
         optim = self._create_optim()
-        
+
         # split data into train and test sets
         strat = StratifiedKFold(n_splits=int(1/(1-self.train_prop)), shuffle=True, random_state=self._shuffle_seed)
         self.train_idxs, self.test_idxs = strat.split(X, y).__next__()
@@ -284,24 +272,36 @@ class LogRegPT():
             for feat, lbl in train_dl:
                 optim.zero_grad()
                 pred = self._model(feat)
-                loss = self.loss(pred, lbl)
+                #print(lbl)
+                loss = self._loss(pred, lbl)
+
+                # add L1 regularization
+                if self.lam > 0:
+                    loss += self.lam*torch.sum(torch.abs(self._model[self.reg_layer].weight))
+
                 loss.backward()
                 optim.step()
             
-            if np.mod(epoch, 10) == 0:
+            if (np.mod(epoch, 10) == 0) and self.verbose:
                 # get predictions for train and test sets
                 if self.train_prop < 1.0:
-                    score_test = self.score(test_ds.ecog_feat, test_ds.ecog_lbl)
+                    self._score_test.append(self.score(test_ds.ecog_feat, test_ds.ecog_lbl))
                 else:
-                    score_test = np.nan
-                score_train = self.score(train_ds.ecog_feat, train_ds.ecog_lbl)
-                print(f'Epoch {epoch}: Train: {score_train:.2f}, Test: {score_test:.2f}')
+                    self._score_test.append(np.nan)
+                self._score_train.append(self.score(train_ds.ecog_feat, train_ds.ecog_lbl))
+                print(f'Epoch {epoch}: Train: {self._score_train[-1]:.2f}, Test: {self._score_test[-1]:.2f}')
                 self._model.train() # set model back to train mode for next epoch
 
         self._model.eval() # set model to eval mode once fitting is done
 
+        if self.train_prop < 1.0:
+            self._score_test.append(self.score(test_ds.ecog_feat, test_ds.ecog_lbl))
+        else:
+            self._score_test.append(np.nan)
+        self._score_train.append(self.score(train_ds.ecog_feat, train_ds.ecog_lbl))
+        
         # return test and train scores for evaluating model generalization
-        return score_test, score_train
+        return np.array(self._score_test[-1]), np.array(self._score_train[-1])
 
     def predict_proba(self, X):
         # Parameters
@@ -311,21 +311,21 @@ class LogRegPT():
 
         # Returns
         # -------
-        # pred : array-like
+        # prob : array-like
         #     Predicted probability of each sample being in class 1
 
         if self._model is None:
-            raise ValueError('Model has not been fit yet.')
+            raise RuntimeError('Model has not been fit yet.')
         
         self._model.eval()
 
         X = torch.tensor(X.astype(np.float32))
         
         with torch.no_grad():
-            pred = self._model(X)
-            pred = pred.squeeze().numpy()
+            prob = self._model(X)
+            prob = prob.squeeze().numpy()
 
-        return pred
+        return prob
     
     def predict(self, X):
         # Parameters
@@ -338,18 +338,11 @@ class LogRegPT():
         # pred : array-like
         #     Predicted labels
 
-        if self._model is None:
-            raise ValueError('Model has not been fit yet.')
+        prob = self.predict_proba(X)
         
-        self._model.eval()
+        pred = np.zeros(prob.shape)
+        pred[prob>=0.5] = 1
 
-        X = torch.tensor(X.astype(np.float32))
-        
-        with torch.no_grad():
-            pred = self._model(X)
-            pred = pred.squeeze().numpy()
-            pred[pred>=0.5] = 1
-            pred[pred<0.5] = 0
         return pred
     
     def get_coefs(self):
@@ -359,7 +352,7 @@ class LogRegPT():
         #     Model coefficients
 
         if self._model is None:
-            raise ValueError('Model has not been fit yet.')
+            raise RuntimeError('Model has not been fit yet.')
         
         self._model.eval()
         coefs = []
@@ -372,6 +365,29 @@ class LogRegPT():
                     coefs.append(np.array([]))
 
         return coefs
+    
+    def get_intercept(self):
+        """
+        Get intercept
+
+        Returns
+        -------
+        intercept : float
+            Intercept value
+        """
+
+        if self._model is None:
+            raise ValueError('Logistic regression model has not been fit yet.')
+        
+        self._model.eval()
+        with torch.no_grad():
+            # find last layer with linear type
+            for layer in reversed(self._model):
+                if isinstance(layer, torch.nn.Linear):
+                    intercept = layer.bias.numpy().squeeze()
+                    break
+            
+        return intercept
     
     def score(self, X, y):
         # Parameters
@@ -393,57 +409,300 @@ class LogRegPT():
 
 class LogRegPT_MC(LogRegPT):
     
-    def __init__(self, reg_layer=-1, **kwargs):
-        super().__init__(reg_layer=reg_layer, **kwargs)
     
-    def _create_model(self, X, y):
-        # Creates a logistic model for multi-class classification
-        # No explicit softmax layer because we want to use CrossEntropyLoss
+    def _create_model(self):
+        
+         # layer where regularization is applied
+        self.reg_layer = 2
 
-        n_features = np.prod(X.shape[1:])
-        n_classes = len(np.unique(y))
+        # input size is the number of features, input will be flattened
+        input_size = np.prod(self._X_shape[1:])
 
         # linear layer is the weights and bias
-        lin_layer = torch.nn.Linear(n_features, n_classes) 
-        
-        # logistic regression model, no sigmoid layer because we want to use softmax
+        # input_dim is the number of input features and 1 is the number of output features
+        # this is taking the dot product of the input features with the weights and adding the bias
+        lin_layer = torch.nn.Linear(input_size, self._n_classes)
+
+        # logistic regression model is a sequential combination of linear and sigmoid layers
         model = torch.nn.Sequential(
-            torch.nn.BatchNorm1d(X.shape[1]), # normalize the input features of each channel (aids with convergence)
+            torch.nn.BatchNorm1d(self._X_shape[1]), # normalize the input features of each channel (aids with convergence)
             torch.nn.Flatten(1), # flatten the input so that each trial is a row and each column is a feature
             lin_layer,
         )
         self._model = model
 
+    def _loss(self, pred, lbl):
+        # create loss function
+        loss_fn = torch.nn.CrossEntropyLoss(reduction='mean')
 
-    def loss(self, pred, act):
+        lbl = lbl.type(torch.int64).squeeze()
+        #lbl_one = torch.nn.functional.one_hot(lbl.squeeze(), num_classes=self._n_classes)
+        #lbl_one = lbl_one.type(torch.float32)
+
+        loss = loss_fn(pred, lbl)
+
+        return loss
+
+    def predict_proba(self, X):
         # Parameters
         # ----------
-        # pred : array-like
-        #     Predicted probability of each sample being in class 1
-        # act : array-like
-        #     Dummy coded array of actual classes
+        # X : array-like
+        #     Array of features, where each row is a trial and each column is a feature
 
         # Returns
         # -------
-        # loss : float
-        #     Loss value
+        # prob : array-like
+        #     Predicted probability of each sample being in class 1
 
-        loss_fn = torch.nn.CrossEntropyLoss(reduction='mean')
+        if self._model is None:
+            raise RuntimeError('Model has not been fit yet.')
+        
+        self._model.eval()
 
-        # calculate loss
-        loss = loss_fn(pred, act)
+        X = torch.tensor(X.astype(np.float32))
+        
+        with torch.no_grad():
+            prob = self._model(X)
+            prob = torch.nn.functional.softmax(prob, dim=1)
+            prob = prob.squeeze().numpy()
 
-        # add L1 regularization at final layer
-        if self.lam > 0:
-            loss += self.lam*torch.sum(torch.abs(self._model[-1].weight)) 
-
-        return loss
+        return prob
     
+    def predict(self, X):
+        # Parameters
+        # ----------
+        # X : array-like
+        #     Array of features, where each row is a trial and each column is a feature
+
+        # Returns
+        # -------
+        # pred : array-like
+        #     Predicted labels
+
+        prob = self.predict_proba(X)
+        pred = np.argmax(prob, axis=1)
+        
+        return pred
+
+
+class LogRegPT_CNN(LogRegPT_MC):
+
+    def _create_model(self):
+
+         # layer where regularization is applied
+        self.reg_layer = -1
+
+        n_ecog_ch = self._X_shape[1]
+        n_conv_ch = 10
+        mp_stride = 5
+        lin_input_sz = n_conv_ch * (self._X_shape[2]//mp_stride) - n_conv_ch
+
+        # CNN layer
+        conv1 = torch.nn.Conv1d(n_ecog_ch, n_conv_ch, 21, stride=1, dilation=3, padding='same')
+        mp = torch.nn.MaxPool1d(n_conv_ch,stride=mp_stride)
+
+        # linear layer is the weights and bias
+        # input_dim is the number of input features and 1 is the number of output features
+        # this is taking the dot product of the input features with the weights and adding the bias
+        lin_layer = torch.nn.Linear(lin_input_sz, self._n_classes)
+
+        # logistic regression model is a sequential combination of linear and sigmoid layers
+        model = torch.nn.Sequential(
+            torch.nn.BatchNorm1d(n_ecog_ch), # normalize the input features of each channel (aids with convergence)
+            conv1,
+            torch.nn.ReLU(),
+            mp,
+            torch.nn.Flatten(1),
+            torch.nn.BatchNorm1d(lin_input_sz),
+            lin_layer,
+        )
+        self._model = model
+
+
+class LogRegPT_CNN_Adam(LogRegPT_CNN):
+    def _create_optim(self):
+        # initialize optimizer
+        return torch.optim.Adam(self._model.parameters(), lr=self.lr)
+    
+
+class LogRegPT_CNN_Dropout(LogRegPT_MC):
 
     def _create_optim(self):
         # initialize optimizer
-        return torch.optim.SGD(self._model.parameters(), lr=self.lr)
+        return torch.optim.Adam(self._model.parameters(), lr=self.lr)
     
+    def _create_model(self):
+
+         # layer where regularization is applied
+        self.reg_layer = -1
+
+        n_ecog_ch = self._X_shape[1]
+        n_conv_ch = 20
+        mp_stride = 5
+        lin_input_sz = n_conv_ch * (self._X_shape[2]//mp_stride) - 3*n_conv_ch
+
+        # CNN layer
+        conv1 = torch.nn.Conv1d(n_ecog_ch, n_conv_ch, 21, stride=1, dilation=3, padding='same')
+        mp = torch.nn.MaxPool1d(n_conv_ch, stride=mp_stride)
+        dropout = torch.nn.Dropout(p=0.5)
+
+        # linear layer is the weights and bias
+        # input_dim is the number of input features and 1 is the number of output features
+        # this is taking the dot product of the input features with the weights and adding the bias
+        lin_layer = torch.nn.Linear(lin_input_sz, self._n_classes)
+
+        # logistic regression model is a sequential combination of linear and sigmoid layers
+        model = torch.nn.Sequential(
+            conv1,
+            mp,
+            torch.nn.BatchNorm1d(n_conv_ch), # normalize the input features of each channel (aids with convergence)
+            torch.nn.ReLU(),
+            dropout,
+            torch.nn.Flatten(1),
+            lin_layer,
+        )
+        self._model = model
+
+
+class LogRegPT_AE(LogRegPT_MC):
+
+    # expand init method to include autoencoder parameters
+    def __init__(self, epochs_ae=100, lr_ae=0.01, n_code=20, 
+                 update_encode=False, **kwargs):
+        # Parameters
+        # ----------
+        # lr : float, optional
+        #     Learning rate for gradient descent
+        # epochs : int, optional
+        #     Number of epochs to train for
+        
+        super().__init__(**kwargs)
+        self.epochs_ae = epochs_ae
+        self.lr_ae = lr_ae
+        self._autoencoder = None
+        self._loss_ae = []
+        self._n_code = n_code
+        self.update_encode = update_encode
+
+    def _create_model(self):
+
+         # layer where regularization is applied
+        self.reg_layer = 2
+
+        # linear layer is the weights and bias
+        lin_layer = torch.nn.Linear(self._n_code, self._n_classes)
+
+        # load in the encoder layer from the autoencoder
+        # and set whether it will be updated when training
+        # the logistic regression model
+        encode_layer = copy.deepcopy(self._autoencoder[0])
+        if not self.update_encode:
+            for param in encode_layer.parameters():
+                param.requires_grad = False
+        
+        # logistic regression model is a sequential combination of linear and sigmoid layers
+        model = torch.nn.Sequential(
+            encode_layer,
+            torch.nn.BatchNorm1d(self._n_code, track_running_stats=False), # normalize the input features of each channel (aids with convergence)
+            lin_layer,
+        )
+        self._model = model
+
+    def _create_autoencoder(self):
+        n_ecog_ch = self._X_shape[1]
+        n_conv_ch = 30
+        lin_input_sz = n_conv_ch * (self._X_shape[2]//4)
+
+        # CNN layers
+        encoder = torch.nn.Sequential(
+            torch.nn.Conv1d(n_ecog_ch, n_conv_ch, 11, padding='same'),
+            torch.nn.MaxPool1d(4, stride=4),
+            torch.nn.BatchNorm1d(n_conv_ch),
+            torch.nn.ReLU(),
+            torch.nn.Flatten(1),
+            torch.nn.Linear(lin_input_sz, self._n_code),
+        )
+
+        decoder = torch.nn.Sequential(
+            torch.nn.Linear(self._n_code, lin_input_sz),
+            torch.nn.Unflatten(1, (n_conv_ch, lin_input_sz//n_conv_ch)),
+            torch.nn.ReLU(),
+            torch.nn.Upsample(scale_factor=4),
+            torch.nn.ConvTranspose1d(n_conv_ch, n_ecog_ch, 11, padding=5),
+            torch.nn.BatchNorm1d(n_ecog_ch)
+        )
+
+        autoencoder = torch.nn.Sequential(
+            encoder,
+            decoder,
+        )
+
+        self._autoencoder = autoencoder
+
+    # takes in data, returns encoded representation
+    def encode(self, X):
+        # Parameters
+        # ----------
+        # X : array-like
+        #     Array of features, where each row is a trial and each column is a feature
+
+        # Returns
+        # -------
+        # code : array-like
+        #     Encoded representation of the input data
+
+        if self._autoencoder is None:
+            raise RuntimeError('Autoencoder has not been fit yet.')
+        
+        self._autoencoder.eval()
+
+        X = torch.tensor(X.astype(np.float32))
+        
+        with torch.no_grad():
+            code = self._autoencoder[0](X)
+            code = code.squeeze().numpy()
+
+        return code
+    
+    def _loss_autoencoder(self, pred, act):
+        loss_fn = torch.nn.MSELoss(reduction='mean')
+        loss = loss_fn(pred, act)
+
+        return loss
+    
+    def _create_optim_autoencoder(self):
+        # initialize optimizer
+        return torch.optim.SGD(self._autoencoder.parameters(), lr=self.lr_ae)
+    
+    def _fit_autoencoder(self, train_dl):
+        # Parameters
+        # ----------
+        # train_dl : DataLoader
+        #     DataLoader for training data
+
+        # initialize model and fitting
+
+        
+        self._create_autoencoder()
+        optim = self._create_optim_autoencoder()
+
+        # train model
+        self._autoencoder.train()
+        for epoch in range(self.epochs_ae):
+            for feat, lbl in train_dl:
+                optim.zero_grad()
+                pred = self._autoencoder(feat)
+                loss = self._loss_autoencoder(pred, feat)
+                loss.backward()
+                optim.step()
+                
+            if np.mod(epoch, 10) == 0:
+                # save and print loss value
+                self._loss_ae.append(loss.item())
+                print(f'Epoch {epoch}: Loss: {self._loss_ae[-1]:.2f}')
+
+        self._autoencoder.eval() # set model to eval mode once fitting is done
+
     def fit(self, X, y):
         # Parameters
         # ----------
@@ -460,64 +719,55 @@ class LogRegPT_MC(LogRegPT):
         #     Balanced accuracy score for training data
 
         # initialize model and fitting
-        self._input_shape = X.shape
+
+        self._X_shape = X.shape
+        self._y_shape = y.shape
         self._classes = np.unique(y)
         self._n_classes = len(self._classes)
 
-        self._create_model()
-        optim = self._create_optim()
-        
+
         # split data into train and test sets
         strat = StratifiedKFold(n_splits=int(1/(1-self.train_prop)), shuffle=True, random_state=self._shuffle_seed)
         self.train_idxs, self.test_idxs = strat.split(X, y).__next__()
 
         if self.train_idxs.size < self.batch_size:
             raise ValueError('Number of training samples smaller than batch size')
-
-        # create data loaders for train and test sets
-        train_ds = ECoGData(X[self.train_idxs,:], y[self.train_idxs])
-        train_dl = DataLoader(train_ds, batch_size=self.batch_size, shuffle=True)
-        test_ds = ECoGData(X[self.test_idxs,:], y[self.test_idxs])
         
+        # create data loaders for train and test sets
+        train_ds = ECoGData(X[self.train_idxs], y[self.train_idxs])
+        train_dl = DataLoader(train_ds, batch_size=self.batch_size, shuffle=True)
+        test_ds = ECoGData(X[self.test_idxs], y[self.test_idxs])
+
+        # fit autoencoder
+        print('Fitting autoencoder')
+        self._fit_autoencoder(train_dl)
+        
+        # initialize logistic regression model
+        self._create_model()
+        optim = self._create_optim()
+
         # train model
+        print('Training logistic regression model')
+        self._model.train()
         for epoch in range(self.epochs):
-            self._mdl.train()
             for feat, lbl in train_dl:
                 optim.zero_grad()
-                y_pred = self._mdl(feat)
-                loss = self.loss(y_pred, self._lbl_to_onehot(lbl))
+                pred = self._model(feat)
+                loss = self._loss(pred, lbl)
+
+                # add L1 regularization
+                if self.lam > 0:
+                    loss += self.lam*torch.sum(torch.abs(self._model[self.reg_layer].weight))
+
                 loss.backward()
                 optim.step()
             
-            # evaluate model every 10 epochs
             if np.mod(epoch, 10) == 0:
                 # get predictions for train and test sets
                 if self.train_prop < 1.0:
-                    score_test = self.score(test_ds.ecog_feat, self._lbl_to_onehot(test_ds.ecog_lbl))
+                    self._score_test.append(self.score(test_ds.ecog_feat, test_ds.ecog_lbl))
                 else:
-                    score_test = np.nan
-
-                score_train = self.score(train_ds.ecog_feat, self._lbl_to_onehot(train_ds.ecog_lbl))
-                self._mdl.train()
-        
-        # return test and train scores for evaluating model generalization
-        return score_test, score_train
-    
-    def _lbl_to_onehot(self, lbl):
-        # Parameters
-        # ----------
-        # lbl : array-like
-        #     Array of labels, where each element is the label for the corresponding row in X
-
-        # Returns
-        # -------
-        # lbl_one : array-like
-        #     Dummy coded array of actual classes
-
-        if type(lbl) is np.ndarray:
-            lbl = torch.tensor(lbl)
-
-        lbl = lbl.type(torch.int64)
-        lbl_one = torch.nn.functional.one_hot(lbl.squeeze(), num_classes=self._n_classes)
-        lbl_one = lbl_one.type(torch.float32)
-        return lbl_one
+                    self._score_test.append(np.nan)
+                self._score_train.append(self.score(train_ds.ecog_feat, train_ds.ecog_lbl))
+                print(f'Epoch {epoch}: Train: {self._score_train[-1]:.2f}, Test: {self._score_test[-1]:.2f}')
+                self._model.train() # set model back to train mode for 
