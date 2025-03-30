@@ -8,6 +8,7 @@ project:
     - Week6.qmd
     - Week7.qmd
     - Week8.qmd
+    - Week9.qmd
   output-dir: docs
 
 website:
@@ -24,9 +25,12 @@ website:
       - Week6.qmd
       - Week7.qmd
       - Week8.qmd
+      - Week9.qmd
       - about.qmd
 
 
 format:
   html:
     theme: cosmo
+    css: styles.css
+    toc: true

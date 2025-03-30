@@ -272,7 +272,6 @@ class LogRegPT():
             for feat, lbl in train_dl:
                 optim.zero_grad()
                 pred = self._model(feat)
-                #print(lbl)
                 loss = self._loss(pred, lbl)
 
                 # add L1 regularization
@@ -282,14 +281,16 @@ class LogRegPT():
                 loss.backward()
                 optim.step()
             
-            if (np.mod(epoch, 10) == 0) and self.verbose:
+            if (np.mod(epoch, 10) == 0):
                 # get predictions for train and test sets
                 if self.train_prop < 1.0:
                     self._score_test.append(self.score(test_ds.ecog_feat, test_ds.ecog_lbl))
                 else:
                     self._score_test.append(np.nan)
                 self._score_train.append(self.score(train_ds.ecog_feat, train_ds.ecog_lbl))
-                print(f'Epoch {epoch}: Train: {self._score_train[-1]:.2f}, Test: {self._score_test[-1]:.2f}')
+
+                if self.verbose:
+                    print(f'Epoch {epoch}: Train: {self._score_train[-1]:.1f}, Test: {self._score_test[-1]:.1f}')
                 self._model.train() # set model back to train mode for next epoch
 
         self._model.eval() # set model to eval mode once fitting is done
@@ -301,7 +302,7 @@ class LogRegPT():
         self._score_train.append(self.score(train_ds.ecog_feat, train_ds.ecog_lbl))
         
         # return test and train scores for evaluating model generalization
-        return np.array(self._score_test[-1]), np.array(self._score_train[-1])
+        return self._score_test[-1], self._score_train[-1]
 
     def predict_proba(self, X):
         # Parameters
@@ -417,6 +418,7 @@ class LogRegPT_MC(LogRegPT):
 
         # input size is the number of features, input will be flattened
         input_size = np.prod(self._X_shape[1:])
+        n_ecog_ch = self._X_shape[1]
 
         # linear layer is the weights and bias
         # input_dim is the number of input features and 1 is the number of output features
@@ -425,7 +427,7 @@ class LogRegPT_MC(LogRegPT):
 
         # logistic regression model is a sequential combination of linear and sigmoid layers
         model = torch.nn.Sequential(
-            torch.nn.BatchNorm1d(self._X_shape[1]), # normalize the input features of each channel (aids with convergence)
+            torch.nn.BatchNorm1d(n_ecog_ch), # normalize the input features of each channel (aids with convergence)
             torch.nn.Flatten(1), # flatten the input so that each trial is a row and each column is a feature
             lin_layer,
         )
@@ -436,13 +438,15 @@ class LogRegPT_MC(LogRegPT):
         loss_fn = torch.nn.CrossEntropyLoss(reduction='mean')
 
         lbl = lbl.type(torch.int64).squeeze()
-        #lbl_one = torch.nn.functional.one_hot(lbl.squeeze(), num_classes=self._n_classes)
-        #lbl_one = lbl_one.type(torch.float32)
 
         loss = loss_fn(pred, lbl)
 
         return loss
 
+    def _create_optim(self):
+        # initialize optimizer
+        return torch.optim.Adam(self._model.parameters(), lr=self.lr)
+    
     def predict_proba(self, X):
         # Parameters
         # ----------
@@ -699,7 +703,8 @@ class LogRegPT_AE(LogRegPT_MC):
             if np.mod(epoch, 10) == 0:
                 # save and print loss value
                 self._loss_ae.append(loss.item())
-                print(f'Epoch {epoch}: Loss: {self._loss_ae[-1]:.2f}')
+                if self.verbose:
+                    print(f'Epoch {epoch}: Loss: {self._loss_ae[-1]:.2f}')
 
         self._autoencoder.eval() # set model to eval mode once fitting is done
 
@@ -769,5 +774,40 @@ class LogRegPT_AE(LogRegPT_MC):
                 else:
                     self._score_test.append(np.nan)
                 self._score_train.append(self.score(train_ds.ecog_feat, train_ds.ecog_lbl))
-                print(f'Epoch {epoch}: Train: {self._score_train[-1]:.2f}, Test: {self._score_test[-1]:.2f}')
-                self._model.train() # set model back to train mode for 
+                if self.verbose:
+                    print(f'Epoch {epoch}: Train: {self._score_train[-1]:.2f}, Test: {self._score_test[-1]:.2f}')
+                self._model.train() # set model back to train mode for next epoch
+
+        self._model.eval() # set model to eval mode once fitting is done
+
+        # return test and train scores for evaluating model generalization
+        return self._score_test[-1], self._score_train[-1]
+
+    """
+    def predict_proba(self, X):
+        # Parameters
+        # ----------
+        # X : array-like
+        #     Array of features, where each row is a trial and each column is a feature
+
+        # Returns
+        # -------
+        # prob : array-like
+        #     Predicted probability of each sample being in class 1
+
+        if self._model is None:
+            raise RuntimeError('Model has not been fit yet.')
+
+        self._model.eval()
+        
+        X_enc = self.encode(X)
+        X_enc = torch.tensor(X_enc.astype(np.float32))
+        
+
+        with torch.no_grad():
+            prob = self._model(X_enc)
+            prob = torch.nn.functional.softmax(prob, dim=1)
+            prob = prob.squeeze().numpy()
+
+        return prob
+        """

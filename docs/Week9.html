@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week9 – Decoding The Brain</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Decoding The Brain</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.qmd"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week1.html"> 
+<span class="menu-text">Week 1</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week2.html"> 
+<span class="menu-text">Week 2</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week3.html"> 
+<span class="menu-text">Week3</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week4.html"> 
+<span class="menu-text">Week 4</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week6.html"> 
+<span class="menu-text">Week 6</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week7.html"> 
+<span class="menu-text">Week 7</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week8.html"> 
+<span class="menu-text">Week8</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./Week9.html" aria-current="page"> 
+<span class="menu-text">Week9</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="./about.qmd"> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#feature-learning" id="toc-feature-learning" class="nav-link active" data-scroll-target="#feature-learning">Feature learning</a>
+  <ul class="collapse">
+  <li><a href="#the-bitter-lesson" id="toc-the-bitter-lesson" class="nav-link" data-scroll-target="#the-bitter-lesson">The Bitter Lesson</a></li>
+  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">Data loading</a></li>
+  <li><a href="#supervised-feature-learning" id="toc-supervised-feature-learning" class="nav-link" data-scroll-target="#supervised-feature-learning">Supervised feature learning</a>
+  <ul class="collapse">
+  <li><a href="#adam-optimizer" id="toc-adam-optimizer" class="nav-link" data-scroll-target="#adam-optimizer">Adam optimizer</a></li>
+  <li><a href="#linear-layers" id="toc-linear-layers" class="nav-link" data-scroll-target="#linear-layers">Linear layers</a></li>
+  <li><a href="#convolutional-layers" id="toc-convolutional-layers" class="nav-link" data-scroll-target="#convolutional-layers">Convolutional layers</a></li>
+  </ul></li>
+  <li><a href="#unsupervised-feature-learning" id="toc-unsupervised-feature-learning" class="nav-link" data-scroll-target="#unsupervised-feature-learning">Unsupervised feature learning</a>
+  <ul class="collapse">
+  <li><a href="#autoencoders" id="toc-autoencoders" class="nav-link" data-scroll-target="#autoencoders">Autoencoders</a></li>
+  <li><a href="#using-an-autoencoder-for-feature-learning" id="toc-using-an-autoencoder-for-feature-learning" class="nav-link" data-scroll-target="#using-an-autoencoder-for-feature-learning">Using an autoencoder for feature learning</a></li>
+  <li><a href="#implementing-an-autoencoder-class" id="toc-implementing-an-autoencoder-class" class="nav-link" data-scroll-target="#implementing-an-autoencoder-class">Implementing an autoencoder class</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week9</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="feature-learning" class="level1">
+<h1>Feature learning</h1>
+<p>So far we have performed decoding by first processing our brain data to extract or highlight features in it that we think are associated with the events we wish to decode. In the case of the EEG data, we got the mean evoked response potential to a stimulus, and then for each trial took the dot product of the mean response with the trial data to get a single number that we could use to classify the trial. For the ECoG data so far, we calculate the power spectrum on each electrode around a finger movement. The movement of a given finger is associated with an increase in power at middle frequencies on just a select few electrodes. Both of these methods are examples of <em>feature engineering</em> that are informed by our knowledge of brain organization, neural responses to events, and the physics of the recording modality.</p>
+<p>But perhaps our knowledge is holding us back. Perhaps we can do better by letting the data speak for itself. By letting the training algorithm optimize not just the classifier but the features that are extracted from the raw neural data. This is the idea behind <em>feature learning</em>. In this notebook we will explore feature learning in the context of supervised and unsupervised learning.</p>
+<section id="the-bitter-lesson" class="level2">
+<h2 class="anchored" data-anchor-id="the-bitter-lesson">The Bitter Lesson</h2>
+<p>In 2019 Richard S. Sutton, a professor of computer science at the University of Alberta (and recent winner of the <a href="https://awards.acm.org/about/2024-turing">Turing Award</a> for his work on reinforcement learning), wrote a paper called <a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">“The Bitter Lesson”</a> in which he argued that the history of AI research has shown that the most successful methods are those that can scale with the amount of data and computation available. He argues that the most successful methods are those that can learn from the data, rather than those that rely on human knowledge to guide the learning.</p>
+<p>He based this on the history of natural language processing, the search for algorithms that can process human language. Early methods relied on hand-crafted rules that were based on the knowledge of linguists. But these methods were quickly surpassed by statistical methods that learned the rules from the data. The same is true for computer vision, where early methods relied on hand-crafted features, but were surpassed by deep learning methods that learned the features from the data.</p>
+<p>Thus, we may be able to improve the performance of our decoders by incorporating feature learning into our decoding pipeline. Instead of just training a logistic decoder on the features we extract from the data, we can graft a neural network on the front of the decoder, placing it between the raw data and the logistic decoder. By allowing the training process to modify the weights of the logistic decoder <em>and</em> the neural network, we can learn features that are optimized for the decoding task.</p>
+</section>
+<section id="data-loading" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading">Data loading</h2>
+<p>We will start by loading the raw ECoG data and the finger movement labels. First we will import the standard packages we we work with, along with some helper classes for loading the ECoG data. Note also that we set the random seeds for reproducibility.</p>
+<div id="36ce8541" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path <span class="im">as</span> op</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> balanced_accuracy_score, confusion_matrix, ConfusionMatrixDisplay</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> Dataset, DataLoader</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">'..'</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> source.utils <span class="im">import</span> zscore</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> source.loaders <span class="im">import</span> EcogFingerData</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> source.decoders <span class="im">import</span> format_ecogfinger_data_raw, ECoGData, LogRegPT_MC, LogRegPT_AE</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Set random seeds for reproducibility</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">4</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">2</span>) <span class="co">#2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>&lt;torch._C.Generator at 0x153821050&gt;</code></pre>
+</div>
+</div>
+<p>Let’s now load the data from the subject we have been working with for the last few weeks.</p>
+<div id="4ca45607" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'cc'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ecog_path <span class="op">=</span> [<span class="st">'data/ecog/'</span>, subj, <span class="st">'</span><span class="sc">{}</span><span class="st">_fingerflex.mat'</span>.<span class="bu">format</span>(subj)]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ecog_file <span class="op">=</span> op.join(<span class="op">*</span>ecog_path)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ecog_data <span class="op">=</span> EcogFingerData(ecog_file)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># list of finger names</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>finger_names <span class="op">=</span> [<span class="st">'thumb'</span>, <span class="st">'index'</span>, <span class="st">'middle'</span>, <span class="st">'ring'</span>, <span class="st">'little'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is where things change, instead of loading the power spectra for each electrode surrounding finger movements, we will get the raw ECoG voltage signal.</p>
+<div id="31bcbf3c" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get flex times</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>feats <span class="op">=</span> {}</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>lbls <span class="op">=</span> {}</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ind, finger <span class="kw">in</span> <span class="bu">enumerate</span>(finger_names):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    flex_times <span class="op">=</span> ecog_data.detect_flex_onsets(finger)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    feats[finger], lbls[finger] <span class="op">=</span> format_ecogfinger_data_raw(ecog_data, flex_times)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># pool together all data</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>feats_all <span class="op">=</span> np.concatenate([feats[finger] <span class="cf">for</span> finger <span class="kw">in</span> finger_names], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>lbls_all <span class="op">=</span> np.concatenate([lbls[finger]<span class="op">*</span>(i<span class="op">+</span><span class="dv">1</span>) <span class="cf">for</span> i,finger <span class="kw">in</span> <span class="bu">enumerate</span>(finger_names)], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># keep a random subset of no finger trials equal in number to the number of individual finger trials</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># get the median number of labels for each finger</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>n_lbls <span class="op">=</span> np.median(np.bincount(lbls_all.squeeze().astype(<span class="bu">int</span>))).astype(<span class="bu">int</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># get the indices of the no finger trials</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>no_finger_inds <span class="op">=</span> np.where(lbls_all<span class="op">==</span><span class="dv">0</span>)[<span class="dv">0</span>]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly select a subset of no finger trials to keep, equal in number to the median number of labels for each finger</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>no_finger_inds <span class="op">=</span> np.random.choice(no_finger_inds, size<span class="op">=</span>n_lbls, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># keep the selected no finger trials and all of the individual finger trials</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>inds <span class="op">=</span> np.concatenate([no_finger_inds, np.where(lbls_all)[<span class="dv">0</span>]])</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>feats_sub <span class="op">=</span> feats_all[inds,:]</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>lbls_sub <span class="op">=</span> lbls_all[inds]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We have taken only a subset of the data so we have an equal number of trials for each finger flexion and no flexion. <code>lbls_sub</code> is a list of labels for each trial, where 0 is no flexion and 1-5 are the fingers. <code>feats_sub</code> is a 3-dimensional numpy array, where the first dimension is the trial number, the second dimension is the electrode number (63), and the third dimension is the time point. The time points are sampled at 1000 Hz. Since we only take the time 200ms before and after the flexion, there are 400 times points.</p>
+<div id="52c30c3a" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Size of our data: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(feats_sub.shape))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Size of our data: (180, 63, 400)</code></pre>
+</div>
+</div>
+</section>
+<section id="supervised-feature-learning" class="level2">
+<h2 class="anchored" data-anchor-id="supervised-feature-learning">Supervised feature learning</h2>
+<p>In <em>supervised feature learning</em>, we use the feedback from our decoder to adjust the parameters of the lower layers of our decoder that are performing the feature extraction. In this way, we can learn features that are optimized for the decoding task. This is not so different from how we have trained our logistic decoders so far, except now we are adding additional layers to the decoder and letting the training process adjust the weights of those layers as well.</p>
+<p>These layers are commonly used in deep neural networks, and we will use some of them here. But before we dive into the details of these new architectures, there is one change we will make to the way we train our decoders. We will change the optimizer we use to update the weights of the network. Instead of using stochastic gradient descent (SGD), we will use the Adam optimizer.</p>
+<section id="adam-optimizer" class="level3">
+<h3 class="anchored" data-anchor-id="adam-optimizer">Adam optimizer</h3>
+<p>The Adam optimizer is an extension to stochastic gradient descent that has been shown to work well in training deep neural networks. It keeps track of the average and the variance of the gradients for each weight in the network, and uses these to adjust the learning rate for each weight. This allows the optimizer to adapt the learning rate for each weight individually, which can lead to faster convergence and better performance.</p>
+<p>To add the Adam optimizer to our decoder, we just have to swap out the SGD optimizer for the Adam optimizer. In PyTorch, this is as simple as changing one line of code. Instead of using <code>optim.SGD</code>, we will use <code>optim.Adam</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _create_optim(<span class="va">self</span>):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize optimizer</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.optim.Adam(<span class="va">self</span>._model.parameters(), lr<span class="op">=</span><span class="va">self</span>.lr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="linear-layers" class="level3">
+<h3 class="anchored" data-anchor-id="linear-layers">Linear layers</h3>
+<p>A linear layer is a simple transformation that applies a linear function to the input data. In fact, the linear transform we have been applying to the data before passing it through the logistic function, <span class="math inline">y = Wx + b</span>, is a linear layer. The weights <code>W</code> and biases <code>b</code> are the parameters of the linear layer. In PyTorch, we can implement a linear layer using the <code>nn.Linear</code> class.</p>
+<p>Often when we create a linear layer in a neural network, it is not just the linear transformation that we apply to the data. We often follow the linear transformation with a non-linear activation function, such as the sigmoid.</p>
+<p>Why should we bother with a non-linear activation function? Well, if you take two linear transformations and stack them together, you still just have a linear transformation. <span class="math inline">y = W_2(W_1x + b_1) + b_2 = (W_2W_1)x + (W_2b_1 + b_2)</span>. So if we only use linear layers, we can always just replace the entire stack of layers with a single linear layer. By adding non-linear activation functions, we can learn more complex functions that can better model the data. One decoding problem that requires such a complex function is known as ‘the XOR problem’. This is a classic example in machine learning that shows why linear transforms by themselves are not always sufficient.</p>
+<p>Here we will create simple dataset to demonstrate this. It will have two classes, and each class will be built from two Gaussian distributions.</p>
+<div id="22a211c0" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a demo scatterplot of data that shows the xor problem</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># generate some data</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">0</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> np.random.normal([<span class="dv">0</span>,<span class="dv">0</span>], <span class="dv">1</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> np.random.normal([<span class="dv">10</span>,<span class="dv">10</span>], <span class="dv">1</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>x3 <span class="op">=</span> np.random.normal([<span class="dv">0</span>,<span class="dv">10</span>], <span class="dv">1</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>x4 <span class="op">=</span> np.random.normal([<span class="dv">10</span>,<span class="dv">0</span>], <span class="dv">1</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># combine the data</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.vstack((x1, x2, x3, x4))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create labels</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>y_nosep <span class="op">=</span> np.repeat([<span class="dv">0</span>, <span class="dv">1</span>], <span class="dv">200</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>y_sep <span class="op">=</span> np.repeat([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>], <span class="dv">100</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the data</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c<span class="op">=</span>y_sep, cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Data that is linearly separable'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].axhline(y<span class="op">=</span><span class="dv">5</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].text(<span class="dv">0</span>, <span class="fl">5.2</span>, <span class="st">'Decision boundary'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c<span class="op">=</span>y_nosep, cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Data that is not linearly separable'</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].text(<span class="dv">1</span>, <span class="fl">5.2</span>, <span class="st">'Decision boundaries?'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot([<span class="op">-</span><span class="dv">3</span>, <span class="fl">7.5</span>], [<span class="dv">2</span>, <span class="dv">13</span>], <span class="st">'--'</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot([<span class="dv">4</span>, <span class="fl">15.5</span>], [<span class="op">-</span><span class="dv">4</span>, <span class="dv">11</span>], <span class="st">'--'</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlim(ax[<span class="dv">0</span>].get_xlim())</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylim(ax[<span class="dv">0</span>].get_ylim())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-6-output-1.png" width="792" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Can you imagine drawing a single line that will evenly divide the blue and red clusters? For the linearly separable case, we can use a draw a single line that splits them. But for the case that is not linearly separable, we would need to combine multiple decision boundaries group together clusters with the same color. To do this, we can envision creating a multiclass logistic function that creates the two lines shown here (one class is on the upper-side of the top line, and the other class is on the lower-side of the bottom line). Then, we would take the output of that multiclass logistic function and pass it to a regular logistic function that determines if either class is present. This is a simple example of how we can use multiple linear layers with non-linear activation functions to learn more complex decision boundaries.</p>
+<p>Crucially, this can only be solved with the added non-linearity of the activation function.</p>
+<p>In Pytorch the linear transform is implemented with the <code>nn.Linear</code> class. It requires two arguments, the number of input features and the number of output features. It also has a bias term by default, which we will keep.</p>
+<section id="relu-activation" class="level4">
+<h4 class="anchored" data-anchor-id="relu-activation">ReLU activation</h4>
+<p>For our logistic decoder, we have been using the sigmoid activation function. But for the layers in our network that are trained to extract features, we will use a different activation function, called the rectified linear unit (ReLU). The ReLU activation function is defined as <span class="math inline">f(x) = max(0, x)</span>. This means that if the input is positive, it returns the input. If the input is negative, it returns 0. This has been shown to work well in practice for many deep learning tasks.</p>
+<p>Why change the activation function anyway? First, the sigmoid activation function can suffer from the vanishing gradient problem. This means that if the input to the sigmoid function is very large or very small, the gradient of the function becomes very small. This can make it difficult for the network to learn. The ReLU activation function does not suffer from this problem (at least for positive values) because it has a constant gradient of 1 for positive inputs. Second, the ReLU activation function has been shown to work well in practice for many deep learning tasks. Lastly, it is computationally efficient and has been found to lead to faster convergence during training.</p>
+<p>The ReLU activation function is implemented in PyTorch with the <code>nn.ReLU</code> class. It does not require any arguments.</p>
+</section>
+<section id="batch-normalization" class="level4">
+<h4 class="anchored" data-anchor-id="batch-normalization">Batch normalization</h4>
+<p>When we train a neural network with multiple layers, the distribution of the inputs to each layer can change as the parameters of the previous layers are updated, or between batches of data. This sometimes makes it difficult for the network to learn. Batch normalization is a technique that helps to stabilize the distribution of the inputs to each layer by normalizing the inputs to have a mean of 0 and a standard deviation of 1. This helps improve the convergence of the network during training, and generalize to the held out test data. During training, the mean and standard deviation are calculated from the current batch of data. During testing, the mean and standard deviation are calculated from the entire training dataset.</p>
+<p>Normalization is typically applied to the output of the linear layer and before the activation function. In PyTorch, batch normalization is implemented with the <code>nn.BatchNorm1d</code> class. It requires one argument, the number of features in the input data.</p>
+<p>A demo of batch normalization built with Numpy is shown below:</p>
+<div id="6518d31b" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> norm1d(x):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    x_mean <span class="op">=</span> np.mean(x, axis<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">2</span>), keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    x_std <span class="op">=</span> np.std(x, axis<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">2</span>), keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    x_norm <span class="op">=</span> (x <span class="op">-</span> x_mean) <span class="op">/</span> x_std</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x_norm</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>feats_sub_z <span class="op">=</span> norm1d(feats_sub)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In Pytorch, the data tensors we use to store the features are usually specified as 2+n dimensional. The first dimension is the ‘batch size’, the second dimension is the number of ‘channels’, and the remaining dimensions are used to store the spatial or temporal structure of the data. Our ECoG data is stored as a 3D tensor, where the first dimension is the trial number, the second dimension is the electrode number, and the third dimension is the time point. Given this, our example function takes the mean and standard deviation across the batch and time dimensions, but not across the electrode dimension. This is because we want to normalize the data for each electrode (i.e.&nbsp;channel) separately. We will save the z-normalized version of our data for later use during unsupervised learning.</p>
+</section>
+<section id="building-the-linear-layer" class="level4">
+<h4 class="anchored" data-anchor-id="building-the-linear-layer">Building the linear layer</h4>
+<p>Now that we have all the parts, we can start building the linear layer. We are going to stack three of these layers together, which should give the network more power to learn a complex decision boundary. We will reuse our multiclass logistic decoder class that was implemented in Pytorch. All we have to change is the <code>_create_model</code> method to include the new layers.</p>
+<div id="d52424b8" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPT_MC_Linear(LogRegPT_MC):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _create_model(<span class="va">self</span>):</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="co"># layer where regularization is applied</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.reg_layer <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># input size is the number of features, input will be flattened</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        input_size <span class="op">=</span> np.prod(<span class="va">self</span>._X_shape[<span class="dv">1</span>:])</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># define a linear layer with batch normalization and ReLU activation</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> linear_layer(input_size, output_size):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>            lin <span class="op">=</span> nn.Sequential(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                nn.Linear(input_size, output_size),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                nn.BatchNorm1d(output_size),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                nn.ReLU()</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> lin</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># logistic regression model is a sequential combination of linear and sigmoid layers</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            nn.Flatten(<span class="dv">1</span>), <span class="co"># flatten the input so that each trial is a row and each column is a feature</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            linear_layer(input_size, <span class="dv">100</span>),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>            linear_layer(<span class="dv">100</span>, <span class="dv">50</span>),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            linear_layer(<span class="dv">50</span>, <span class="dv">20</span>),</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">20</span>, <span class="va">self</span>._n_classes),</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._model <span class="op">=</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There is a lot going on here, so lets unpack it.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># layer where regularization is applied</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.reg_layer <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># input size is the number of features, input will be flattened</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>input_size <span class="op">=</span> np.prod(<span class="va">self</span>._X_shape[<span class="dv">1</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Since our model will now feature multiple layers, we cannot assume that the regularization we perform on the logistic decoder will always be applied to the same layer. But, since the logistic decoder will always be the last layer, we can just set the <code>self.reg_layer</code> to -1, which will always refer to the last layer.</p>
+<p>Next we need to specify the input size to the first layer. Since we are using a linear layer, we need to specify the number of input features. In our case, the input features are the flattened ECoG data. So we need to calculate the total number of features by taking the product of the dimensions of the ECoG data, excluding the first dimension (which is the trial number). This is done with <code>np.prod(self._X_shape[1:])</code>. In this case, we have 63 electrodes and 400 time points, so the input size is 25,200.</p>
+<p>The next bit of code creates a function that will make it easier to create the layers.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> linear_layer(input_size, output_size):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    lin <span class="op">=</span> nn.Sequential(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        nn.Linear(input_size, output_size),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        nn.BatchNorm1d(output_size),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        nn.ReLU()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> lin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This function creates a sequential model that includes a linear layer, batch normalization, and the ReLU activation function. It takes the input size and output size as arguments and returns the sequential model.</p>
+<p>With this function, we can now use the <code>nn.Sequential</code> class to stack the layers together.</p>
+<p>The first layer will take the flattened ECoG data as input and output 100 features. The second layer will take those 100 features as input and output 50 features. The final layer will take those 50 features as input and output the number of classes (6 in our case, for the 5 fingers and no flexion).</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    nn.Flatten(<span class="dv">1</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    linear_layer(input_size, <span class="dv">100</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    linear_layer(<span class="dv">100</span>, <span class="dv">50</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    linear_layer(<span class="dv">50</span>, <span class="dv">20</span>),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">20</span>, <span class="va">self</span>._n_classes),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>._model <span class="op">=</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>nn.Flatten(1)</code> layer is used to flatten the input data, starting from the second dimension (the first dimension is the batch size). This is necessary because the linear layers expect a 2D input, where the first dimension is the batch size and the second dimension is the number of features.</p>
+<p>The raw ECoG data is passed through three linear layers prior to reaching the logistic decoder at the end. The first layer takes the 25,200 features of the flattened ECoG data and outputs 400 features. The second layer takes those 400 features and outputs 100 features. The third layer takes those 100 features and outputs 50 features. This narrowing down of the features encourages the network to learn a more compact representation of the data that is useful for the decoding task. At the last layer we just use a regular <code>nn.Linear</code> layer, whose output will be passed to a softmax function yielding class probabilities (5 fingers and no flexion).</p>
+<p>Note how much simpler our model description is when we define a function to create the layers. This makes it much easier to add or remove layers in the future, and to experiment with different architectures. If we had not used such a function, our model would instead have been verbose:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    nn.Flatten(<span class="dv">1</span>),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    nn.Linear(input_size, <span class="dv">100</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    nn.BatchNorm1d(<span class="dv">100</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    nn.ReLU(),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">100</span>, <span class="dv">50</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    nn.BatchNorm1d(<span class="dv">50</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    nn.ReLU(),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">50</span>, <span class="dv">20</span>),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    nn.BatchNorm1d(<span class="dv">20</span>),</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    nn.ReLU(),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">20</span>, <span class="va">self</span>._n_classes)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That description is less clear than the one in our code. Moreover, as you will see below, if we want to change how our linear layer is implemented, it would require us to change every instance of the layer in the model description. By using a function, we can just change the function and all the layers will be updated automatically.</p>
+<p>Finally, we assign the model to <code>self._model</code>, which is the attribute that is used by the rest of the class to access the model.</p>
+<div id="162e25a4" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># trying multiclass logistic regression</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lr_lin <span class="op">=</span> LogRegPT_MC_Linear(shuffle_seed<span class="op">=</span><span class="dv">2</span>, epochs<span class="op">=</span><span class="dv">250</span>, batch_size<span class="op">=</span><span class="dv">30</span>, lr<span class="op">=</span><span class="fl">0.001</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>test_perf, train_perf <span class="op">=</span> lr_lin.fit(feats_sub, lbls_sub)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print train and test performance with 1 decimal place</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(train_perf))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(test_perf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train performance: 98.6
+Test performance: 50.1</code></pre>
+</div>
+</div>
+<p>The performance of the model on the training data is near perfect at 98.6% accuracy. However, for the testing data it is only 50.1%. This is better than the chance level of 16.7% (1/6). Perhaps we are not running the training for long enough. Since we have dramatically increased the complexity of the model, it may be the case that we need to give it more training epochs to optimize its parameters. To see if this is the case, let’s examine how performance on the training and test data sets changed during training.</p>
+<div id="1d6019b4" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_training_performance(mdl, ax <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    train_scores <span class="op">=</span> mdl._score_train</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    test_scores <span class="op">=</span> mdl._score_test</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    epochs <span class="op">=</span> np.arange(<span class="bu">len</span>(train_scores))<span class="op">*</span><span class="dv">10</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    ax.plot(epochs, train_scores, label<span class="op">=</span><span class="st">'train'</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    ax.plot(epochs, test_scores, label<span class="op">=</span><span class="st">'test'</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Balanced accuracy'</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim([<span class="dv">0</span>, <span class="dv">105</span>])</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    ax.legend()</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'Performance over training epochs'</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ax</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>plot_training_performance(lr_lin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-10-output-1.png" width="593" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Within the first 10 epochs performance on the training and test dataset was near their peaks. This suggests that the problem is not the need for additional training. One possibility for the training dramatically exceeding the test is overfitting, where the model learns the training data so well that it memorizes individual samples and does not generalize to new data.</p>
+<p>In previous lectures, we avoided overfitting with regularization. Here we can apply a regularization technique frequently used in neural networks called <em>dropout</em>. But first, let’s see what features our network learned about the data.</p>
+</section>
+<section id="identifying-the-learned-features" class="level4">
+<h4 class="anchored" data-anchor-id="identifying-the-learned-features">Identifying the learned features</h4>
+<p>Once the network has been trained we can inspect the learned features. This is easiest to do with the first layer, since it is directly connected to the raw ECoG data. The weights will be a matrix of size 100x25,200, where each row corresponds to one of 100 features and each column corresponds to one of the 25,200 combinations of channel and time point. We can visualize these weights as a grid of images, where each image corresponds to one of the input features.</p>
+<div id="91519d65" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract weights from the model</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> lr_lin._model[<span class="dv">1</span>][<span class="dv">0</span>].weight.detach().numpy()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> weights.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">63</span>, <span class="dv">400</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a few selected weights</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].imshow(weights[<span class="dv">3</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].imshow(weights[<span class="dv">30</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].imshow(weights[<span class="dv">42</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].imshow(weights[<span class="dv">77</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Selected weights from the model'</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>fig.supxlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>fig.supylabel(<span class="st">'Channel'</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-11-output-1.png" width="1416" height="485" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The patterns learned don’t seem to resemble anything we have seen before in response to finger flexion. This could be because the subsequent linear layers combine these features in a way that solves the decoding problem, so looking at them in isolation is not as informative. Despite this, repeated patterns can be seen across channels that is reminiscent of the types of spatial patterns we have seen before with the ECoG grid.</p>
+<p>Perhaps there is a pattern in the strength of the weights? We know that certain channels were more sensitive to finger flexion than others, and that the signal changes on them tended to happen at the time of flexion. Thus, the weights for those channel/time point combinations should be higher than the weights for other channel/time point combinations. We can visualize this by taking the mean of the absolute value of the weights across all time points for each channel, and then plotting those means.</p>
+<div id="1342349c" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>weights_str <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(weights), axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(weights_str, aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> ax.figure.colorbar(im, ax<span class="op">=</span>ax)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Magnitude of weights'</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Channels'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>Text(0, 0.5, 'Channels')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-12-output-2.png" width="572" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here we can see that there are a few channels that have high weights. Moreover, these larger weights tend to be around time 0 ms, when the finger flexion occurred.</p>
+</section>
+<section id="dropout" class="level4">
+<h4 class="anchored" data-anchor-id="dropout">Dropout</h4>
+<p>Dropout is a regularization technique that randomly sets a fraction of the input units to 0 at each update during the training time. This helps to prevent overfitting by making the network not depend too much on any one input or combination of inputs. Instead, the network must learn to generalize from the data. Dropout is typically applied to the output of a layer. In PyTorch, dropout is implemented with the <code>nn.Dropout</code> class. It requires one argument, the dropout probability, which is the fraction of input units to drop. A common value for this is 0.5, meaning that half of the input units will be randomly set to 0 during training.</p>
+<div id="428173c0" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPT_MC_Dropout(LogRegPT_MC):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _create_model(<span class="va">self</span>):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>         <span class="co"># layer where regularization is applied</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.reg_layer <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># input size is the number of features, input will be flattened</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        input_size <span class="op">=</span> np.prod(<span class="va">self</span>._X_shape[<span class="dv">1</span>:])</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> linear_layer(input_size, output_size):</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>            lin <span class="op">=</span> nn.Sequential(</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                nn.Linear(input_size, output_size),</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>                nn.BatchNorm1d(output_size),</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>                nn.ReLU(),</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>                nn.Dropout(<span class="fl">0.5</span>) <span class="co">#&lt;-- add dropout layer with 50% probability</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> lin</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># logistic regression model is a sequential combination of linear and sigmoid layers</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>            nn.Flatten(<span class="dv">1</span>), <span class="co"># flatten the input so that each trial is a row and each column is a feature</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>            linear_layer(input_size, <span class="dv">100</span>),</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>            linear_layer(<span class="dv">100</span>, <span class="dv">50</span>),</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>            linear_layer(<span class="dv">50</span>, <span class="dv">20</span>),</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">20</span>, <span class="va">self</span>._n_classes),</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._model <span class="op">=</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since we defined our linear layers with a function, it was easy to add a dropout to all of them. We just need to add the <code>nn.Dropout</code> layer after the ReLU activation function in the <code>linear_layer</code> function.</p>
+<p>Let’s now train the model with dropout and see how it performs.</p>
+<div id="1d114d5e" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># trying multiclass logistic regression</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>lr_do <span class="op">=</span> LogRegPT_MC_Dropout(shuffle_seed<span class="op">=</span><span class="dv">2</span>, epochs<span class="op">=</span><span class="dv">250</span>, batch_size<span class="op">=</span><span class="dv">30</span>, lr<span class="op">=</span><span class="fl">0.001</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>test_perf, train_perf <span class="op">=</span> lr_do.fit(feats_sub, lbls_sub)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(train_perf))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(test_perf))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>plot_training_performance(lr_do)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train performance: 98.6
+Test performance: 61.6</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-14-output-2.png" width="593" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Adding dropout slowed the training, with accuracy on the training data taking longer to reach its peak. Performance on the testing data was better, though, with accuracy now at 61.6%. However, this performance is still not as good as we were getting with our logistic decoder using spectral power, whose performance was in the 80s. While it is tempting to try adding more linear layers to see if performance can be improved, it might be better to try a different kind of architecture that is more suited to the time-series nature of the ECoG data. One such architecture is a <em>convolutional neural network</em>, which we will explore next.</p>
+<p>Here too we can inspect the weights in the first layer to see if we can identify any interesting features that the network has learned. Perhaps adding dropout has changed the kinds of features that are learned.</p>
+<div id="2340b9da" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract weights from the model</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> lr_do._model[<span class="dv">1</span>][<span class="dv">0</span>].weight.detach().numpy()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> weights.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">63</span>, <span class="dv">400</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a few selected weights</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].imshow(weights[<span class="dv">3</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].imshow(weights[<span class="dv">30</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].imshow(weights[<span class="dv">42</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].imshow(weights[<span class="dv">77</span>,:,:], aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Selected weights from the model'</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>fig.supxlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>fig.supylabel(<span class="st">'Channel'</span>)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-15-output-1.png" width="1416" height="485" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="dbf77c0d" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>weights_str <span class="op">=</span> np.mean(np.<span class="bu">abs</span>(weights), axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>im <span class="op">=</span> ax.imshow(weights_str, aspect<span class="op">=</span><span class="st">'auto'</span>, extent<span class="op">=</span>[<span class="op">-</span><span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">63</span>], cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> ax.figure.colorbar(im, ax<span class="op">=</span>ax)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Magnitude of weights'</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Channels'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>Text(0, 0.5, 'Channels')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-16-output-2.png" width="581" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Adding dropout seems to have resulted in a sparser distribution of weights.</p>
+</section>
+</section>
+<section id="convolutional-layers" class="level3">
+<h3 class="anchored" data-anchor-id="convolutional-layers">Convolutional layers</h3>
+<p>The ECoG data is made up of voltage measurements taken across multiple electrodes at fixed time intervals. This means that the data has a spatial structure (the electrodes) and a temporal structure (the time points). Adjacent time points on the same electrode will tend to have similar values. What we are looking for are patterns in their sequence of values that indicate whether a flexion occurred. A convolutional neural network (CNN) is a type of neural work that is particularly well-suited for data with this kind of structure. CNNs use a special kind of layer called a convolutional layer, which applies a convolution operation to the input data. This allows the network to learn spatial and temporal features from the data.</p>
+<p>In our case, we will ignore the absolute spatial positions of the electrodes and just treat each one as a separate ‘channel’ of data.</p>
+<section id="convolutional-layer" class="level4">
+<h4 class="anchored" data-anchor-id="convolutional-layer">Convolutional layer</h4>
+<p>A convolutional layer applies a convolution operation to the input data. This involves sliding a small filter (or kernel) over the input data and computing the dot product between the filter and the input data at each position. This allows the network to learn local patterns in the data. For 1 dimensional convolution, filter has a dimensionality of <code>[n_channels, n_timepoints]</code>, where <code>n_timepoints</code> is specified by us. This means that a single filter detects patterns in the series of voltages that are expressed across multiple channels.</p>
+<p>Some common parameters for a convolutional layer include:</p>
+<p>- <code>in_channels</code>: the number of input channels (in our case, the number of electrodes)</p>
+<p>- <code>out_channels</code>: the number of output channels (the number of filters)</p>
+<p>- <code>kernel_size</code>: the size of the filter (the number of time points in the filter)</p>
+<p>- <code>stride</code>: the amount by which the filter is moved at each step (default is 1)</p>
+<p>- <code>padding</code>: the amount of zero-padding added to the input data (default is 0)</p>
+<p>- <code>dilation</code>: the spacing between the kernel points across time (default is 1)</p>
+<p>- <code>bias</code>: whether to include a bias term (default is True)</p>
+<p>To visualize how each of these impact the convolution operation, check out these <a href="https://github.com/vdumoulin/conv_arithmetic">animations</a>. We can explore how the convolution operation works with the functional version of it in Pytorch. For this we will use the <code>F.conv1d</code> function, which applies a 1-dimensional convolution to the input data.</p>
+<div id="fda370d9" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> torch.tensor([[[<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]]]).<span class="bu">float</span>()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>in_data <span class="op">=</span> torch.tensor([[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>], </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                        [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>],</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>                        [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]]).reshape(<span class="dv">1</span>,<span class="dv">3</span>,<span class="op">-</span><span class="dv">1</span>).<span class="bu">float</span>()</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>out_data <span class="op">=</span> F.conv1d(in_data, weights)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Filter weights: </span><span class="ch">\n\r</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(weights.squeeze()))</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'In shape: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(in_data.shape))</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Out shape: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(out_data.shape))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Filter weights: 
+tensor([[ 0.,  0.,  0.],
+        [ 0.,  1., -1.],
+        [ 0.,  1., -1.]])
+In shape: torch.Size([1, 3, 13])
+Out shape: torch.Size([1, 1, 11])</code></pre>
+</div>
+</div>
+<p>The filter we are creating here samples 3 time points across 3 channels. It is going to be insensitive to anything happening on the first (top) channel, since all the weights there are set to zero. The other two channels have weights with the sequence <code>[0, 1, -1]</code>, which act as detectors of a single sample increase in voltage followed by a single sample decrease in voltage.</p>
+<p>After we apply the convolution operation, we can see that the output is a new tensor that has a different size. The first dimension has the same size since convolutional is applied to each item in the batch separately and we only have 1 item in our batch. The second dimension has gone from 3 to 1. This happened because the number of channels in our input data was 3, but we only had 1 filter specified, so only one channel is returned. Lastly, the time dimension is smaller. This is because the convolution operation reduced the size of the input data. The size of the output data depends on the size of the input data, the size of the filter, the stride, and the padding. In this case, we used a stride of 1 and no padding, so the output size is smaller than the input size. To keep the size consistent, we can add extra padding to the input data using the <code>padding</code> argument. This will add zeros to the beginning and end of the input data, which will keep the output size the same as the input size.</p>
+<div id="b2bd58f7" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>out_data <span class="op">=</span> F.conv1d(in_data, weights, padding<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].imshow(in_data.squeeze(), aspect<span class="op">=</span><span class="st">'equal'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Input'</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].imshow(out_data[<span class="dv">0</span>], aspect<span class="op">=</span><span class="st">'equal'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Output'</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-18-output-1.png" width="470" height="314" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looking over the output, we can how the convolution transforms the input to create the output. The first (top) channel is ignored since its weights were all zero. When an event occurred on either channel 2 or 3, the filter was reflected in the output. If both channels 2 and 3 had the same event, the output was a bit larger. This is because the filter was able to summed the events on both channels.</p>
+<p>With only 3 time points in our filter, the duration of features we can detect in the time series is limited. Indeed, the neural events we care about tend to happen over dozens of samples. To detect longer duration features, We could create a larger kernel with more time points. However, this would also increase the number of parameters in the model, which could lead to overfitting if we are not careful. Since adjacent time points tend to be correlated, adjacent weights would be redundant. Instead, we could increase the dilation, spacing out the weights in the filter. This would allow us to detect features that are spread out over a longer period of time, while keeping the number of parameters the same.</p>
+<div id="a51adb3a" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use pytorch to interpolate over in_data increasing its length by a factor of 10</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>in_data_long <span class="op">=</span> F.interpolate(in_data, scale_factor<span class="op">=</span><span class="dv">10</span>, mode<span class="op">=</span><span class="st">'nearest'</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>out_data_d1 <span class="op">=</span> F.conv1d(in_data_long, weights, padding<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>out_data_d10 <span class="op">=</span> F.conv1d(in_data_long, weights, padding<span class="op">=</span><span class="dv">1</span>, dilation<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">3</span>,<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].imshow(in_data_long.squeeze(), aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Input'</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].imshow(out_data_d1[<span class="dv">0</span>], aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Output with dilation=1'</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].imshow(out_data_d10[<span class="dv">0</span>], aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_title(<span class="st">'Output with dilation=10'</span>)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-19-output-1.png" width="470" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By setting the dilation equal to the size of the features we want to detect, we can create a filter that samples the time series at intervals consistent with the patterns we wish to extract. However, we can now see that much of the information in the time series being outputted is redundant. The value at a given time point will often be the same as the value at the nearest 10 other time points. This redundancy can be reduced using <em>max pooling</em>, which we will explore next.</p>
+</section>
+<section id="max-pooling" class="level4">
+<h4 class="anchored" data-anchor-id="max-pooling">Max pooling</h4>
+<p>Max pooling is a downsampling technique that reduces the size of the input data by taking the maximum value over a specified window. This helps to reduce the redundancy in the data and makes the network more robust to small changes in the input data. Max pooling is typically applied after a convolutional layer. In PyTorch, max pooling is implemented with the <code>nn.MaxPool1d</code> class. It requires one argument, the size of the pooling window.</p>
+<p>We can explore the max pooling operation with the functional version of it in Pytorch. For this we will use the <code>F.max_pool1d</code> function, which applies a 1-dimensional max pooling to the input data. A max pooling operation accepts many of the same parameters used in convolution. Here we will use the size of the window to take the maximum over (which is analogous to the kernel size), and the stride, which is how much to move the window at each step. In our case, the features we care about have a size of 10, so we will use a window size of 10 and a stride of 10. This means that we will take the maximum value over every 10 time points, and then move the window by 10 time points for the next operation. This will reduce the size of the output data by a factor of 10.</p>
+<div id="a9540479" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>out_data_pool <span class="op">=</span> F.max_pool1d(out_data_d10, kernel_size<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>))</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].imshow(out_data_d10[<span class="dv">0</span>], aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Output with dilation=10, no pooling'</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].imshow(out_data_pool[<span class="dv">0</span>], aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Output with max pooling'</span>)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-20-output-1.png" width="470" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In general, the convolution and pooling operations are building in two assumptions into our model. First, that the features we care about are patterns that are spread over time and can occur at any time point. Second, that the exact timing of the feature is not as important as the presence of the feature. Both assumptions can dramatically decrease the number of parameters needed to specify our model. Instead of giving every combination of electrode and time point its own weight, which we did in the first linear layer of the previous decoder, we have those parameters shared across all time points. This is known as parameter sharing, and it is a key reason why convolutional neural networks are so powerful. Another reduction in parameters comes from the max pooling operation, which downsamples the data and reduces the number of time points we need to consider in the subsequent layers.</p>
+</section>
+<section id="implementing-a-convolutional-layer" class="level4">
+<h4 class="anchored" data-anchor-id="implementing-a-convolutional-layer">Implementing a convolutional layer</h4>
+<p>Now that we understand how convolutional and pooling layers work, we can implement a convolutional layer in our multiclass logistic decoder. We will replace the first linear layer with a convolutional layer. The output of the convolutional layer will be passed to a max pooling layer, which will downsample the data. After that, we will add two more linear layers, which will take the output of the max pooling layer as input.</p>
+<div id="9fde4b22" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPT_CNN(LogRegPT_MC):</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _create_model(<span class="va">self</span>):</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>         <span class="co"># layer where regularization is applied</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.reg_layer <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        n_ecog_ch <span class="op">=</span> <span class="va">self</span>._X_shape[<span class="dv">1</span>]</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        n_conv_ch <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        ks <span class="op">=</span> <span class="dv">21</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>        mp <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        lin_input_sz <span class="op">=</span> n_conv_ch <span class="op">*</span> (<span class="va">self</span>._X_shape[<span class="dv">2</span>]<span class="op">//</span>mp) </span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># CNN layer</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> cnn_layer(input_size, output_size):</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>            cnn <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>                torch.nn.Conv1d(input_size, output_size, kernel_size<span class="op">=</span>ks, stride<span class="op">=</span><span class="dv">1</span>, dilation<span class="op">=</span><span class="dv">3</span>, padding<span class="op">=</span><span class="st">'same'</span>), </span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>                torch.nn.BatchNorm1d(output_size), </span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>                torch.nn.ReLU(), </span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>                torch.nn.MaxPool1d(kernel_size<span class="op">=</span>mp, stride<span class="op">=</span>mp),</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>                torch.nn.Dropout1d(<span class="fl">0.5</span>), </span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> cnn</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> linear_layer(input_size, output_size):</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>            lin <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>                torch.nn.Linear(input_size, output_size),</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>                torch.nn.BatchNorm1d(output_size),</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>                torch.nn.ReLU(),</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>                torch.nn.Dropout(<span class="fl">0.5</span>)</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> lin</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>            cnn_layer(n_ecog_ch, n_conv_ch),</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>            torch.nn.Flatten(<span class="dv">1</span>),</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>            linear_layer(lin_input_sz, <span class="dv">50</span>),</span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>            linear_layer(<span class="dv">50</span>, <span class="dv">20</span>),</span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>            torch.nn.Linear(<span class="dv">20</span>, <span class="va">self</span>._n_classes),</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._model <span class="op">=</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We keep the two linear layers from the previous models, and add a convolutional layer at the beginning. The convolutional layer is defined as:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cnn_layer(input_size, output_size):</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    cnn <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        torch.nn.Conv1d(input_size, output_size, kernel_size<span class="op">=</span>ks, stride<span class="op">=</span><span class="dv">1</span>, dilation<span class="op">=</span><span class="dv">3</span>, padding<span class="op">=</span><span class="st">'same'</span>), </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        torch.nn.BatchNorm1d(output_size),</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        torch.nn.ReLU(), </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        torch.nn.MaxPool1d(kernel_size<span class="op">=</span>mp, stride<span class="op">=</span>mp),</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        torch.nn.Dropout1d(<span class="fl">0.5</span>),</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cnn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>cnn_layer</code> function creates a sequential model that includes a convolutional layer, batch normalization, ReLU activation function, max pooling, and dropout. Since our sample rate is 1000 Hz, and the features we care about last for 10s of samples (spectral power in the 100 Hz frequency range was indicative of a finger flexion), we will use a kernel size of 21. Setting the dilation to 3 means that the weights in the filter can detect features that are spread out over 60 ms. Following convolution, we apply <code>nn.BatchNorm1d</code> to normalize the input features of each channel. This is followed by the ReLU activation function to introduce non-linearity. After that, we apply max pooling with a kernel size of 20 and a stride of 20 to downsample the data. Finally, we apply dropout with <code>nn.Dropout1d</code>, which randomly sets entire channels to 0 for each sample in the batch. The reason for using this and not the standard dropout is because adjacent samples are correlated in time series data, so just dropping out random time points still leaves information that can be used between channels to solve the decoding problem. Often such between-channel dependencies encourage memorization of training samples. Dropout mitigates this.</p>
+<p>To build the final model, we declare:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    cnn_layer(n_ecog_ch, n_conv_ch),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    torch.nn.Flatten(<span class="dv">1</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    linear_layer(lin_input_sz, <span class="dv">100</span>),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    linear_layer(<span class="dv">100</span>, <span class="dv">50</span>),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    torch.nn.Linear(<span class="dv">50</span>, <span class="va">self</span>._n_classes),</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>cnn_layer</code> function is used to create the convolutional layer, which takes the number of ECoG channels as input and outputs the number of convolutional channels. The output of the convolutional layer is then flattened and passed to two linear layers, which can detect arbitrary patterns across channels and time points. The final layer is a linear layer that outputs the number of classes.</p>
+<div id="83ce3ebd" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>lr_cnn <span class="op">=</span> LogRegPT_CNN(shuffle_seed<span class="op">=</span><span class="dv">2</span>, epochs<span class="op">=</span><span class="dv">250</span>, batch_size<span class="op">=</span><span class="dv">30</span>, lr<span class="op">=</span><span class="fl">0.001</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>score_test, score_train <span class="op">=</span> lr_cnn.fit(feats_sub, lbls_sub)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(score_train))</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(score_test))</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>plot_training_performance(lr_cnn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train performance: 98.6
+Test performance: 68.7</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-22-output-2.png" width="593" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using a convolutional layer as the first step in our model seemed to improve performance, bringing us up to 68.7% on the test set. This is likely because the convolutional filters in the first layer capture spatial (i.e.&nbsp;electrode) and temporal patterns in the ECoG data that were not consistent in their timing relative to flexion onset, but were consistently expressed depending on the finger that was flexed. We can examine the kinds of features the convolutional layer is learning by plotting the weights of the filters.</p>
+<div id="cac5581b" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get weights from convlution layer</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> lr_cnn._model[<span class="dv">0</span>][<span class="dv">0</span>].weight</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot convolution filters</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">10</span>, figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, ax <span class="kw">in</span> <span class="bu">enumerate</span>(axs.flatten()):</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    ax.imshow(weights[i].detach().numpy(), cmap<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(i<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-23-output-1.png" width="470" height="271" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Each of the filters is a 2D array, where the rows are channels and the columns are time points. We can visualize these filters as images, where each image corresponds to one of the filters. Most of the filters show one or two channels with strong positive weights, and the rest of the channels with weak negative weights.</p>
+</section>
+</section>
+</section>
+<section id="unsupervised-feature-learning" class="level2">
+<h2 class="anchored" data-anchor-id="unsupervised-feature-learning">Unsupervised feature learning</h2>
+<p>In unsupervised feature learning, we do not use the labels for the data. Instead, we want to identify features from the data itself. This can be useful for a number of reasons. First, it can help us to understand the structure of the data and find patterns that we might not have seen otherwise. Second, the features we learn can reduce the dimensionality of the data, which can make it easier to work with. Finally, unsupervised feature learning can be used as a pretraining step for supervised learning, where we can use the learned features to initialize the weights of a neural network before training it on labeled data.</p>
+<section id="autoencoders" class="level3">
+<h3 class="anchored" data-anchor-id="autoencoders">Autoencoders</h3>
+<p>A common type of unsupervised feature learning is <em>data compression</em>, where we learn a smaller representation of the data that captures the most important information needed to reconstruct it. One way to do this is with an <em>autoencoder</em>, which is a type of neural network that is trained to take the data as input and return the same data as output. An autoencoder has two parts: an <em>encoder</em>, which compresses the data into a smaller representation, sometimes called a <em>code</em> or <em>embedding</em>. This is then passed to a <em>decoder</em>, which reconstructs the data from the smaller representation. By training the autoencoder to minimize the difference between the input and output data, it forms a compressed representation of the data that captures its most salient features.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/autoencoder.png" class="img-fluid figure-img"></p>
+<figcaption>A typical autoencoder architecture.</figcaption>
+</figure>
+</div>
+<p>Autoencoders have been used for many years in the machine learning field. <a href="https://arxiv.org/abs/2003.05991">For example</a>, one can use an autoencoder to learn a compressed representation of the MNIST dataset, which consists of images of handwritten digits. The autoencoder learns a representation of the digit images that is smaller than the original images, and that can be used to reconstruct the images with high accuracy.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Banketal.png" class="img-fluid figure-img"></p>
+<figcaption>MNIST autoencoder</figcaption>
+</figure>
+</div>
+</section>
+<section id="using-an-autoencoder-for-feature-learning" class="level3">
+<h3 class="anchored" data-anchor-id="using-an-autoencoder-for-feature-learning">Using an autoencoder for feature learning</h3>
+<p>You can use the features learned by an autoencoder for a variety of tasks. For example, you can use the compressed representation as input to a supervised learning task, such as classification or regression. This can be useful if you have a large amount of unlabeled data and a smaller amount of labeled data. You can train the autoencoder on the unlabeled data to learn a good representation, and then use that representation to train a supervised model on the labeled data.</p>
+<p><img src="images/autoencoderpretraining.png" class="img-fluid" alt="using autoencoder for classification"> Once the autoencoder is trained, you extract the encoder part of the network and graft a classifier on the end of it. This classifier uses the code as input, and is trained on the labels for the data. This allows you to use the features learned by the autoencoder to perform a supervised learning task. At this point, training can be carried out two ways. One approach is to freeze the weights of the encoder and only train the weights of the classifier. The allows the features learned by the autoencoder to remain fixed, while the classifier maps them to the correct labels. Alternatively, you can let the encoder weights continue to update during the training of the classifier. This may lead to better performance, as the encoder can refine the features to be more useful for the specific task.</p>
+</section>
+<section id="implementing-an-autoencoder-class" class="level3">
+<h3 class="anchored" data-anchor-id="implementing-an-autoencoder-class">Implementing an autoencoder class</h3>
+<p>If we want to use an autoencoder to pretrain on the features from our ECoG data, we will need to implement a new decoder class. Our existing logistic decoder class is designed to only train a single network, not two networks in sequence. The new class will need additional initialization arguments to specify the properties and training of the autoencoder. It will also need new methods to assist in specifying and training the autoencoder. In addition, its <code>fit</code> method must be changed to first train the autoencoder, then the classifier. We will go through each of these in turn.</p>
+<section id="initializing-the-autoencoder-class" class="level4">
+<h4 class="anchored" data-anchor-id="initializing-the-autoencoder-class">Initializing the autoencoder class</h4>
+<p>The new class will need to accept additional arguments to specify the properties of the autoencoder. For training the autoencoder, we specify the same parameters used for training a classifier, such as the number of epochs (<code>epochs_ae</code>), batch size (<code>batch_size_ae</code>), and learning rate (<code>lr_ae</code>). The architecture of the autoencoder will be fixed, except for the size of the code layer, which will be specified by the user (<code>n_code</code>). Finally, it will need an argument to specify whether to update the encoder weights when training the classifier (<code>update_encode</code>).</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPT_AE(LogRegPT_MC):</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expand init method to include autoencoder parameters</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, epochs_ae<span class="op">=</span><span class="dv">100</span>, lr_ae<span class="op">=</span><span class="fl">0.01</span>, n_code<span class="op">=</span><span class="dv">20</span>, </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                 update_encode<span class="op">=</span><span class="va">False</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># lr : float, optional</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Learning rate for gradient descent</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># epochs : int, optional</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Number of epochs to train for</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(<span class="op">**</span>kwargs)</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.epochs_ae <span class="op">=</span> epochs_ae</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lr_ae <span class="op">=</span> lr_ae</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._autoencoder <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._loss_ae <span class="op">=</span> []</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._n_code <span class="op">=</span> n_code</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.update_encode <span class="op">=</span> update_encode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here we keep all the same parameters used to train the classifier (<code>super().__init__(**kwargs)</code>), and add new ones for the autoencoder.</p>
+</section>
+<section id="methods-for-specifying-and-training-the-autoencoder" class="level4">
+<h4 class="anchored" data-anchor-id="methods-for-specifying-and-training-the-autoencoder">Methods for specifying and training the autoencoder</h4>
+<p>Training an autoencoder requires the same methods as training a classifier. We need to specify the model, loss function, and fitting process. To make things easier, we will use the same type of optimizer (Adam) to train the autoencoder as we use for the classifier. For the loss function, we will use the mean squared error (MSE) loss, which is commonly used for training autoencoders. This loss function measures the average squared difference between the input and its reconstruction, and we want to minimize this to learn a good representation of the data.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _loss_autoencoder(<span class="va">self</span>, pred, act):</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    loss_fn <span class="op">=</span> torch.nn.MSELoss(reduction<span class="op">=</span><span class="st">'mean'</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> loss_fn(pred, act)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This method calculates the MSE loss between the predicted output of the autoencoder and the actual input data. The <code>reduction='mean'</code> argument specifies that we want to take the mean of the losses over all samples in the batch.</p>
+<p>Next we will create the method for fitting the autoencoder. This will be similar to the <code>fit</code> method we created for the classifier, except that it will call the autoencoder model instead of the classifier model. It will also use the <code>_loss_autoencoder</code> method to calculate the loss, and update the weights of the autoencoder using the optimizer.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _fit_autoencoder(<span class="va">self</span>, train_dl):</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parameters</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ----------</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># train_dl : DataLoader</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     DataLoader for training data</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize model and fitting</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._create_autoencoder()</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    optim <span class="op">=</span> <span class="va">self</span>._create_optim_autoencoder()</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># train model</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._autoencoder.train()</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.epochs_ae):</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> feat, lbl <span class="kw">in</span> train_dl:</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>            optim.zero_grad()</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>            pred <span class="op">=</span> <span class="va">self</span>._autoencoder(feat)</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> <span class="va">self</span>._loss_autoencoder(pred, feat)</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>            loss.backward()</span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>            optim.step()</span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> np.mod(epoch, <span class="dv">10</span>) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># save and print loss value</span></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._loss_ae.append(loss.item())</span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.verbose:</span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f'Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">: Loss: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>_loss_ae[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._autoencoder.<span class="bu">eval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This method trains the autoencoder for the specified number of epochs, using the provided DataLoader for the training data. It initializes the autoencoder model and optimizer, then iterates over the training data to update the weights of the autoencoder. The loss is calculated using the <code>_loss_autoencoder</code> method. Note that we ignore the labels (<code>lbl</code>) since we are not using them to train the autoencoder. Instead, we only use the features (<code>feat</code>) as both the input and target output of the autoencoder.</p>
+<p>Next we create a method to initialize the autoencoder model. This will be similar to the <code>_create_model</code> method we created for the classifier, but it will create an autoencoder model instead.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _create_autoencoder(<span class="va">self</span>):</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    n_ecog_ch <span class="op">=</span> <span class="va">self</span>._X_shape[<span class="dv">1</span>]</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    ks <span class="op">=</span> <span class="dv">11</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    mp <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    n_conv_ch <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    n_lin_in <span class="op">=</span> n_conv_ch <span class="op">*</span> (<span class="va">self</span>._X_shape[<span class="dv">2</span>]<span class="op">//</span>mp)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    n_code <span class="op">=</span> <span class="va">self</span>._n_code</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CNN layer</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> cnn_layer(input_size, output_size):</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>        cnn <span class="op">=</span> nn.Sequential(</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>            nn.Conv1d(input_size, output_size, kernel_size<span class="op">=</span>ks, padding<span class="op">=</span><span class="st">'same'</span>), </span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>            nn.BatchNorm1d(output_size), </span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>            nn.ReLU(),</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>            nn.MaxPool1d(kernel_size<span class="op">=</span>mp, stride<span class="op">=</span>mp),</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cnn</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> linear_layer(input_size, output_size):</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>        lin <span class="op">=</span> nn.Sequential(</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>            nn.Linear(input_size, output_size),</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>            nn.ReLU(),</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> lin</span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> upsample_layer(input_size, output_size):</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>        up <span class="op">=</span> nn.Sequential(</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>            nn.Upsample(scale_factor<span class="op">=</span>mp, mode<span class="op">=</span><span class="st">'linear'</span>),</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>            nn.ConvTranspose1d(input_size, output_size, kernel_size<span class="op">=</span>ks, </span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>                                        padding<span class="op">=</span>ks<span class="op">//</span><span class="dv">2</span>),</span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>            nn.BatchNorm1d(output_size),</span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> up</span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a>    encoder <span class="op">=</span> nn.Sequential(</span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a>        cnn_layer(n_ecog_ch, n_conv_ch),</span>
+<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>        nn.Flatten(<span class="dv">1</span>),</span>
+<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a>        linear_layer(n_lin_in, n_code),</span>
+<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-40"><a href="#cb41-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-41"><a href="#cb41-41" aria-hidden="true" tabindex="-1"></a>    decoder <span class="op">=</span> nn.Sequential(</span>
+<span id="cb41-42"><a href="#cb41-42" aria-hidden="true" tabindex="-1"></a>        linear_layer(n_code, n_lin_in),</span>
+<span id="cb41-43"><a href="#cb41-43" aria-hidden="true" tabindex="-1"></a>        nn.Unflatten(<span class="dv">1</span>, (n_conv_ch, <span class="va">self</span>._X_shape[<span class="dv">2</span>]<span class="op">//</span>mp)),</span>
+<span id="cb41-44"><a href="#cb41-44" aria-hidden="true" tabindex="-1"></a>        upsample_layer(n_conv_ch, n_ecog_ch)</span>
+<span id="cb41-45"><a href="#cb41-45" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-46"><a href="#cb41-46" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb41-47"><a href="#cb41-47" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb41-48"><a href="#cb41-48" aria-hidden="true" tabindex="-1"></a>        encoder,</span>
+<span id="cb41-49"><a href="#cb41-49" aria-hidden="true" tabindex="-1"></a>        decoder</span>
+<span id="cb41-50"><a href="#cb41-50" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb41-51"><a href="#cb41-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-52"><a href="#cb41-52" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>._autoencoder <span class="op">=</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Our autoencoder model is built from a series of components. We first specify the size of our kernels (<code>ks</code>), number of convolutional channels (<code>n_conv_ch</code>), and the stride for our max pooling (<code>mp</code>). We then define three types of layers: a convolutional layer, a linear layer, and an upsampling layer. The convolutional layer is used in the encoder to extract features from the input data. The linear layers are used to either compress data into the code in the encoding module, or expand it out from the code in the decoding module. The upsampling layer is used in the decoding module to reconstruct the data from the representation expanded from the code.</p>
+<p>We then define the encoder and decoder modules. The encoder is a sequential model that includes a convolutional layer, a flattening layer, and a linear layer. The convolutional layer extracts features from the input data, the flattening layer converts the multi-dimensional output of the convolutional layer into a 1D tensor, and the linear layer compresses the data into the code. This is similar to the convolutional architecture used above in our supervised learning network.</p>
+<p>The decoder is also a sequential model that includes a linear layer, an unflattening layer, and an upsampling layer. The linear layer expands the code back out to the size of the flattened convolutional output. The unflattening layer reshapes the data back into its original shape, and the upsampling layer reconstructs the expands the data back to the original dimensionality of the data we inputted (i.e.&nbsp;same number of channels and time points).</p>
+<p>The decoder module introduces three new operations. To reconstruct the data from the code, we need to expand out from the compressed representation and generate a tensor of the same size as the original input. You can imagine the operations we use to do this are the inverse of the ones we used in our convolutional layer to distill the data. First, we use a linear layer to expand the code out to the size of the flattened convolutional output. Next, we reshape the data into a 3D tensor with a shape of <code>[batch_size, n_conv_ch, downsampled_time_points]</code> using <code>nn.Unflatten</code>. The first input to <code>nn.Unflatten</code> specifies the dimension which is to be reshaped, and the next input is the length of each axis along that new dimension. This gets our data into the same format it would have had after it was passed out of the convolution layer in the encoder.</p>
+<p>Now we have to reconstruct the original input data. We do this using an upsampling layer. This layer first expands the data along the time axis using <code>nn.Upsample</code>. We do this by a factor of <code>mp</code>, which is the same as the downsampling factor used in the max pooling layer in the encoder. The <code>mode</code> argument is set to ‘linear’ so that the upsampled data is linearly interpolated, which means the in-filled values gradually change from one value to the next. This is followed by a transposed convolutional layer (<code>nn.ConvTranspose1d</code>). Transposed convolution is the inverse of the convolution operation. Where a convolution operation takes data and reduces its size using a kernel, a transposed convolution operation takes data and increases its size using a kernel. You can see a helpful visualization of transposed convolution <a href="https://github.com/vdumoulin/conv_arithmetic?tab=readme-ov-file#transposed-convolution-animations">here</a>. The kernel size and padding are set to match the original convolutional layer, so that the output size matches the input size of our original ECoG data.</p>
+<p>Finally, we put the encoder and decoder together into a single model using <code>nn.Sequential</code>. This allows us to train the autoencoder <em>end-to-end</em>, with the encoder compressing the data and the decoder reconstructing it.</p>
+<div id="9a888f50" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> autoencoder(LogRegPT_AE):</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _create_autoencoder(<span class="va">self</span>):</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        n_ecog_ch <span class="op">=</span> <span class="va">self</span>._X_shape[<span class="dv">1</span>]</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        ks <span class="op">=</span> <span class="dv">21</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        mp <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>        n_conv_ch <span class="op">=</span> <span class="dv">80</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>        n_lin_in <span class="op">=</span> n_conv_ch <span class="op">*</span> (<span class="va">self</span>._X_shape[<span class="dv">2</span>]<span class="op">//</span>mp)</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        n_code <span class="op">=</span> <span class="va">self</span>._n_code</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># CNN layer</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> cnn_layer(input_size, output_size):</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>            cnn <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>                torch.nn.Conv1d(input_size, output_size, </span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>                                kernel_size<span class="op">=</span>ks, padding<span class="op">=</span><span class="st">'same'</span>),</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>                torch.nn.BatchNorm1d(output_size),</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>                torch.nn.ReLU(),</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>                torch.nn.MaxPool1d(kernel_size<span class="op">=</span>mp, stride<span class="op">=</span>mp),</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> cnn</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> linear_layer(input_size, output_size):</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>            lin <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>                torch.nn.Linear(input_size, output_size),</span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>                torch.nn.ReLU(),</span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> lin</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> upsample_layer(input_size, output_size):</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>            up <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>                torch.nn.Upsample(scale_factor<span class="op">=</span>mp, mode<span class="op">=</span><span class="st">'linear'</span>),</span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>                torch.nn.ConvTranspose1d(input_size, output_size, </span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>                                         kernel_size<span class="op">=</span>ks, padding<span class="op">=</span>ks<span class="op">//</span><span class="dv">2</span>),</span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a>                torch.nn.BatchNorm1d(output_size),</span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> up</span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a>        encoder <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a>            cnn_layer(n_ecog_ch, n_conv_ch),</span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a>            torch.nn.Flatten(<span class="dv">1</span>),</span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a>            linear_layer(n_lin_in, n_code),</span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a>        decoder <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a>            linear_layer(n_code, n_lin_in),</span>
+<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a>            torch.nn.Unflatten(<span class="dv">1</span>, (n_conv_ch, <span class="va">self</span>._X_shape[<span class="dv">2</span>]<span class="op">//</span>mp)),</span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a>            upsample_layer(n_conv_ch, n_ecog_ch)</span>
+<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-51"><a href="#cb42-51" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> torch.nn.Sequential(</span>
+<span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a>            encoder,</span>
+<span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a>            decoder</span>
+<span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._autoencoder <span class="op">=</span> model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>How does the pretraining the encoder help with the classification task? Let’s first train the autoencoder on the ECoG data, then just use its output (without allowing its weights to update) to train a classifier. This will allow us to see if the features learned by the autoencoder are useful for the classification task.</p>
+<div id="0bd04d74" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lr_ae <span class="op">=</span> autoencoder(shuffle_seed<span class="op">=</span><span class="dv">2</span>, epochs<span class="op">=</span><span class="dv">250</span>, batch_size<span class="op">=</span><span class="dv">30</span>, n_code<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                    lr<span class="op">=</span><span class="fl">0.001</span>, lr_ae<span class="op">=</span><span class="fl">0.01</span>, epochs_ae<span class="op">=</span><span class="dv">250</span>, update_encode<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>score_test, score_train <span class="op">=</span> lr_ae.fit(feats_sub_z, lbls_sub)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(score_train))</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(score_test))</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>plot_training_performance(lr_ae)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fitting autoencoder
+Training logistic regression model
+Train performance: 98.6
+Test performance: 37.4</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-25-output-2.png" width="602" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Well that did not go well. Despite the performance reaching 98.6% on the training data, the test accuracy plateaued at 37.4%. That is better than chance, but far worse than the performance we were getting with fully supervised learning. One possibility is that our autoencoder was not trained adequately, so it’s encoder layer did not learn a good representation of the ECoG data. To test that, we can evaluate the autoencoder’s performance by giving it a trial of ECoG data and seeing how well it reconstructs it.</p>
+<div id="1d05e53e" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a data sample and visualize the reconstruction</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> torch.tensor(feats_sub_z[<span class="dv">25</span>], dtype<span class="op">=</span>torch.float32).view(<span class="dv">1</span>, <span class="dv">63</span>, <span class="dv">400</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the data through the autoencoder to get the reconstructed output</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> lr_ae._autoencoder(data)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].imshow(data.detach().numpy().squeeze(), aspect<span class="op">=</span><span class="st">'auto'</span>)</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Original ECoG data'</span>)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">'Channel'</span>)</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].imshow(out.detach().numpy().squeeze(), aspect<span class="op">=</span><span class="st">'auto'</span>)</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Reconstructed ECoG data'</span>)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">'Channel'</span>)</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-26-output-1.png" width="662" height="470" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The reconstruction is not perfect, but it seems to work reasonably well. The autoencoder is able to capture the general structure of the input data, but there are some details that are lost in the reconstruction. The individual channels do not differentiate as much as they in the original data, and some of the finer details are lost. This suggests that the autoencoder is able to learn a compressed representation of the data, but it may not be capturing all of the relevant information needed for the classification task.</p>
+<p>This suggests it might be beneficial to update the encoder weights during training on the classification task. By allowing the encoder to update, its features can be refined to better capture details the specific task of classifying finger flexions. This can help to improve performance on the classification task, as the features will be more tailored to the task at hand.</p>
+<div id="ac05599d" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>lr_ae <span class="op">=</span> autoencoder(shuffle_seed<span class="op">=</span><span class="dv">2</span>, epochs<span class="op">=</span><span class="dv">250</span>, batch_size<span class="op">=</span><span class="dv">30</span>, n_code<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>                    lr<span class="op">=</span><span class="fl">0.001</span>, lr_ae<span class="op">=</span><span class="fl">0.01</span>, lam<span class="op">=</span><span class="fl">0.0</span>, epochs_ae<span class="op">=</span><span class="dv">250</span>, update_encode<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>score_test, score_train <span class="op">=</span> lr_ae.fit(feats_sub_z, lbls_sub)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(score_train))</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test performance: </span><span class="sc">{:.1f}</span><span class="st">'</span>.<span class="bu">format</span>(score_test))</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>plot_training_performance(lr_ae)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fitting autoencoder
+Training logistic regression model
+Train performance: 98.6
+Test performance: 66.7</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week9_files/figure-html/cell-27-output-2.png" width="602" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Allowing the encoder weights to be trained as well on the classification task did improve performance, bringing the test accuracy up to 66.7%. But this is not outperforming the fully supervised training we did earlier. Moreover, the performance is worse than the spectral decoder we trained in the previous lectures. Altogether, this suggests that the there is room to improve the design of our multilayer network. Right we we are using a single convolutional layer, which only captures patterns in the time series data on a limited temporal scale. However, the spectral analysis we performed detects patterns on multiple time scales. Indeed, convolutional networks for time series data often use multiple convolutional layers with different dilations to capture patterns at multiple scales. This allows the network to learn features that are both short and long in duration, which may be more informative for the classification task. This goes a bit beyond the scope of this lecture, but if you are interested in exploring this further, you can read up on <a href="https://deepmind.google/discover/blog/wavenet-a-generative-model-for-raw-audio/">WaveNet</a>.</p>
+
+
+</section>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,5 +1,5 @@
 ---
-title: Multinomial logistic decoders
+title: Week8
 jupyter: python3
 format:
   html:
@@ -9,7 +9,7 @@ format:
     theme: litera
 ---
 
-## Decoding multiple events
+## Multiclass logistic decoders
 
 Last week we ended with a PyTorch implementation of a multifeature logistic classifier. We were able to have it determine whether a thumb movement had been initiated based on the profile of spectral changes across multiple ECoG electrodes lying over motor cortex. Detecting whether a single movement occurred only requires a binary output, True or False. This is limited. Ideally our decoder would be able to read-out a variety of movements. This problem is known as *multinomial* or *multiclass classification*. For that, a set of features is given, just like before, and the probability of those features being associated with each of $K$ possibilities is returned.
 
@@ -54,7 +54,7 @@ Alternatively, we could just keep five outputs, one for each finger, and encode 
 
 Both of these are examples of multinomial decoders. We can use these to decode which finger was moved. To learn how to build such decoders, we will start with our original logistic decoder that we made in PyTorch and successively add features to it so that it behaves as a conventional multiclass decoder. The intermediate steps we take to this final outcome will each have problems. But, by implementing them, seeing how they fail, and fixing those failures, we will uncover how to properly construct a multinomial logistic decoder.
 
-## Multinomial decoding, the wrong way
+## Multiclass decoding, the wrong way
 
 Let's start by loading in our data and importing our PyTorch based logistic decoder. We will use the PyTorch version because it allows us to directly implement changes required in making a multinomial logistic decoder.
 
@@ -1108,4 +1108,4 @@ print('Training score: {:.0f}%'.format(score_tt*100))
 print('Validation score: {:.0f}%'.format(score_val*100))
 ```
 
-A validation score of 74% is on par with the 75% accuracy we got with the function we built with PyTorch. But, keep in mind that we used Scikit-Learn's `LogisticRegressionCV`, which performs cross-validation to find the optimal lambda parameter for L1 regularization. In the PyTorch case, we just chose a single lambda and stuck with it. It's
+A validation score of 74% is on par with the 75% accuracy we got with the function we built with PyTorch. But, keep in mind that we used Scikit-Learn's `LogisticRegressionCV`, which performs cross-validation to find the optimal lambda parameter for L1 regularization. In the PyTorch case, we just chose a single lambda and stuck with it. It's possible our performance with the PyTorch version would be enhanced by optimizing the hyperparameters.
