@@ -10,6 +10,7 @@ project:
     - Week8.qmd
     - Week9.qmd
     - Week10.qmd
+    - Week11.qmd
   output-dir: docs
 
 website:
@@ -28,6 +29,7 @@ website:
       - Week8.qmd
       - Week9.qmd
       - Week10.qmd
+      - Week11.qmd
       - about.qmd
 
 

@@ -208,6 +208,10 @@ window.Quarto = {
     <a class="nav-link" href="./Week10.html"> 
 <span class="menu-text">Week10</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Week11.html"> 
+<span class="menu-text">Week11</span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="./about.qmd"> 
 <span class="menu-text"></span></a>
@@ -279,7 +283,7 @@ window.Quarto = {
 <section id="decoding-with-multiple-features" class="level2">
 <h2 class="anchored" data-anchor-id="decoding-with-multiple-features">Decoding with multiple features</h2>
 <p>The ECoG recordings feature multiple channels, and the signal on each channel can be decomposed into multiple frequency bands. Activities in both the high and low frequency bands changed during finger flexions. Can we use this multichannel and multifrequency activity to decode finger flexions? So far we have built logistic decoders that use only a single feature, but we may be able to get better performance if multiple features were used. This week we will discuss how to construct logistic decoders with multiple features.</p>
-<div id="0d0d3213" class="cell" data-execution_count="1">
+<div id="4e275e5c" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path <span class="im">as</span> op</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> product</span>
@@ -302,7 +306,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="spatial-pattern-of-spectral-changes">Spatial pattern of spectral changes</h2>
 <p>Last week we started working with ECoG recordings from subjects while they moved their fingers. The grid had 64 electrodes placed directly on the cortical surface. When a subject moved a finger there was a localized pulse of activity over part of the cortex. This appeared as an ERP, but also as an increased incidence of high frequency activity bursts, and a decrease in low frequency power. These bursts are closely related to local processing in the cortex. Since different parts of cortex control different parts of the body (including individual fingers), each motor action would create a different pattern of high frequency bursts across the ECoG array.</p>
 <p>Let’s load the data from last week and see if spectral activity differed in their spatial pattern across different finger movements.</p>
-<div id="bec30716" class="cell" data-execution_count="2">
+<div id="6a9dcda2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'cc'</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ecog_path <span class="op">=</span> [<span class="st">'data'</span>, <span class="st">'ecog'</span>, subj, <span class="st">'</span><span class="sc">{}</span><span class="st">_fingerflex.mat'</span>.<span class="bu">format</span>(subj)]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ecog_file <span class="op">=</span> op.join(<span class="op">*</span>ecog_path)</span>
@@ -310,13 +314,13 @@ window.Quarto = {
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>ecog_data <span class="op">=</span> EcogFingerData(ecog_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we will get the flexion event times.</p>
-<div id="cc95f63a" class="cell" data-execution_count="3">
+<div id="1495166a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flex_events <span class="op">=</span> {}</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> finger <span class="kw">in</span> [<span class="st">'thumb'</span>, <span class="st">'index'</span>, <span class="st">'middle'</span>, <span class="st">'ring'</span>, <span class="st">'little'</span>]:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    flex_events[finger] <span class="op">=</span> ecog_data.detect_flex_onsets(finger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s examine the spectrogram associated with the start of thumb flexions. Since we have 63 channels to choose from, we will focus on just one, channel 20.</p>
-<div id="69539ecf" class="cell" data-execution_count="4">
+<div id="1cc7d5d6" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get spectrograms for thumb flexion</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>f, t, S <span class="op">=</span> ecog_data.get_spec(event_ts<span class="op">=</span>flex_events[<span class="st">'thumb'</span>], chans<span class="op">=</span><span class="dv">20</span>, pre_t<span class="op">=</span><span class="fl">1.5</span>, post_t<span class="op">=</span><span class="fl">1.5</span>, freq_max<span class="op">=</span><span class="dv">200</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -339,7 +343,7 @@ window.Quarto = {
 </div>
 <p>We can see that the spectral changes start approximately two hundred milliseconds prior to the finger movement, and end about two hundred milliseconds after. Pause for a moment to consider the fact that changes in brain activity <em>precede</em> the movement. This means that if you were tracking the activity of a person’s motor cortex in real time you could potentially tell when they were going to move their finger before it happened. These kinds of recordings give you profoundly different insights into another person (and raise a whole host of thorny ethical issues!). Anyway, this is the event we wish to detect. So, we will sample the spectrogram for 200 ms before and after the movement onset.</p>
 <p>This is just one channel and one movement type. It does not give us a sense of how spectral changes vary across movement types and channels. It would be tedious to plot every spectrogram for every channel and movement. Instead, we will plot the mean spectrum during the +/-200 ms surrounding for each channel and finger flexion. These will be z-scored with respect to a baseline period centered at 1.5 seconds prior to the movement onset.</p>
-<div id="709e35d8" class="cell" data-execution_count="5">
+<div id="89e7cef2" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate z-scored spectrums for each finger</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>S_on <span class="op">=</span> {}</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>S_base <span class="op">=</span> {}</span>
@@ -380,7 +384,7 @@ window.Quarto = {
 </div>
 <p>In the above plot, each subplot is a different finger flexion. The increases in high frequency power varies across movement types. For instance, the peak channels for thumb flexions are on channels 18 and 20, while for the index finger they are on 27 and 28. The decrease in low frequency power is less channel specific, but it too may prove informative. Thus, we want to use these channel specific spectral differences to try and decode whether a specific movement occurred.</p>
 <p>We can plot these onto the ECoG grid, to get a better sense of the spatial distribution of these two bands of activity.</p>
-<div id="6c0fe87a" class="cell" data-execution_count="6">
+<div id="5e13523f" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># frequency bands of interest</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>low_freqs <span class="op">=</span> f<span class="op">&lt;</span><span class="dv">20</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>high_freqs <span class="op">=</span> (f<span class="op">&gt;</span><span class="dv">50</span>)<span class="op">&amp;</span>(f<span class="op">&lt;</span><span class="dv">100</span>)</span>
@@ -411,7 +415,7 @@ window.Quarto = {
 <p>Laying out the spectral power across the ECoG grid makes the movement-related patterns more apparent. We divided spectral power into low (&lt;20 Hz) and high (&gt;50 Hz) bands, and plotted them on each ECoG grid location. For the low power, there was not much differentiation between movement types. The top left and bottom right portions of the grid showed consistent elevations, and the middle was low. On the other hand, high frequency power was elevated on distinct sets of electrodes near the middle of the array. This difference is crucial for classifying each type of movement. Some movements, such as thumb raising, strongly activate only one site, while others, such as little finger movement, activate 3.</p>
 <p>For the previous ERP decoding we focused on just a single electrode and measure (dot product of the ERP). While we may be tempted to take the same approach here, such as measuring the high frequency power on the electrode where it is strongest for each movement, the other sites might offer additional information for decoding. For instance, two sites show substantial increases in high frequency power for index finger movement. If the activation on those sites is perfectly correlated, then we could use just one of them without losing information. But imagine that one of the sites is active on half the trials, and the other is activated on the other half. In that case, only focusing on one of them means we could miss 50% of movements. Instead, we would want to pool them together.</p>
 <p>We can see if these channels provide redundant or distinct information about flexion by plotting the relationship between the activation on those sites across trials.</p>
-<div id="37a46646" class="cell" data-execution_count="7">
+<div id="570c0b68" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot mean power in low and high frequency bands for index finger movements on each channel and epoch</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>index_spec_low <span class="op">=</span> np.mean(S_on_z[<span class="st">'index'</span>][:,:,low_freqs,:], axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>index_spec_high <span class="op">=</span> np.mean(S_on_z[<span class="st">'index'</span>][:,:,high_freqs,:], axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
@@ -467,7 +471,7 @@ window.Quarto = {
 <p>Lastly, dusting off our linear algebra, we can treat <span class="math inline">w</span> and <span class="math inline">x</span> as vectors, <span class="math inline">W</span> and <span class="math inline">X</span> respectively:</p>
 <p><span class="math display"> \sigma(x) = \frac{1}{1+e^{-(b+W \cdot X)}} </span></p>
 <p>Fortunately, scikit-learn makes it trivial to add additional features to our logistic regression model. Previously we supplied our ERP measures across trials as a vector to the <code>LogisticRegression</code> classifier’s <code>fit</code> method. Now, we want to supply multiple measures, the spectral power at each frequency and channel, for multiple trials. That means we will supply a matrix of data. The <code>LogisticRegression</code> classifier object can handle that, with trials along the row axis, and features along the columns axis. So we just have to reshape our data into that format. We also need to include some ‘null’ movement periods for training the classifier.</p>
-<div id="c9d20def" class="cell" data-execution_count="8">
+<div id="08263479" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># minimum time between thumb flexion events</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>min_times <span class="op">=</span> [np.<span class="bu">min</span>(np.diff(events)) <span class="cf">for</span> _, events <span class="kw">in</span> flex_events.items()]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Minimum time between flexion events: </span><span class="sc">{:0.2f}</span><span class="st"> s'</span>.<span class="bu">format</span>(np.<span class="bu">min</span>(min_times)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -476,7 +480,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Since the minimum time between flexions is ~3.3 s, we create our null events by offsetting the flexion times by 1 second. With the 200 ms windows around each flexion, we should not overlap with another flexion of the same finger. We will train our decoder to pick up thumb movements.</p>
-<div id="bc1810d6" class="cell" data-execution_count="9">
+<div id="e3016083" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_ecogfinger_data(data<span class="op">=</span><span class="va">None</span>, flex_events<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Format ECoGFinger data for decoding.</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
@@ -531,7 +535,7 @@ window.Quarto = {
 </div>
 <p>Recall a caveat about z-scoring: when you transform your samples based on other samples, you open yourself up to the possibility of <em>data leakage</em>. This means that the transformed samples are partly dependent on the the values from other samples. When building a decoder, it may pick up on this dependency, leading to improved performance that is spurious. In our case, since we are taking the mean and standard deviation across the entire session, the cross-contamination between movement and null samples will be minimized. However, if we just derived those measures from the samples we trained our decoder on, then there would be a far greater chance of improved decoding owing simply to data leakage.</p>
 <p>It is usually a good idea to plot our data before passing it to a model, just to make sure it is formatted correctly.</p>
-<div id="5bf68601" class="cell" data-execution_count="10">
+<div id="5210489e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot thumb movement features</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.imshow(thumb_feats, aspect<span class="op">=</span><span class="st">'auto'</span>, vmin<span class="op">=-</span><span class="dv">2</span>, vmax<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Features'</span>)</span>
@@ -550,7 +554,7 @@ window.Quarto = {
 </div>
 <p>The first 33 trials had thumb movements. Each row is a spectrum from a channel, repeated for each channel. This results in a banding pattern for those channels with with high frequency bursts during movement. Those bands go away on the null trials when thumb movements are not present.</p>
 <p>Now that the data is formatted, we can pass it to the scikit-learn <code>LogisticRegression</code> function and see how well we predict thumb movements.</p>
-<div id="0114f0e8" class="cell" data-execution_count="11">
+<div id="f3f6890d" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create logistic regression model</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>log_mdl <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>log_mdl.fit(thumb_feats, thumb_lbls)</span>
@@ -566,7 +570,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Thumb flexion can be predicted with 100% accuracy when we use the spectrums from the ECoG channels. This is far better than our ability to predict stimulus presentation with the ERP. In fact, it is so good we should be suspicious. If we think about what the decoder is doing, it is trying to generate the correct label based on the features we supply to it. In this case, we have ~60 trials to predict using 3150 features. Since we have far more features than trials, it is possible that the decoder is just picking up on a specific pattern of features for each individual trial that are unrelated to whether the thumb was moving or not. We can test this possibility by seeing if the logistic decoder can perform even if we scramble the trial labels, essentially destroying the relationship between the features and thumb movement. In that case, the only solution the decoder can use is to memorize specific patterns associated with each trial.</p>
-<div id="90f25416" class="cell" data-execution_count="12">
+<div id="b3ba1732" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>log_mdl_sc <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># scramble trial labels</span></span>
@@ -587,7 +591,7 @@ window.Quarto = {
 </div>
 <p>Oh dear! Perfect performance, even with scrambled labels. How can we control for this?</p>
 <p>Recall that when we trained the ERP decoder we used two separate sets of data, one for training and the other for testing. This means the decoder may memorize specific trials, but it won’t help because it is tested on trials it has never seen.</p>
-<div id="9f977cee" class="cell" data-execution_count="13">
+<div id="57aecbc4" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit and evalulate logistic regression model to ECoG spectra using cross-validation</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logreg_traintest(feats, lbls, k, <span class="op">**</span>kwargs):</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -655,7 +659,7 @@ window.Quarto = {
 <span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Median test accuracy: </span><span class="sc">{:.2f}</span><span class="st"> %'</span>.<span class="bu">format</span>(np.median(scores_test)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Median train accuracy: 100.00 %
-Median test accuracy: 93.75 %</code></pre>
+Median test accuracy: 95.83 %</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -672,7 +676,7 @@ Median test accuracy: 93.75 %</code></pre>
 <h2 class="anchored" data-anchor-id="regularization">Regularization</h2>
 <p>The problem is that with so many features the decoder can now correctly label each trial using some random combination of features, even if they do not generalize across most trials. This is similar to the problem of <em>overfitting</em>. By overfitting, we mean that the model tries to capture all the variability in the training data, even the noise. A good example of this phenomenon is fitting a curve with as many parameters as there are data points.</p>
 <p>Imagine we have two variables, <span class="math inline">x</span> and <span class="math inline">y</span>, that are related to each other by the equation <span class="math inline">y=x+\epsilon</span>. Here <span class="math inline">\epsilon</span> is some noise that makes <span class="math inline">x</span> and <span class="math inline">y</span> only partially correlated. We want to predict the value of <code>y</code> given the value of <code>x</code>. There are a host of models that can be used. One is a linear model, where <span class="math inline">y=b+wx</span>.</p>
-<div id="51420d58" class="cell" data-execution_count="14">
+<div id="07855deb" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create two partially correlated variables</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">47</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.random.randn(<span class="dv">10</span>)</span>
@@ -722,7 +726,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 </div>
 <p>A linear fit captures the trend, larger values of x lead to larger values of y, but almost none of the data points lie along the best fit line. The linear equation is a polynomial with order=1. What happens if we increase the model order? To do that, we can keep including additional terms, <span class="math inline">y = b + m_1x + m_2x^2</span>, <span class="math inline">y= b + m_1x + m_2x^2 + m_3x^3</span>, and so on.</p>
-<div id="297805d4" class="cell" data-execution_count="15">
+<div id="e61b007b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot x vs y with fits of different orders</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plot_w_fit(x, y, <span class="dv">2</span>, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
@@ -739,7 +743,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 </div>
 <p>As we increase the order, the fitted line gets closer to the data points. If our order is equal to the number of data points, then the line passes through each point. However, between points it deviates dramatically. If we generate additional data points using the same rule, we will find that higher order fits are even worse then the lower order ones.</p>
-<div id="d9868d6d" class="cell" data-execution_count="16">
+<div id="35257dcf" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate new data using the same process</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x_new <span class="op">=</span> np.random.randn(<span class="dv">10</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>y_new <span class="op">=</span> x_new <span class="op">+</span> np.random.randn(<span class="dv">10</span>)<span class="op">/</span><span class="dv">2</span></span>
@@ -763,7 +767,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 </div>
 <p>The higher order models better fit the data points they are fitted (i.e.&nbsp;trained) on, but poorly on those data points they are not (green crosses). In fact, increasing model order seems to worsen the fit to the held out data. We show this by measuring the mean squared error between the fitted line and the data it was, or was not, trained on, for models of different order.</p>
-<div id="11cc07b4" class="cell" data-execution_count="17">
+<div id="74704507" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ord_list <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">9</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>train_err <span class="op">=</span> np.zeros(ord_list.size)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>test_err <span class="op">=</span> np.zeros(ord_list.size)</span>
@@ -801,7 +805,7 @@ Median test accuracy: 93.75 %</code></pre>
 <p><span class="math display"> loss = loss_{fit} + \lambda\sum_{i=0}^{n}w_i^2 </span></p>
 <p>The consequence of this is that large weights shrink to smaller values while still minimizing the <span class="math inline">loss_{fit}</span>. The degree to which one emphasizes minimizing the weights is set by the <span class="math inline">\lambda</span> parameter. If <span class="math inline">\lambda</span> is set to 0, then the equation is the same loss function we have been using normally without regularization. As <span class="math inline">\lambda</span> increases, the penalty on weights becomes more stringent, pushing them towards 0.</p>
 <p>How does this affect the loss landscape? We can imagine it as being the summation of two surfaces, one for <span class="math inline">loss_{fit}</span> and another for <span class="math inline">\lambda\sum_{i=0}^{n}w_i^2</span>. We can contrive a convex <span class="math inline">loss_{fit}</span>, and then vary the strength of <span class="math inline">\lambda</span>, to see how it distorts it.</p>
-<div id="0e487b0c" class="cell" data-execution_count="18">
+<div id="d6e5dea2" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create loss surface as quadratic function of two variables</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
@@ -842,7 +846,7 @@ Median test accuracy: 93.75 %</code></pre>
 <p>Another norm is to take the sum of the absolute values of the weights. This is known as the L1 norm, or Least Absolute Shrinkage and Selection Operator (LASSO). This is expressed mathematically as:</p>
 <p><span class="math display"> loss = loss_{fit} + \lambda\sum_{i=0}^{n}|w_i| </span></p>
 <p>Because we are not squaring the weights, the shape of the penalty is different. Instead of a smooth quadratic curve centered on zero, it will be an upside down pyramid centered on zero.</p>
-<div id="6bf92636" class="cell" data-execution_count="19">
+<div id="25ecc634" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create L2 penalty surface</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> np.<span class="bu">abs</span>(w11) <span class="op">+</span> np.<span class="bu">abs</span>(w22)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -880,13 +884,13 @@ Median test accuracy: 93.75 %</code></pre>
 <section id="regularization-with-scikit-learn" class="level3">
 <h3 class="anchored" data-anchor-id="regularization-with-scikit-learn">Regularization with Scikit Learn</h3>
 <p>Scikit Learn offers a logistic regression that has cross-validated regularization built in, <code>LogisticRegressionCV</code>. It allows you to specify the type of penalty, L1 or L2 (or L1+L2, aka ‘elasticnet’) and the range of <span class="math inline">\lambda</span> values. The cross-validation routine used by <code>LogisticRegressionCV</code> is the <code>StratifiedKFold</code> cross-validation schedule that we used previously.</p>
-<div id="22d8ae26" class="cell" data-execution_count="20">
+<div id="d4970364" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize logistic regression model</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>log_mdl_l2 <span class="op">=</span> LogisticRegressionCV(Cs<span class="op">=</span><span class="dv">100</span>, cv<span class="op">=</span><span class="dv">5</span>, penalty<span class="op">=</span><span class="st">'l2'</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The argument <code>Cs</code> specifies the <span class="math inline">\lambda</span> values to use. If we pass just an integer then we are setting the number of <span class="math inline">\lambda</span> values to try, ranging from <span class="math inline">10^{-4}</span> to <span class="math inline">10^4</span>. <code>cv</code> determines the number of folds to split the dataset into. In this case with <code>cv=5</code>, 4 of the folds will be used for training and 1 will be held back for testing. For each value of <span class="math inline">\lambda</span>, fitting will be performed for as many folds as were specified by <code>cv</code>. Lastly, <code>penalty</code> specifies the type of norm to use. We decided to use the L2 norm, so we will be shrinking the weights instead of selecting them.</p>
 <p>Once we have initialized the object, we can use its <code>fit</code> method just as we did for the regular <code>LogisticRegression</code> object. This can be followed up by a call to predict, to get the decoder’s prediction based on the set of weights that had the lowest cross-validated error.</p>
-<div id="fe21a2df" class="cell" data-execution_count="21">
+<div id="5e26cd08" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit logistic regression model</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>log_mdl_l2.fit(thumb_feats, thumb_lbls)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -901,7 +905,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 </div>
 <p>We are back up to nearly 100% accuracy. This could be very good. Let’s see what <span class="math inline">\lambda</span> value was settled on.</p>
-<div id="1ed212fc" class="cell" data-execution_count="22">
+<div id="464a3991" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_lambdas(log_mdl):</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to get lambda values from a logistic regression model.</span></span>
@@ -937,7 +941,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 </div>
 <p>Looks like the lambda we used was greater than the minimum (0.0001), so the fitting settled on coefficients that were affected by the penalty. It is often helpful to visualize the performance of the decoder as a function of lambda. This is similar to what we did with the polynomial fit above, when we plotted the mean squared error on the test data as a function of the polynomial order. In the case of the <code>LogisticRegressionCV</code> object, we can get an attribute called <code>scores_</code>, which gives the performance for the model on each test fold. It is stored as a dictionary, with the key being the class, in our case there is just one, ‘1.0’, since we are only detecting thumb flexions. Inside that, the scores are stored as a numpy array with fold along the row axis and lambdas along the column axis. We will take the mean across folds, so that we get a single measure of performance for every lambda value.</p>
-<div id="50e0a6e4" class="cell" data-execution_count="23">
+<div id="86518146" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_scores(log_mdl, ax<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to plot scores for each lambda value.</span></span>
@@ -982,7 +986,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 <p>The <code>LogisticRegressionCV</code> class has chosen a <span class="math inline">\lambda</span> with an intermediate value. It went for the one with the highest performance and largest value. In addition to visualizing how the score changes with <span class="math inline">\lambda</span>, we can inspect how the weights change as a function of lambda. This will give us an intuition for how the L2 norm operates.</p>
 <p>The most common way to plot the weight change is to use a coefficient path plot. For this, we plot each coefficient as a line with respect to the lambda value.</p>
-<div id="9d519341" class="cell" data-execution_count="24">
+<div id="489b7163" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_coef_paths(log_mdl, ax<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to plot coefficient paths for each lambda value.</span></span>
@@ -1025,7 +1029,7 @@ Median test accuracy: 93.75 %</code></pre>
 </div>
 </div>
 <p>You can really see the shrinkage! The weights are gradually downscaled towards 0 as <span class="math inline">\lambda</span> increases. Curiously, the shrinkage required to reduce the overfitting is small. And further reduction does not improve performance. Still, it is hard to visualize what this means for the neural signals that are driving the decoder. It is unclear from the plotted lines what channels or frequency bands have the largest weights, and the most reduction. Instead of doing the traditional coefficient path plot, we could instead plot the weights as spectrums on each channel, and capture the variation in <span class="math inline">\lambda</span> by animating the plot.</p>
-<div id="6e7ea3d5" class="cell" data-execution_count="25">
+<div id="4dff1695" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_anim_coefs(log_mdl, ax<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to plot an animated pcolormesh of coefficients for each lambda value.</span></span>
@@ -1073,7 +1077,7 @@ Median test accuracy: 93.75 %</code></pre>
 <span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>HTML(anim_l2.to_html5_video())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>INFO:matplotlib.animation:Animation.save using &lt;class 'matplotlib.animation.FFMpegWriter'&gt;
-INFO:matplotlib.animation:MovieWriter._run: running command: ffmpeg -f rawvideo -vcodec rawvideo -s 480x480 -pix_fmt rgba -framerate 3.3333333333333335 -loglevel error -i pipe: -vcodec h264 -pix_fmt yuv420p -y /var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/tmprd_ohb1f/temp.m4v</code></pre>
+INFO:matplotlib.animation:MovieWriter._run: running command: ffmpeg -f rawvideo -vcodec rawvideo -s 480x480 -pix_fmt rgba -framerate 3.3333333333333335 -loglevel error -i pipe: -vcodec h264 -pix_fmt yuv420p -y /var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/tmptqbl_869/temp.m4v</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <video width="480" height="480" controls="" autoplay="" loop="">
@@ -5663,7 +5667,7 @@ TGF2ZjYwLjE2LjEwMA==
 <p>The weights resemble the mean spectrum calculated earlier, except downscaled. As <span class="math inline">\lambda</span> increases the contrast in the weights seem to fade towards zero, with the same pattern maintained throughout.</p>
 <p>All of this fits the L2 norm performing shrinkage on the weights.</p>
 <p>Let’s now try the L1 norm as the penalty.</p>
-<div id="782c2a18" class="cell" data-execution_count="26">
+<div id="0c446b18" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize logistic regression model</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>log_mdl_l1 <span class="op">=</span> LogisticRegressionCV(Cs<span class="op">=</span><span class="dv">100</span>, cv<span class="op">=</span><span class="dv">5</span>, penalty<span class="op">=</span><span class="st">'l1'</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5680,7 +5684,7 @@ TGF2ZjYwLjE2LjEwMA==
 </div>
 </div>
 <p>Switching to an L1 penalty gives a performance of 100%, just as with L2. However, since L1 performs both shrinkage and selection, the way it achieves this may be different. To see how, let’s take a look at the error and weight curves as a function of <span class="math inline">\lambda</span>.</p>
-<div id="9fcbfc2a" class="cell" data-execution_count="27">
+<div id="4e9ace10" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create two subplots, one of scores and the other of coefficient paths</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>,figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>plot_scores(log_mdl_l1, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
@@ -5696,13 +5700,13 @@ TGF2ZjYwLjE2LjEwMA==
 </div>
 <p>This is a bit more interesting than the L2 norm. The performance is worse when <span class="math inline">\lambda</span> is less than 0.1, then peaks, before falling down again at <span class="math inline">\lambda</span> values past 10. This <em>inverted-U</em> shaped relationship between <span class="math inline">\lambda</span> and performance is commonly observed. For very small values of <span class="math inline">\lambda</span>, the model performs comparably to there being no penalty. As <span class="math inline">\lambda</span> increases, some weights begin to drop out, and other increase to aid in decoding. Further increasing <span class="math inline">\lambda</span> starts to diminish those enhanced weights, and here performance peaks. Eventually, <span class="math inline">\lambda</span> is so large that the penalty selects out all weights, and decoder performance drops to chance levels.</p>
 <p>We can visualize the evolution of the weights using the same animated plot as we did for L2.</p>
-<div id="8233c89d" class="cell" data-execution_count="28">
+<div id="a3ffaacb" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>))</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>anim_l2 <span class="op">=</span> plot_anim_coefs(log_mdl_l1, ax<span class="op">=</span>ax)</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>HTML(anim_l2.to_html5_video())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>INFO:matplotlib.animation:Animation.save using &lt;class 'matplotlib.animation.FFMpegWriter'&gt;
-INFO:matplotlib.animation:MovieWriter._run: running command: ffmpeg -f rawvideo -vcodec rawvideo -s 480x480 -pix_fmt rgba -framerate 3.3333333333333335 -loglevel error -i pipe: -vcodec h264 -pix_fmt yuv420p -y /var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/tmp84l3309_/temp.m4v</code></pre>
+INFO:matplotlib.animation:MovieWriter._run: running command: ffmpeg -f rawvideo -vcodec rawvideo -s 480x480 -pix_fmt rgba -framerate 3.3333333333333335 -loglevel error -i pipe: -vcodec h264 -pix_fmt yuv420p -y /var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/tmpq46_tfnq/temp.m4v</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <video width="480" height="480" controls="" autoplay="" loop="">
@@ -17694,7 +17698,7 @@ AABMYXZmNjAuMTYuMTAw
 </div>
 <p>Notice how some coefficients are set to 0 (white pixels) and the density of those increases with larger values of <span class="math inline">\lambda</span>. For many channel/frequency combinations the weights toggle seemingly randomly between selected or not selected. But, for those channels/frequencies that showed the strongest response to the thumb movement they remain selected until lambda reaches very high values. Thus, the L1 penalty tends to keep in the model only those channels/frequencies that had the strongest relationship with thumb movement.</p>
 <p>To summarize, we can compare the coefficients across the models.</p>
-<div id="1f257d9f" class="cell" data-execution_count="29">
+<div id="a35e626b" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot coefs for non-regularized, L1, and L2 norms</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>,figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">4</span>))</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>coefs_nonreg <span class="op">=</span> log_mdl.coef_.reshape(<span class="dv">63</span>,<span class="op">-</span><span class="dv">1</span>)</span>
@@ -17730,7 +17734,7 @@ AABMYXZmNjAuMTYuMTAw
 <section id="ecog-logistic-decoder-with-pytorch" class="level3">
 <h3 class="anchored" data-anchor-id="ecog-logistic-decoder-with-pytorch">ECoG logistic decoder with PyTorch</h3>
 <p>To study the effect of hyperparameters on model fitting, we will reimplement logistic regression with PyTorch. Unlike our previous implementation, this version will support multiple features. To start, let’s create the <code>Dataset</code> object for our ECoG data. Recall that a PyTorch <code>Dataset</code> object, when passed to the <code>Dataloader</code>, facilitates the conversion of the training data into a form that is easily ingested by an optimization algorithm.</p>
-<div id="c09f199f" class="cell" data-execution_count="30">
+<div id="59060441" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ECoGData(Dataset):</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, ecog_feat, ecog_lbl, transform<span class="op">=</span><span class="va">None</span>, target_transform<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
@@ -17779,7 +17783,7 @@ AABMYXZmNjAuMTYuMTAw
 <span id="cb41-46"><a href="#cb41-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> feat, lbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we will create the multifeature logistic regression class. While the model will use functions and objects from the PyTorch package, the class will have the methods found in a SciKit learn estimator object. The user will have access to various hyperparameters that can be setup during initialization. These include learning rate (<code>lr</code>), proportion of data to train on (<code>train_prop</code>), number of samples used for each optimization step (<code>batch_size</code>), the number of passes through the training dataset used for optimization (<code>epochs</code>), and lambda for an L1 penalty (<code>lam</code>).</p>
-<div id="3c839c7f" class="cell" data-execution_count="31">
+<div id="e0f1c1ed" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPT():</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, lr<span class="op">=</span><span class="fl">0.01</span>, epochs<span class="op">=</span><span class="dv">100</span>, train_prop<span class="op">=</span><span class="fl">0.8</span>, batch_size<span class="op">=</span><span class="dv">5</span>, lam<span class="op">=</span><span class="fl">0.0</span>):</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
@@ -17979,7 +17983,7 @@ AABMYXZmNjAuMTYuMTAw
 <p>The <code>fit</code> method contains the crucial code to generate a multifeature logistic regression model. Unlike the single feature version we created previously, this new one includes an L1 penalty term. We do this by first calculating the loss based on the binary cross-entropy (<code>BCELoss</code>), and then adding the L1 penalty term to that loss. To calculate the L1 penalty for the PyTorch model, we extract the weights in the linear layer, take their absolute value and add them together, then multiply by <code>lam</code> (<span class="math inline">\lambda</span>). Once this is added to the loss, the L1 penalty contributes to the calculation of the gradients that are used to update the weights.</p>
 <p>Since we want to iterate over a range of values for each hyperparameter, and we want to explore how multiple hyperparameters contribute to the fitting, we will create functions to facilitate this. As a general rule in programming, if you find yourself writing the same code multiple times, then it should be encapsulated into a function. This reduces the number of lines of code you have to produce. It also makes it easier to update your code, since you only have to change the code within the function, instead of changing the same section in each of the repetitions.</p>
 <p>To examine how changes in a hyperparameter affects model performance, we will create the method <code>hyper_cv</code>. This stands for hyperparameter cross-validation, which takes data and hyperparameters, and fits the model to each combination of hyperparameters, and does this for a user specified number of times, <code>n</code>. Next we want to plot the results, and for that we create the function <code>plot_hyper_cv</code>. This takes the train and test scores, along with a list of strings representing the corresponding parameters, and create violin plots showing the distribution of these scores for each hyperparameter set.</p>
-<div id="9b040265" class="cell" data-execution_count="32">
+<div id="2efc4297" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hyper_cv(feats, lbls, n<span class="op">=</span><span class="dv">100</span>, verbose<span class="op">=</span><span class="va">False</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to perform hyperparameter cross-validation for logistic regression.</span></span>
@@ -18072,7 +18076,7 @@ AABMYXZmNjAuMTYuMTAw
 <section id="effect-of-lambda" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-lambda">Effect of <span class="math inline">\lambda</span></h3>
 <p>We already covered how an L1 penalty can affect fitting using the <code>LogisticRegression</code> classifier from SciKit learn, so it should perform similarly when reimplemented with PyTorch. Here we vary lambda from 0 to 10.</p>
-<div id="45bfe456" class="cell" data-execution_count="33">
+<div id="8311aa2e" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>lams <span class="op">=</span> np.hstack((<span class="dv">0</span>,<span class="fl">10.0</span><span class="op">**</span>np.arange(<span class="op">-</span><span class="dv">4</span>,<span class="dv">2</span>)))</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>scores_test, scores_train, params <span class="op">=</span> hyper_cv(thumb_feats, thumb_lbls, lam<span class="op">=</span>lams, batch_size<span class="op">=</span>[<span class="dv">20</span>])</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>))</span>
@@ -18097,7 +18101,7 @@ AABMYXZmNjAuMTYuMTAw
 <section id="effect-of-learning-rate" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-learning-rate">Effect of learning rate</h3>
 <p>Learning rate determines how much we adjust the weights with each optimization step. The effect of this on final performance will depend on the number of training epochs we give, which we have set at 100 by default. Here we will vary the learning rate over 10 orders of magnitude.</p>
-<div id="1759e60b" class="cell" data-execution_count="34">
+<div id="b29db495" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>lrs <span class="op">=</span> <span class="fl">10.0</span><span class="op">**</span>np.arange(<span class="op">-</span><span class="dv">8</span>,<span class="dv">3</span>)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>scores_test, scores_train, params <span class="op">=</span> hyper_cv(thumb_feats, thumb_lbls, lr<span class="op">=</span>lrs)</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>))</span>
@@ -18121,7 +18125,7 @@ AABMYXZmNjAuMTYuMTAw
 <section id="effect-of-batch-size" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-batch-size">Effect of batch size</h3>
 <p>When training with stochastic gradient descent, we can choose how many samples are used to calculate the gradient for each optimization step. If all the samples are used, then this is regular gradient descent. If less than the total are used, then we have to randomly select some samples, and that is the <em>stochastic</em> part of stochastic gradient descent. Each of these randomly selected subsets of samples is referred to as a <em>minibatch</em>, and their size can impact the fitting process. When we have cycled through all minibatches in our training data, a new epoch is started and we run through the data again. If we use a batch size of 1, then we update the model weights based on the performance with each sample. As the batch size increases, we average the losses over samples when calculating the updates.</p>
-<div id="de8c95cb" class="cell" data-execution_count="35">
+<div id="20a3f582" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>batch_sizes <span class="op">=</span> np.linspace(<span class="dv">1</span>, <span class="dv">40</span>, <span class="dv">10</span>).astype(<span class="bu">int</span>).tolist()</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>scores_test, scores_train, params <span class="op">=</span> hyper_cv(thumb_feats, thumb_lbls, </span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                                             batch_size <span class="op">=</span> batch_sizes, epochs<span class="op">=</span>[<span class="dv">25</span>], lr<span class="op">=</span>[<span class="fl">0.001</span>])</span>
@@ -18146,7 +18150,7 @@ AABMYXZmNjAuMTYuMTAw
 <section id="effect-of-training-data-amount" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-training-data-amount">Effect of training data amount</h3>
 <p>The amount of data used for training should impact performance. Here we vary it from 10 to 90% of the dataset.</p>
-<div id="7132d60b" class="cell" data-execution_count="36">
+<div id="5a1dda69" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>train_props <span class="op">=</span> np.linspace(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="dv">10</span>)</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>scores_test, scores_train, params <span class="op">=</span> hyper_cv(thumb_feats, thumb_lbls, </span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                                             train_prop <span class="op">=</span> train_props)</span>
@@ -18193,7 +18197,7 @@ A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to h
 <section id="putting-them-all-together" class="level3">
 <h3 class="anchored" data-anchor-id="putting-them-all-together">Putting them all together</h3>
 <p>Now that we have found the optimal values of the hyperparameters for each setting, we can put them all together when training our model. The assumption here is that if a certain parameter results in improved performance, it will not result in decreased performance when combined with the ideal value of another parameter. This is a reasonable starting assumption to make, however it can also be wrong. Thus, exploring the contribution of each hyperparameter on training individually, and then using the best values in combination, is only the first step to optimizing the training of a model. Let’s try training a model now using the optimal hyperparameter values we found above.</p>
-<div id="3dbf0f77" class="cell" data-execution_count="37">
+<div id="bcc58a90" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>num_runs <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>scores_test <span class="op">=</span> np.zeros(num_runs)</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>scores_train <span class="op">=</span> np.zeros(num_runs)</span>
@@ -18234,7 +18238,7 @@ Median test accuracy: 100.00 %</code></pre>
 <p>So far we have been relying on cross-validation to assess the performance of our decoder. We have done this because the fitting procedure optimizes for the training data, and may be prone to memorizing specific features of that data, which will not generalize to held out data. We have tried to control for memorization using regularization and hyperparameter tuning, which allows us to test a variety of training schemes and select the one that perfroms the best on the test data. Unfortunately, this scheme does not ensure that we get an estimate of decoder performance that reflects how it will do on new data. This is because we have optimized our hyperparameters for performance on the data in the training and testing data sets, so we are implicitly fitting to them. Even though we use a different subset of the data for testing each time we run our fitting, some of it is used for the training in other fitting runs. Thus, we may have some <em>information leakage</em> in our test data when selecting for the optimal hyperparameter.</p>
 <p>To minimize this, after the hyperparameters have been fit we want to evaluate our model performance on data that was neither used for training or testing. We refer to this subset of data as the <em>validation set</em>. The performance of the hyperparameter optimized model on the validation data will be a truer estimate of how it would perform on an entirely new set of samples. Indeed, if the whole point of a decoder is to predict stimuli or behaviors from brain activity in real time, then our decoder must perform well on data it has never been trained or optimized on.</p>
 <p>Incorporating a validation data set into our fitting procedure is simple. We just have to divide our data into three groups, and hold out the validation samples until after all cross-validated optimizations have been completed.</p>
-<div id="2590a75b" class="cell" data-execution_count="38">
+<div id="10095a19" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set random number generator to ensure reproducibility</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">8</span>)</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">8</span>)</span>
