@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Week8 – Decoding The Brain</title>
+<title>Week 8 – Decoding The Brain</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -198,23 +198,23 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./Week8.html" aria-current="page"> 
-<span class="menu-text">Week8</span></a>
+<span class="menu-text">Week 8</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week9.html"> 
-<span class="menu-text">Week9</span></a>
+<span class="menu-text">Week 9</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week10.html"> 
-<span class="menu-text">Week10</span></a>
+<span class="menu-text">Week 10</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week11.html"> 
-<span class="menu-text">Week11</span></a>
+<span class="menu-text">Week 11</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week12.html"> 
-<span class="menu-text">Week10</span></a>
+<span class="menu-text">Week 12</span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="./about.qmd"> 
@@ -254,7 +254,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Week8</h1>
+<h1 class="title">Week 8</h1>
 </div>
 
 
@@ -275,7 +275,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="multiclass-logistic-decoders">Multiclass logistic decoders</h2>
 <p>Last week we ended with a PyTorch implementation of a multifeature logistic classifier. We were able to have it determine whether a thumb movement had been initiated based on the profile of spectral changes across multiple ECoG electrodes lying over motor cortex. Detecting whether a single movement occurred only requires a binary output, True or False. This is limited. Ideally our decoder would be able to read-out a variety of movements. This problem is known as <em>multinomial</em> or <em>multiclass classification</em>. For that, a set of features is given, just like before, and the probability of those features being associated with each of <span class="math inline">K</span> possibilities is returned.</p>
 <p>This week we will explore how to extend our logistic decoder in Pytorch to achieve this. This will help us better understand the principles behind multiclass classification. Then, we will use the <code>LogisticRegression</code> class in Scikit Learn, which has multiclass classification built-in.</p>
-<div id="3af7575b" class="cell" data-execution_count="1">
+<div id="cb47c0a9" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path <span class="im">as</span> op</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -297,7 +297,7 @@ window.Quarto = {
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">2</span>) <span class="co">#1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&lt;torch._C.Generator at 0x1489a4f50&gt;</code></pre>
+<pre><code>&lt;torch._C.Generator at 0x163ed6fd0&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -324,7 +324,7 @@ window.Quarto = {
 <section id="multiclass-decoding-the-wrong-way" class="level2">
 <h2 class="anchored" data-anchor-id="multiclass-decoding-the-wrong-way">Multiclass decoding, the wrong way</h2>
 <p>Let’s start by loading in our data and importing our PyTorch based logistic decoder. We will use the PyTorch version because it allows us to directly implement changes required in making a multinomial logistic decoder.</p>
-<div id="2a2fbc6c" class="cell" data-execution_count="2">
+<div id="ecfce206" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select dataset</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'cc'</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ecog_path <span class="op">=</span> [<span class="st">'data/ecog/'</span>, subj, <span class="st">'</span><span class="sc">{}</span><span class="st">_fingerflex.mat'</span>.<span class="bu">format</span>(subj)]</span>
@@ -337,7 +337,7 @@ window.Quarto = {
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>finger_names <span class="op">=</span> [<span class="st">'thumb'</span>, <span class="st">'index'</span>, <span class="st">'middle'</span>, <span class="st">'ring'</span>, <span class="st">'little'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Much the same as the previous week, except now we will load in the spectrally processed ECoG samples from each finger movement. These will be pooled together into a dictionary to start.</p>
-<div id="1cdc7120" class="cell" data-execution_count="3">
+<div id="c3d69fed" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>feats <span class="op">=</span> {}</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>lbls <span class="op">=</span> {}</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ind, finger <span class="kw">in</span> <span class="bu">enumerate</span>(finger_names):</span>
@@ -348,7 +348,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="building-a-naive-decoder">Building a naive decoder</h3>
 <p>To build a simple multiclass decoder, we can try to pool together the results from decoders that were independently trained on each finger. Each is trained to detect whether a certain finger did or did not move. If all of them return a probability of finger movement less than 0.5, we will declare that no finger was moved. Otherwise, the detected finger will be assigned to the decoder the returns the highest probability for finger movement that is greater than 0.5.</p>
 <p>When training each decoder we will use mostly standard settings, except for setting the L1 penalty to a value that encourages a sparse weight matrix. As covered last week, this tended to improve the performance of the decoder on the held out test data set by discouraging memorization of the training examples.</p>
-<div id="287cce64" class="cell" data-execution_count="4">
+<div id="8285daa1" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train a separate logistic regression model for each finger</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lr_sgl <span class="op">=</span> {}</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training individual models for each finger...'</span>)</span>
@@ -378,7 +378,7 @@ little    100       92        </code></pre>
 <p>Fantastic performance on the training dataset, which isn’t surprising. Performance on test sets was good as well. Not as good as the training, but that is to be expected. All decoders were able to classify correctly greater than 90% of the time between a movement or no movement of a given finger.</p>
 <p>Let’s now attempt to pool our decoders together to determine if a finger was moved, and if so which one. For this we will run each decoder on data from all fingers. We will construct an array of prediction probabilities, where each row is a different event (lift of a finger, or no finger movement), and each column is the probability returned for a different finger decoder. If for a given event all decoders return a probability less than 0.5, we will treat that as a no finger movement event. Otherise, we will assign the finger whose model returned the highest probability.</p>
 <p>Before we do that, though, we need to pool our data together and get just those trials that were used for testing.</p>
-<div id="9042dd39" class="cell" data-execution_count="5">
+<div id="c63c86cd" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pool together all data</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>feats_all <span class="op">=</span> np.concatenate([feats[finger] <span class="cf">for</span> finger <span class="kw">in</span> finger_names], axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>lbls_all <span class="op">=</span> np.concatenate([lbls[finger]<span class="op">*</span>(i<span class="op">+</span><span class="dv">1</span>) <span class="cf">for</span> i,finger <span class="kw">in</span> <span class="bu">enumerate</span>(finger_names)], axis<span class="op">=</span><span class="dv">0</span>)</span>
@@ -395,7 +395,7 @@ little    100       92        </code></pre>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>feats_test <span class="op">=</span> feats_all[idx_test]</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>lbls_test <span class="op">=</span> lbls_all[idx_test]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="670400cd" class="cell" data-execution_count="6">
+<div id="d3a33181" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lr_nv(feats):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Predict finger flexion using naive multinomial logistic regression.</span></span>
@@ -432,7 +432,7 @@ little    100       92        </code></pre>
 <p>A performance of 79% is much lower than single finger classification, but not awful, especially considering that with 6 classes the chance level is ~16%.</p>
 <p>Now we want to visualize the performance of our decoder. For that, we will use a confusion matrix. Recall that we used these in Week 3 for evaluating the performance of our ERP detector. In that case, we had two possible outcomes, Cue or No-cue. Here, we have 6 different outcomes: No finger flexion, thumb, index, middle, ring, or little finger flexion. For each event we have a <em>true label</em> that we know is correct, and a <em>predicted label</em> that is what our model claims was the case. Each row of the confusion matrix corresponds to a different true label, and each column to a predicted label. The value in each cell is the probability of the model returning a predicted label given that the event had a particular true label. This means that a model performing perfectly will show values of 1 along the diagonal of its confusion matrix, indicating that the true label and predicted label always agreed. If cells off the diagonal have probabilities greater than zero, then it means the model was wrong in its prediction (i.e.&nbsp;confused). Representing this as a matrix makes the nature of the errors more clear. For instance, it may be that a particular type of event has more errors, which would appear as an entire row with elevated probabilities. Or that a model is prone to erroneously predicting one type of event over another, which would manifest as a column of higher probabilties.</p>
 <p>The SciKit learn package offers functions for computing and displaying confusion matrices, so let’s avail ourselves of them to see how our finger decoder performs.</p>
-<div id="bb95cd71" class="cell" data-execution_count="7">
+<div id="2191c4f3" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate confusion matrix</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>cm_nv <span class="op">=</span> confusion_matrix(lbls_test, lbls_pred_nv, normalize<span class="op">=</span><span class="st">'true'</span>) <span class="co"># normalize by true labels</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -454,7 +454,7 @@ little    100       92        </code></pre>
 </div>
 <p>Notice that the total probability for each row is 1, meaning that the values represent the probability of a predicted label (<span class="math inline">\hat{y}</span>) given the true label (<span class="math inline">y</span>), expressed as <span class="math inline">p(\hat{y}|y)</span>. The most salient feature of the confusion matrix is that the highest probabilities tend to lie along the diagonal. This means our decoder is performing better than chance, but not perfectly. There are off-diagonal elements with non-zero probabilities, indicating incorrect classifications. This is especially the case for the little finger, who is frequently misclassified with the ring finger.</p>
 <p>Why might this be so? Individually, each decoder had greater than 90% accuracy for whether a given finger had moved or not on the test data. However, this is a different problem then what we are asking now, which is for a decoder to distinguish between different fingers. If the middle and ring finger evoke similar patterns of ECoG activity, then a decoder will have trouble distinguishing them. This pattern is captured by the coefficients that our decoder uses. To see this, let’s plot the coefficients used each decoder.</p>
-<div id="427552fc" class="cell" data-execution_count="8">
+<div id="95ff507a" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the coefficients from each decoder</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>coefs_nv <span class="op">=</span> np.zeros((<span class="bu">len</span>(finger_names), feats_all.shape[<span class="dv">1</span>]))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -483,7 +483,7 @@ little    100       92        </code></pre>
 </div>
 <p>We have extracted the coefficients from each decoder, reshaped them to reflect the channel by frequency organization of our features, and then plotted them for each finger. Red pixels have a positive weight, blue a negative, and white are at or near zero. The preponderance of zeros is because we used an L1 norm during the fitting.</p>
 <p>The coefficient map for the thumb is radically different than the others, while the ring and little look more similar to each other compared with the rest. Indeed, looking back at the confusion matrix we can see that movement of the little finger had a 50% chance of being labeled as movement of the ring finger. To more precisely capture the degree of similarities between the coefficients, we can measure their correlation with each other.</p>
-<div id="258914c8" class="cell" data-execution_count="9">
+<div id="1103ca5c" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot correlation coefficients between each set of coefficients</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_coefcorr(coefs, finger_names, ax<span class="op">=</span><span class="va">None</span>):</span>
@@ -516,7 +516,7 @@ little    100       92        </code></pre>
 <p>To understand why the coefficients matter here, think back to the formula we used for our multifeature logistic regression: <span class="math display"> \sigma(X)=\frac{1}{1+e^{-(b+WX)}} </span></p>
 <p>Here <span class="math inline">W</span> is the vector of coefficients, and <span class="math inline">X</span> are the observed ECoG activity patterns. If the <span class="math inline">W</span> for the ring finger decoder is similar to the <span class="math inline">W</span> for the little finger decoder, than the two decoders will behave similarly and an ECoG pattern that would cause the detection of your little finger moving will also trigger a detection on the ring finger decoder. To visualize this, we can plot the distribution of <span class="math inline">WX</span> values for little and ring finger events, and compare those with no finger movement events. We will explore this using all the data, both training and testing, with the ring finger movement decoder coefficients.</p>
 <p>We will also plot the decision line, where the logistic equation crosses 0.5 and an event is classified as ring finger movement. This will be when <span class="math inline">WX=-b</span>, since <span class="math inline">\frac{1}{1+e^0}=\frac{1}{1+1}=\frac{1}{2}</span>.</p>
-<div id="4a6df8bc" class="cell" data-execution_count="10">
+<div id="85574be3" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get finger indices and model parameters for ring finger decoder</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ring_ind <span class="op">=</span> finger_names.index(<span class="st">'ring'</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>little_ind <span class="op">=</span> finger_names.index(<span class="st">'little'</span>)</span>
@@ -550,7 +550,7 @@ little    100       92        </code></pre>
 </div>
 <p>The ring finger movement decoder is good at detecting when the ring finger has moved, compared to when it has not. Most of the no finger events are below the threshold, while all the ring finger movement events are above threshold. However, the same is also true for the little finger movement events. This means our ring finger movement detector can also act as a little finger movement detector. The question now is whether there is enough difference in the ECoG activity between ring and little finger movements for a decoder to tell the difference between them.</p>
 <p>One way to answer that question is to try to visualize the distribution of ring vs little finger ECoG patterns. This is challenging because each event is composed of several thousand data points, making the data exceedingly high dimensional. A trick then is to try to reduce the dimensionality of the data, to take those several thousand data points and distill them down to just a few. If we get it down to two, those can then be plotted on a scatter plot. The literature on dimensionality reduction (also called <em>embedding</em> or <em>manifold learning</em>) is vast and beyond this lecture. Instead we will try to use the projection onto the decoder coefficients. This time, instead of just projecting the data onto the ring finger decoder, we will also project them onto the little finger decoder. We can then plot those projections as a scatter plot.</p>
-<div id="37f3cf11" class="cell" data-execution_count="11">
+<div id="8ba99a48" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the projection of data onto the little finger coefficients</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>little_coefs <span class="op">=</span> coefs_nv[little_ind,:]</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>little_intercept <span class="op">=</span> lr_sgl[<span class="st">'little'</span>].get_intercept()</span>
@@ -580,7 +580,7 @@ little    100       92        </code></pre>
 </div>
 <p>Most of the data points lie along a diagonal, indicating that coefficients of each model tend to transform the data similarly. As before, the greater segregation of events is between finger movement and no movement events, here shown as blue and orange data points exclusively above the thresholds, and green no movement data points mostly below the thresholds. Crucially, focusing on the ring and little finger event data points, we can see that they do not perfectly overlap. The ring finger movement data points tend to be offset from the little finger data points. That difference was not trained for, but this indicates that the ECoG patterns evoked by these events might be distinct enough to discriminate them. What we need to do now is train a decoder to do so.</p>
 <p>What does this look like if we compare two fingers who were never confused? Let’s create the same plot, but for thumb and middle finger.</p>
-<div id="8a8ece67" class="cell" data-execution_count="12">
+<div id="ad0f9ade" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get finger indices and model parameters for ring finger decoder</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>thumb_ind <span class="op">=</span> finger_names.index(<span class="st">'thumb'</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>middle_ind <span class="op">=</span> finger_names.index(<span class="st">'middle'</span>)</span>
@@ -690,7 +690,7 @@ pred_{i} = \underset{f=fingers}{\text{argmax}}\ \sigma(z_{i,f})
 </span></p>
 <p>The only major effect this will have on our training is that instead of our algorithm trying to fit a decoder between finger movement and no movement, it will instead optimize for the difference between moving a specific finger and all other fingers. During the fitting, the coefficients will update the same, since the loss will be propagated back through each column in matrix W independently. In addition, we will add an additional output (logistic decoder) for the no finger condition, which will have its own weights and intercept.</p>
 <p>To implement this, we will modify our existing <code>LogRegPT</code> class. There are only a few spots we have to change. First, we need to change the Linear layer in our logistic regression model to now have 6 outputs, instead of the original one. Two, the <code>loss</code> method has to be modified to accept the 6 outputs instead of just one (more on this below). Lastly, the <code>predict</code> method needs to convert the 6 outputs of the network to labels by identifying which has the highest probability for each sample.</p>
-<div id="afc6ef8d" class="cell" data-execution_count="13">
+<div id="e90293a1" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPTOvR(LogRegPT):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _create_model(<span class="va">self</span>):</span>
@@ -770,7 +770,7 @@ pred_{i} = \underset{f=fingers}{\text{argmax}}\ \sigma(z_{i,f})
 <span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pred_lbls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Looking over this code, you will notice that the term <em>one-hot</em> is used. This refers to a way to encode the classes. Originally when we trained single logistic decoders we encoded whether a finger moved or not as a binary variable, 0 or 1, at each sample. When we pooled the decoders together, we needed a way to label each finger uniquely (they can’t all be 1). To do this, we did thumb = 1, index = 2, middle = 3, ring = 4, little = 5, and no finger movement = 0. Now that we are training 6 decoders in parallel, our output is 6 probabilities, and the target output will be a vector of length 6, with one entry for each finger (or no finger). When a finger is moved, its value is set to 1, and all others are set to 0. This is where the term one-hot comes from; only one entry in the vector is set to 1, and all the other are 0. Let’s visualize this:</p>
-<div id="9e2ba828" class="cell" data-execution_count="14">
+<div id="b4c5b2e8" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adding in the no finger condition</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mult_lbls <span class="op">=</span> [<span class="st">'no finger'</span>] <span class="op">+</span> finger_names</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -808,7 +808,7 @@ pred_{i} = \underset{f=fingers}{\text{argmax}}\ \sigma(z_{i,f})
 </div>
 <p>The target labels have been transformed from a list of integers to a binary matrix. For the one-hot coded matrix each row is a sample and each column a type of event. Here, the value in the first column is a 1 if no finger movement occurred, and then each of the fingers is assigned its own column. Note that the changes we made to our logistic regression class allow us to keep passing the integer coded label list as the <code>y</code> input. All the one-hot conversions are done internally in the <code>predict</code> and <code>loss</code> methods.</p>
 <p>There is one other thing we have to do to the training data before passing it to the decoder’s <code>fit</code> method. Looking at the one-hot coded labels matrix, we can see that there are approximately 5 times as many no finger conditions as there are conditions for each finger. This is because we just pooled together all the training data we used for each of the single decoders, which were each trained on a dataset containing equal numbers of movement and no movement trials. By pooling, we have created an unbalanced dataset with an over representation of no finger trials. This could bias the training to optimize for detecting no finger movement events, at the expense of improved discrimination between different finger movements. So before we train, we remove enough no-finger trials to balance the dataset.</p>
-<div id="3843138a" class="cell" data-execution_count="15">
+<div id="f05cec2b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># keep a random subset of no finger trials equal in number to the number of individual finger trials</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the median number of labels for each finger</span></span>
@@ -826,7 +826,7 @@ pred_{i} = \underset{f=fingers}{\text{argmax}}\ \sigma(z_{i,f})
 <span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>lbls_sub <span class="op">=</span> lbls_all[inds]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that the data is balanced, let’s train!</p>
-<div id="aba2f492" class="cell" data-execution_count="16">
+<div id="4a6e81b2" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lr_ovr <span class="op">=</span> LogRegPTOvR(lam<span class="op">=</span><span class="fl">0.005</span>, shuffle_seed<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>test_score, train_score <span class="op">=</span> lr_ovr.fit(feats_sub, lbls_sub)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training score: </span><span class="sc">{:.0f}</span><span class="st">%'</span>.<span class="bu">format</span>(train_score))</span>
@@ -838,7 +838,7 @@ Test score: 82%</code></pre>
 </div>
 <p>Whoa, 82% is a far fall from 98%, but it is better than the 79% performance with our naive decoder.</p>
 <p>To diagnose where things are going wrong, let’s use the confusion matrix. We can compare it with the original confusion matrix from our naive decoder to see if the types of errors being made have changed. As before, we will restrict our analysis to the test trials, which we extract from our logistic decoder object.</p>
-<div id="2a04ed0f" class="cell" data-execution_count="17">
+<div id="14aa8bee" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>test_idxs <span class="op">=</span> lr_ovr.test_idxs</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluate decoder performance using confusion matrix</span></span>
@@ -868,7 +868,7 @@ Test score: 82%</code></pre>
 </div>
 <p>Notice how the diagonal elements on the OvR confusion matrix tend to have higher probabilities now, this indicates that correct classifications have increased. Correspondingly, many of the off-diagonal elements have been reduced to zero, which means we have fewer misclassifications. Performance for no finger and index have improved, which makes sense since the patterns of neural activity associated with them are quite different from the others. Index and middle fingers are much less confused. However, correct classifications for the ring finger have gotten dramatically worse.</p>
 <p>Given that the performance of each decoder depends on their weights, these should be different from the naive case.</p>
-<div id="d69335e9" class="cell" data-execution_count="18">
+<div id="8fd3a09e" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the coefficients from each decoder</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>coefs_ovr <span class="op">=</span> lr_ovr.get_coefs()[<span class="dv">0</span>]</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -917,7 +917,7 @@ Test score: 82%</code></pre>
 <p>For our naive decoder we only had 5 sets of weights, one for each finger. Now we have six with the no finger decoder added. Using the OvR strategy radically changed the weights our model learned. The naive decoder, where each finger was trained separately, had the strongest weights as positive values at gamma frequencies and localized to several channels that were common across all the fingers (except for the thumb). This is because each decoder is separating the no finger condition from the finger movement condition, and for many of the fingers the same channels are activated.</p>
 <p>The OvR decoder, on the other hand, is mostly composed of negative weights. The no finger decoder is composed of negative weights largely on the channels that indicated finger movements by the naive decoder. By doing this, the logistic function will be decoding the <strong>absence</strong> of a finger movement. This can be imagined as taking the average weights of the finger decoders from the naive, and then negating them to have the decoder give a high probability for samples where no finger movement was present. Dramatic changes were also present for the decoders of individual finger movements. The fingers now have a mixture of positive and negative weights, each on a different subset of channels. These weights reflect the patterns of activities that are distinct between both the no finger and each of the other fingers.</p>
 <p>How did these changes in weights affect how samples are projected?</p>
-<div id="1780a6ec" class="cell" data-execution_count="19">
+<div id="4266a690" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_finger_projections(finger1, finger2, lbls_list, coef_tensor, feats, lbls, ax<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -959,7 +959,7 @@ Test score: 82%</code></pre>
 </div>
 </div>
 <p>The distribution of points is now quite different from what we saw with the naive training strategy. In that case, thumb and little finger trials tended to project similarly, scattering in the same region that lay opposite those for no finger trials. Now, they lie on opposing ends of the no finger distribution. This happens because the OvR training strategy encourages the weights for each condition to provide maximal separation from all other conditions, and not just from the no finger condition. For some pairs of fingers with very different neural activation profiles, such as thumb and little finger, this results in perfect separation between them. Other pairs, however, may not divide as cleanly if their activations are too similar. We can see this when comparing middle vs.&nbsp;index or ring vs.&nbsp;little:</p>
-<div id="882c8ba7" class="cell" data-execution_count="20">
+<div id="34860bd6" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>plot_finger_projections(<span class="st">'index'</span>, <span class="st">'middle'</span>, mult_lbls, coefs_ovr, feats_sub, lbls_sub, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>plot_finger_projections(<span class="st">'ring'</span>, <span class="st">'little'</span>, mult_lbls, coefs_ovr, feats_sub, lbls_sub, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
@@ -975,7 +975,7 @@ Test score: 82%</code></pre>
 <p>Here we see that the points for index and middle finger samples are better separated than those between ring and little. This agrees with the pattern of classifications seen in the confusion matrix, where index and middle showed no incorrect classifications between, while such mistakes dominated for ring and little finger trials.</p>
 <p>Importantly, we still see the general pattern where the distribution of points for each finger lies on the opposite side of the no-finger distribution. Thus, an OvR strategy improves decoding by encouraging the weights for each decoder to separate from the other ones.</p>
 <p>To project the finger trials into counterposed domains, the weights seem to be taking on negative values for those channels and frequencies where the fingers evoked common activations. Positive weights are found where the fingers differed from each other. This should cause the weights associated with each finger to be less, or even negatively correlated with each other. To see if this is the case, let’s plot the correlation matrix of the weight vectors.</p>
-<div id="3be5ca31" class="cell" data-execution_count="21">
+<div id="b0253d9d" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>plot_coefcorr(coefs_nv, finger_names, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>plot_coefcorr(coefs_ovr, mult_lbls, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
@@ -995,7 +995,7 @@ Test score: 82%</code></pre>
 <section id="softmax-activation-to-fix-probabilities" class="level3">
 <h3 class="anchored" data-anchor-id="softmax-activation-to-fix-probabilities">Softmax activation to fix probabilities</h3>
 <p>So far we have just chosen the decoder with the highest probability to indicate which finger (or no finger) was moved. For this task, at each moment in time, only one finger can be moving, so the probabilities returned by our model should add up to 1. Is this the case? Our decoder provides a <code>predict_proba</code> method similar to what is found in scikit-learn classifiers. This returns the probability assigned by the model for each finger. We can use this function to determine whether the probabilities are behaving correctly and adding up to 1 for each sample.</p>
-<div id="60e5274e" class="cell" data-execution_count="22">
+<div id="5b07e721" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_prob_tbl(lr):</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    idxs <span class="op">=</span> lr.test_idxs</span>
@@ -1050,7 +1050,7 @@ Test score: 82%</code></pre>
 </span></p>
 <p>The exponentiation ensures that the outputs of our linear layer are kept positive, which means we will never go below 0. Then, dividing by the sum of all the exponentiated class outputs, we force the total probability to be 1.</p>
 <p>To code the softmax function, you would:</p>
-<div id="0be38084" class="cell" data-execution_count="23">
+<div id="4281c911" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parameters</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ----------</span></span>
@@ -1065,7 +1065,7 @@ Test score: 82%</code></pre>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.exp(x)<span class="op">/</span>np.<span class="bu">sum</span>(np.exp(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s now get a feel for how it behaves by passing a few different types of inputs to it.</p>
-<div id="6216fa6d" class="cell" data-execution_count="24">
+<div id="bba8d04c" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>inp1 <span class="op">=</span> np.array([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>inp2 <span class="op">=</span> np.array([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>])</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>inp3 <span class="op">=</span> np.array([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>])</span>
@@ -1080,7 +1080,7 @@ Softmax of [1,2,3,4,5]: [0.01165623 0.03168492 0.08612854 0.23412166 0.63640865]
 </div>
 </div>
 <p>The probability assigned to each input grows with its relative value. The smallest input has the smallest probability and the largest input has the largest probability. The probabilities also tend to shrink as the number of inputs increase. It is also the case that even though our inputs each have a difference of 1, their assigned probabilities grow exponentially the larger they are. Let’s try some more inputs.</p>
-<div id="156acf26" class="cell" data-execution_count="25">
+<div id="145e29e1" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>inp4 <span class="op">=</span> inp1 <span class="op">-</span> <span class="dv">2</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>inp5 <span class="op">=</span> inp1 <span class="op">+</span> <span class="dv">2</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1136,7 +1136,7 @@ L &amp;= -\log{\frac{e^{z_i}}{\sum_{j=0}^{k}e^{z_j}}} \notag \\
 </div>
 </div>
 <p>The softmax function is used at the output layer when performing multiclass decoding, and PyTorch includes it in the library. So we will now create a third version of our decoder, creating a subclass of our <code>LogRetPTOvR</code> logistic decoder. This entails a few changes. In the <code>loss</code> method we will remove the <code>BCELoss</code> function and replace it with the <code>CrossEntropyLoss</code> function, which includes a numerically stable softmax function. Since softmax is built into the loss and is the multiple output generalization of the sigmoid, we have to remove the sigmoid layer from our <code>_logreg</code> network. Removing that transformation from the output layer will not affect which class is predicted when we call the <code>predict</code> method since the softmax transform is monotonic, meaning that output with the largest probability would also have the largest value before softmax is applied. But, if we want to return the correct probability for each class, then we do have to add the softmax function to the <code>predict_proba</code> method. Otherwise, it would just return the output of the linear layer, which is sometimes referred to as ‘logits’ (<span class="math inline">exp(log(z))=z</span>).</p>
-<div id="7f984225" class="cell" data-execution_count="26">
+<div id="7182b421" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogRegPTSM(LogRegPTOvR):</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _create_model(<span class="va">self</span>):</span>
@@ -1214,7 +1214,7 @@ L &amp;= -\log{\frac{e^{z_i}}{\sum_{j=0}^{k}e^{z_j}}} \notag \\
 <span id="cb34-75"><a href="#cb34-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pred</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This new version of the multiclass logistic decoder now accounts for all the issues we could think of. Let’s see how well it works.</p>
-<div id="3084f7b5" class="cell" data-execution_count="27">
+<div id="d0f4cd9c" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>lr_sm <span class="op">=</span> LogRegPTSM(lam<span class="op">=</span><span class="fl">0.005</span>, shuffle_seed<span class="op">=</span><span class="dv">0</span>) <span class="co"># use all data for training</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>test_score, train_score <span class="op">=</span> lr_sm.fit(feats_sub, lbls_sub)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training score: </span><span class="sc">{:.0f}</span><span class="st">%'</span>.<span class="bu">format</span>(train_score))</span>
@@ -1226,7 +1226,7 @@ Test score: 85%</code></pre>
 </div>
 <p>Not bad. Including the softmax at the output stage raised the accuracy from 82 to 85%. But it is not immediately clear why, since all we did was ensure that the returned probabilities behave appropriately. Indeed, it could just be due to chance since randomization is part of the data shuffling and optimization process. Nevertheless, we can examine how the softmax version of our decoder is solving the classification problem.</p>
 <p>First, let’s examine the probabilities returned to make sure they are correct.</p>
-<div id="92532a62" class="cell" data-execution_count="28">
+<div id="7b3e36a5" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>print_prob_tbl(lr_sm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>no finger thumb     index     middle    ring      little    Sum       
@@ -1244,7 +1244,7 @@ Test score: 85%</code></pre>
 </div>
 <p>Looks great. For each sample the probabilities sum to 1, and often the correct event has the highest probability. Note also that the distribution of probabilities is different now. The largest ones for each sample tend to be much higher, and the incorrect events are seemingly pushed towards 0. This stems from the exponentiation performed on the <span class="math inline">z</span> values returned by the linear layer.</p>
 <p>Since the performance was modestly better, we can see what was driving that by examining the confusion matrix.</p>
-<div id="2a6e058b" class="cell" data-execution_count="29">
+<div id="8fb47900" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>test_idxs <span class="op">=</span> lr_sm.test_idxs</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluate decoder performance using confusion matrix</span></span>
@@ -1279,7 +1279,7 @@ Test score: 85%</code></pre>
 </div>
 <p>The improved performance seems to have only arrived by improving the decoding of the ring finger. Previously, the OvR decoder was prone to attributing ring finger samples to other fingers, or no finger movement at all. Now, it doesn’t do that as much. Given this, we might be tempted to conclude that the weights for the ring finger have changed.</p>
 <p>Visualizing the weights will help us see how this refined performance occurred.</p>
-<div id="c759043d" class="cell" data-execution_count="30">
+<div id="f032d7e7" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the coefficients from each decoder</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>coefs_sm <span class="op">=</span> lr_sm.get_coefs()[<span class="dv">0</span>]</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1328,7 +1328,7 @@ Test score: 85%</code></pre>
 </div>
 </div>
 <p>Well that is quite different! The no finger weights still show prominent negative bands, but those are completely gone from the finger movement weights. Instead, these show positive weights that appear to be localized to those channels and frequencies that were the most strongly activated by their corresponding finger movements. This suggests that the projections should be quite different as well, since those are determined by the weights.</p>
-<div id="1a0b6e87" class="cell" data-execution_count="31">
+<div id="cf064c1a" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">4</span>))</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>plot_finger_projections(<span class="st">'thumb'</span>, <span class="st">'little'</span>, mult_lbls, coefs_sm, feats_sub, lbls_sub, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>plot_finger_projections(<span class="st">'index'</span>, <span class="st">'middle'</span>, mult_lbls, coefs_sm, feats_sub, lbls_sub, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
@@ -1343,7 +1343,7 @@ Test score: 85%</code></pre>
 </div>
 <p>Indeed, we no longer see the counter posing between finger events that the OvR decoder showed. Instead, they are either at right angles to each other (orthogonal), as in the case of thumb and little fingers, or well separated distributions that lie in the same quadrant, seen with the index and middle fingers.</p>
 <p>To shed further light on why these patterns are emerging, we can examine the correlations between the weight vectors.</p>
-<div id="baeff1a6" class="cell" data-execution_count="32">
+<div id="294c9152" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot correlation between coefficients</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">4</span>))</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>plot_coefcorr(coefs_nv, finger_names, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
@@ -1371,7 +1371,7 @@ Test score: 85%</code></pre>
 <p>While we have improved the performance of the multiclass decoder, it seems to have been at the expense of worse performance for the no finger condition, which dropped from 100 down to 83% accuracy. If all conditions were equally likely, or important, than this trade off would be fine. We are willing to tolerate worse performance for situations that don’t happen often, or that we do not care so much about detecting. However, the lack of finger movement occurs more often than the movement of any other finger, and it is something that we need to detect since detecting the absence of finger movement is crucial for a finger movement decoder.</p>
 <p>To resolve this, we can try to encourage the model to better fit the no movement condition. Since the fitting depends on the loss function, we should think about ways to bias it to encourage better fitting to the no finger trials. The simplest way to is increase the number of no finger movement samples in the data set. This over representation of no finger trials unbalances the data, but that is fine because we want to model to be more penalized for poor performance on those trials. By including more trials without finger movements, their will be more opportunities for the model weights to be shifted towards values that minimize loss on those trials.</p>
 <p>To do this, we can try just training with the full dataset, which had 5 times the no finger trials compared with any single finger.</p>
-<div id="c33e526e" class="cell" data-execution_count="33">
+<div id="1016da87" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lr_sm_all <span class="op">=</span> LogRegPTSM(lam<span class="op">=</span><span class="fl">0.005</span>, shuffle_seed<span class="op">=</span><span class="dv">0</span>) <span class="co"># use all data for training</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>test_score, train_score <span class="op">=</span> lr_sm_all.fit(feats_all, lbls_all)</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Training score: </span><span class="sc">{:.0f}</span><span class="st">%'</span>.<span class="bu">format</span>(train_score))</span>
@@ -1382,7 +1382,7 @@ Test score: 75%</code></pre>
 </div>
 </div>
 <p>Our score on the test set dropped down to 75%. This worse performance is not entirely unexpected, since we are measuring performance with the balanced accuracy score and so the fitting process may try to improve performance on the more frequent no finger trials at the expense of decoding individual finger movements. The performance on each type of trials is weighted equally when calculating balanced accuracy, this could lead to a drop in performance. To see if this is the case, we can use the confusion matrix.</p>
-<div id="6d349d2c" class="cell" data-execution_count="34">
+<div id="8330b6cd" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>test_idxs <span class="op">=</span> lr_sm_all.test_idxs</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluate decoder performance using confusion matrix</span></span>
@@ -1415,7 +1415,7 @@ Test score: 75%</code></pre>
 <section id="doing-it-with-scikit-learn" class="level2">
 <h2 class="anchored" data-anchor-id="doing-it-with-scikit-learn">Doing it with Scikit Learn</h2>
 <p>Of course, all of this can just be done with Scikit Learn. Its logistic regression function, which we used already in previous weeks, supports multifeature decoders with multiclass outputs.</p>
-<div id="699b5d74" class="cell" data-execution_count="35">
+<div id="4e34570d" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set aside data for validation</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>skf <span class="op">=</span> StratifiedKFold(n_splits<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>tt_idxs, val_idxs <span class="op">=</span> <span class="bu">next</span>(skf.split(feats_all, lbls_all))</span>
@@ -1840,7 +1840,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <p>Before we look at the results, a few notes on how to use the <code>LogisticRegressionCV</code> class. This is a subclass of the <code>LogisticRegression</code> class we used several weeks ago. It works much the same, except now it supports the cross-validated optimization of weight penalties like L1 and L2. When initializing it, we supplied the parameters <code>Cs=10</code>, which means that lambda will be sampled at 10 points on a log scale ranging from <span class="math inline">10^{-4}</span> to <span class="math inline">10^4</span>. To perform cross-validation, we need a way to block the data into folds. This is done with the <code>cv</code> parameter, where here we deliver the Scikit-Learn stratification object that we want to use. Finally, we choose L1 regularization with the <code>penalty</code> parameter and set a few other aspects of the fitting (<code>solver</code> and <code>max_iter</code>) and to improve performance.</p>
-<div id="aa95b53a" class="cell" data-execution_count="36">
+<div id="6259a1f6" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>pred_tt <span class="op">=</span> lr_sk.predict(feats_tt)</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pred_val <span class="op">=</span> lr_sk.predict(feats_val)</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>

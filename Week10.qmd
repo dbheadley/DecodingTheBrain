@@ -1,5 +1,5 @@
 ---
-title: Week10
+title: Week 10
 jupyter: python3
 format:
   html:
@@ -503,18 +503,18 @@ pca_pool = pca.fit_transform(waves_collapse)
 ```
 
 ```{python}
-chan_list = [0,1,2]
+comp_list = [0,1,2]
 fig, ax = plt.subplots(3,3,figsize=(6,6))
-for ind1, chan1 in enumerate(chan_list):
-    for ind2, chan2 in enumerate(chan_list):
+for ind1, comp1 in enumerate(comp_list):
+    for ind2, comp2 in enumerate(comp_list):
         if ind1==ind2:
-            ax[ind1,ind2].hist(pca_pool[:,chan1], bins=50)
-            ax[ind1,ind2].set_title('Channel {x}'.format(x=chan1))
+            ax[ind1,ind2].hist(pca_pool[:,comp1], bins=50)
+            ax[ind1,ind2].set_title('Component {x}'.format(x=comp1))
         elif ind1>ind2:
             ax[ind1,ind2].axis('off')
         else:
-            ax[ind1,ind2].scatter(pca_pool[:,chan1],pca_pool[:,chan2], alpha=1, s=.001)
-            ax[ind1,ind2].set_title('Channels {x} vs {y}'.format(x=chan1,y=chan2))
+            ax[ind1,ind2].scatter(pca_pool[:,comp1],pca_pool[:,comp2], alpha=1, s=.001)
+            ax[ind1,ind2].set_title('Components {x} vs {y}'.format(x=comp1,y=comp2))
 
 fig.tight_layout()
 ```

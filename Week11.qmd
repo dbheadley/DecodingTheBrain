@@ -1,5 +1,5 @@
 ---
-title: Week11
+title: Week 11
 jupyter: python3
 format:
   html:
@@ -472,7 +472,7 @@ fig.tight_layout()
 
 After taking the difference in firing rates, it is readily apparent that the first unit has a bimodal response to the stimulus (either it responds or not), while the second decreased and the remaining two showed substantial increases.
 
-## Spike counts as a Poisson point process
+## Spike counts as a Poisson point process {#poisson}
 
 While we only observed the neuron's spike count across 15 presentations of the stimulus, it would be helpful to fit a distribution to those counts so we could get the probability of any particular count we observe. Fitting such a distribution requires that we make assumptions about the type of point process that is generating the spikes. It is common in neuroscience to treat spiking as a *Poisson point process*. There are a couple assumptions built into this. First, it assumes that the occurrence of spikes can be described by their rate. Second, spikes occur independent from one another. Put another way, the past history of spiking does not influence the probability that a new spike will be produced. We know this to not be the case, since neurons have a refractory period that prevents spikes from occurring within a few milliseconds of one another (if we wanted to incorporate the influence of the previous spike on the probability of the next one, we would treat spiking as a *renewal process*). However, since the refractory period is quite small relative to the few hundred milliseconds that typically separate spikes, usually it can be safely ignored.
 
@@ -866,12 +866,12 @@ ax.set_ylabel('Count')
 ax.set_xlim([0, 1])
 ax.set_title('Histogram of $R^2$ values for orientation tuning curve fits')
 x = np.linspace(0, 1, 100)
-ax.plot(x, gmm.weights_[0]*norm.pdf(x, means[0], np.sqrt(covs[0])), label='Tuned')
-ax.plot(x, gmm.weights_[1]*norm.pdf(x, means[1], np.sqrt(covs[1])), label='Untuned')
+ax.plot(x, gmm.weights_[0]*norm.pdf(x, means[0], np.sqrt(covs[0])), label='Untuned')
+ax.plot(x, gmm.weights_[1]*norm.pdf(x, means[1], np.sqrt(covs[1])), label='Tuned')
 ax.legend()
 ```
 
-Here we got two components that match our intuition about there being a narrow, tuned, distribution on the high end (blue) and a broad untuned distribution (orange) on the low end. Just below $R^2=0.8$ the distributions intersect. This is where the threshold should be for declaring a unit tuned. To find that numerically, we can subtract the tuned curve from the untuned curve and find the point where that difference goes from positive to negative.
+Here we got two components that match our intuition about there being a narrow, tuned, distribution on the high end (orange) and a broad untuned distribution (blue) on the low end. Just below $R^2=0.8$ the distributions intersect. This is where the threshold should be for declaring a unit tuned. To find that numerically, we can subtract the tuned curve from the untuned curve and find the point where that difference goes from positive to negative.
 
 ```{python}
 # get tuned and untuned curves

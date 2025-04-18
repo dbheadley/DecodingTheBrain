@@ -198,23 +198,23 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week8.html"> 
-<span class="menu-text">Week8</span></a>
+<span class="menu-text">Week 8</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week9.html"> 
-<span class="menu-text">Week9</span></a>
+<span class="menu-text">Week 9</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week10.html"> 
-<span class="menu-text">Week10</span></a>
+<span class="menu-text">Week 10</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week11.html"> 
-<span class="menu-text">Week11</span></a>
+<span class="menu-text">Week 11</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week12.html"> 
-<span class="menu-text">Week10</span></a>
+<span class="menu-text">Week 12</span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="./about.qmd"> 
@@ -315,7 +315,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="loading-and-processing-ecog-and-finger-flexion-data">Loading and processing ECoG and finger flexion data</h2>
 <p>To start, let’s load the recorded data. The dataset we are working with comes from the ‘fingerflex.zip’ dataset found <a href="https://exhibits.stanford.edu/data/catalog/zk881ps0522">here</a>. Other ECoG data sets can be found that use <a href="https://openneuro.org/datasets/ds004194/versions/1.0.1">visual stimuli</a>. There is also a BCI competition with several freely available datasets that also include EEG and MEG recordings <a href="https://www.bbci.de/competition/iv/">here</a>.</p>
 <p>We will use the SciPy package for much of this week, so let’s load the relevant packages.</p>
-<div id="19ffd1e0" class="cell" data-execution_count="1">
+<div id="aa0d8655" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> namedtuple</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os.path <span class="im">as</span> op</span>
@@ -336,7 +336,7 @@ window.Quarto = {
 <section id="loading-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="loading-the-data">Loading the data</h3>
 <p>The ECoG and finger flexion data is found in the file with the suffix ‘_fingerflex.mat’. We can load it using the <code>loadmat</code> function from the <code>scipy.signal</code> package.</p>
-<div id="78737e7f" class="cell" data-execution_count="2">
+<div id="119923b7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data files</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'cc'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ecog_path <span class="op">=</span> [<span class="st">'data'</span>, <span class="st">'ecog'</span>, subj, <span class="st">'</span><span class="sc">{}</span><span class="st">_fingerflex.mat'</span>.<span class="bu">format</span>(subj)]</span>
@@ -349,7 +349,7 @@ window.Quarto = {
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ch <span class="op">=</span> np.arange(data[<span class="st">'data'</span>].shape[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Examining the data in <code>ecog</code>, we have several relevant fields.</p>
-<div id="da82f8bd" class="cell" data-execution_count="3">
+<div id="c44fa3f5" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list the keys and data types in the dictionary</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, val <span class="kw">in</span> data.items():</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(key))</span>
@@ -381,7 +381,7 @@ cue
 <p>The <code>data</code> field contains the recordings from the ECoG electrode array. It is stored as a numpy array with time across rows and electrodes along columns. 63 channels were recorded, and with a 1 kHz sample rate the recording duration was 610050/1000 = 610 s or approximately 10 minutes.</p>
 <p>Finger flexion information is stored in the <code>flex</code> field. It has time across rows, and fingers across columns.</p>
 <p>Also provided is a <code>locs</code> field, which indicates the location of ECoG electrodes on the brain. We can use the <code>nilearn</code> and <code>nimare</code> package to visualize these overlaid on a standard brain model.</p>
-<div id="d5ba4c19" class="cell" data-execution_count="4">
+<div id="ea8caf2c" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot location of ECoFG electrodes</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># code from https://colab.research.google.com/github/NeuromatchAcademy/course-content/blob/main/projects/ECoG/load_ECoG_fingerflex.ipynb#scrollTo=tD75j3xqzMh9</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
@@ -770,7 +770,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 <section id="preprocessing-finger-movement-data" class="level3">
 <h3 class="anchored" data-anchor-id="preprocessing-finger-movement-data">Preprocessing finger movement data</h3>
 <p>The finger flexion data is stored in the field <code>flex</code>. It is a numpy array with time along the row dimension and fingers along the column dimension (hence 5 columns). Since we want to examine the finger activity associated with finger flexion, we need to extract the times when finger flexing occurs. Visualizing this signal is the first step to creating an algorithm to extract these periods.</p>
-<div id="ec1bbd69" class="cell" data-execution_count="5">
+<div id="fb7f227d" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flex <span class="op">=</span> data[<span class="st">'flex'</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the raw data</span></span>
@@ -792,7 +792,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 <p><span class="math display"> zscore = \frac{X-E[X]}{SD[X]} </span></p>
 <p>Here X is the signal, <span class="math inline">E[X]</span> is its mean, and <span class="math inline">SD[X]</span> is the standard deviation. Z-scoring transforms the data so that the value at each time point is now in terms of standard deviations from the mean. Generally that means that extreme values, such as the deflections we see, will not exceed a value of 5 (5 standard deviations from the mean).</p>
 <p>We can implement this as a function using numpy functions. Then we can apply it to our flexion data.</p>
-<div id="c51d1085" class="cell" data-execution_count="6">
+<div id="4847dfcd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create zscore function with dimension parameter</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> zscore(x, axis<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x <span class="op">-</span> np.mean(x, axis<span class="op">=</span>axis, keepdims<span class="op">=</span><span class="va">True</span>))<span class="op">/</span>np.std(x, axis<span class="op">=</span>axis, keepdims<span class="op">=</span><span class="va">True</span>)</span>
@@ -801,7 +801,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>zflex <span class="op">=</span> zscore(flex, axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To visualize multichannel data, it is usually a good to separate out the channels along the y-axis, so that they do not overlap. Since the signals are z-scored, we can set a separation of 5 standard deviations between each trace.</p>
-<div id="3440356b" class="cell" data-execution_count="7">
+<div id="49070b2c" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_stacked_signals(sig, t, sep<span class="op">=</span><span class="dv">5</span>, ax<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span>:</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> plt.gca()</span>
@@ -815,7 +815,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>plot_stacked_signals(zflex, t)</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Middle'</span>, <span class="st">'Ring'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -830,14 +830,14 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>The signals looks fairly equalized now. We can see that for channel (column in the array) 0, the thumb, there is a well defined deflection with consistent height. This is also mostly true for the little finger, on channel 4. This is less the case for the index finger, which is showing modest deflections that are associated with deflections of either the middle or ring fingers. This means decoding flexion of the middle and ring fingers would prove difficult, since we cannot adequately isolate them. Instead, we will focus on the thumb, index, and little fingers.</p>
 <p>To detect flexions, we need to set a threshold. Again, plotting the signals will help with this. Let’s now plot just the fingers we intend to decode, and in a smaller time window so we can see how the signal fluctuates during deflections.</p>
-<div id="7ece66c0" class="cell" data-execution_count="8">
+<div id="7fbdf21e" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_stacked_signals(zflex[:, [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">4</span>]],t)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ax.set_ylim([<span class="op">-</span><span class="dv">2</span>, <span class="dv">15</span>])</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">10</span>, <span class="dv">100</span>])</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -851,7 +851,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 </div>
 <p>Now we can see things more clearly. Each flexion event is actually a quick series of flexions, usually 3 in a row. It is that period we want to detect. The simplest way to do this is to set a threshold. We can then plot the detection signals on top of the flexion traces.</p>
-<div id="431a3696" class="cell" data-execution_count="9">
+<div id="709cddf5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dflex <span class="op">=</span> zflex<span class="op">&gt;</span><span class="fl">1.5</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
@@ -861,7 +861,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">10</span>, <span class="dv">100</span>])</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -876,7 +876,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>The detected flexion signals are transparent black lines layered on top the flexion traces. These seem to be pretty good except for two issues. First, during a flexion burst there are periods where the signal drops below the threshold, so we want to eliminate those gaps. Second, occasionally the index finger detection briefly occurs spuriously, for instance around 35 seconds for the index finger. We can use <em>morphological binary operations</em> to fix these.</p>
 <p>To remove gaps by grouping together closely spaced deflections we use the <em>morphological binary closing</em> operation. This fills in gaps between blocks of true values. Put another way, areas of 0s (bordered by 1s) that are smaller than a specified size are replaced with 1s.</p>
-<div id="78554274" class="cell" data-execution_count="10">
+<div id="39a3a0cc" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>test_bin <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>test_bin_close1 <span class="op">=</span> sn.binary_closing(test_bin, structure<span class="op">=</span>np.ones(<span class="dv">1</span>))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>test_bin_close2 <span class="op">=</span> sn.binary_closing(test_bin, structure<span class="op">=</span>np.ones(<span class="dv">2</span>))</span>
@@ -896,7 +896,7 @@ test_bin_close3:[0 1 1 1 1 1 1 1 1 1 0 0 0 1 1 0]</code></pre>
 </div>
 <p>The length of ones in the <code>structure</code> argument determines the maximum size allowed for a contiguous block of 0s. You can see that <code>structure=[1]</code> nothing changes. When <code>structure=[1,1]</code>, then any single 0s are removed. For a <code>structure=[1,1,1]</code> we remove blocks of 0s that are just two next to each other.</p>
 <p>Let’s apply it to the flexion time series. It should eliminate the gaps within a burst of finger flexions. We want to remove gaps less than 0.5 seconds.</p>
-<div id="d922c96c" class="cell" data-execution_count="11">
+<div id="2961f72e" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>close_struct <span class="op">=</span> np.ones([<span class="dv">500</span>,<span class="dv">1</span>]) <span class="co"># 500 ms, given the sampling rate of 1000 Hz</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dflex_open <span class="op">=</span> sn.binary_closing(dflex,close_struct)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -907,7 +907,7 @@ test_bin_close3:[0 1 1 1 1 1 1 1 1 1 0 0 0 1 1 0]</code></pre>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">10</span>, <span class="dv">100</span>])</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -922,7 +922,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>Yay, we eliminated those gaps.</p>
 <p>Next, we will use a binary opening operation, which removes blocks of 1s shorter than a length specified by the <code>stucture</code> argument. You can think of a binary open operation as applying a filter to an array of binary data that sets to 0 (false) areas of 1s (trues) that are smaller than a preset size. For instance:</p>
-<div id="979fed24" class="cell" data-execution_count="12">
+<div id="93bda65c" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>test_bin <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>test_bin_open1 <span class="op">=</span> sn.binary_opening(test_bin, structure<span class="op">=</span>np.ones(<span class="dv">1</span>))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>test_bin_open2 <span class="op">=</span> sn.binary_opening(test_bin, structure<span class="op">=</span>np.ones(<span class="dv">2</span>))</span>
@@ -942,7 +942,7 @@ test_bin_open3:[0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0]</code></pre>
 </div>
 <p>For a 1D array, and if the filter is a list of 1s, then the length of the filter determines the minimum size allowed for a contiguous block of 1s. You can see that with a filter of <code>[1]</code> nothing changes. When the filter is <code>[1,1]</code>, then single 1s are removed. For a filter of <code>[1,1,1]</code> we remove blocks of 1s that are just two next to each other.</p>
 <p>Let’s apply it to the flexion data. Using this, we should be able to eliminate the spurious deflections on the index finger. We will assume that a flexion less than 0.2 seconds long is unintended.</p>
-<div id="63b58b5d" class="cell" data-execution_count="13">
+<div id="07c53071" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>open_struct <span class="op">=</span> np.ones([<span class="dv">200</span>,<span class="dv">1</span>]) <span class="co"># 200 ms, given the sampling rate of 1000 Hz</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dflex_open_closed <span class="op">=</span> sn.binary_opening(dflex_open,open_struct)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -953,7 +953,7 @@ test_bin_open3:[0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0]</code></pre>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">10</span>, <span class="dv">100</span>])</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -967,7 +967,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 </div>
 <p>Looking good now! The periods of deflections are contiguous and we have eliminated spurious ones. Let’s package all of this into a function that accepts flexion data and returns the series of detected deflections.</p>
-<div id="0bf87ca1" class="cell" data-execution_count="14">
+<div id="9f1c3d25" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_flex_events(sig, thresh<span class="op">=</span><span class="fl">1.5</span>, min_duration<span class="op">=</span><span class="dv">200</span>, max_spacing<span class="op">=</span><span class="dv">500</span>):</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Detects events in a flex signal.</span></span>
@@ -1013,7 +1013,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">500</span>, <span class="dv">600</span>])</span>
 <span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -1027,7 +1027,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 </div>
 <p>Plotting a different time window, we can see that the index and little fingers occasionally share the same deflection periods, especially between 580 and 600 s. This is arises from limitations in the hand’s mechanics and how finger movements are controlled by the central nervous system (<a href="https://journals.physiology.org/doi/full/10.1152/japplphysiol.01063.2003">see here</a>). To minimize that, we can try raising the threshold a little.</p>
-<div id="4ae325e8" class="cell" data-execution_count="15">
+<div id="4044b697" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detect events</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>flex_events <span class="op">=</span> detect_flex_events(flex, thresh <span class="op">=</span> <span class="dv">2</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1039,7 +1039,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">500</span>, <span class="dv">600</span>])</span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -1053,7 +1053,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 </div>
 <p>Tweaking the detection parameters didn’t fix it. Instead, we can add a final step to the algorithm that for overlapping finger detection times selects the finger with the highest amount of flexion.</p>
-<div id="fae9bfeb" class="cell" data-execution_count="16">
+<div id="84843b42" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_flex_events(sig, thresh<span class="op">=</span><span class="fl">1.5</span>, min_duration<span class="op">=</span><span class="dv">200</span>, max_spacing<span class="op">=</span><span class="dv">500</span>):</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Detects events in a flex signal.</span></span>
@@ -1101,7 +1101,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> events.astype(<span class="bu">int</span>) <span class="co"># convert to int for numpy operations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="3ddf1b21" class="cell" data-execution_count="17">
+<div id="e7e50f7c" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detect events</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>flex_events <span class="op">=</span> detect_flex_events(flex, thresh <span class="op">=</span> <span class="dv">2</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1120,7 +1120,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">500</span>, <span class="dv">600</span>])</span>
 <span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>ax.legend([<span class="st">'Thumb'</span>, <span class="st">'Index'</span>, <span class="st">'Little'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -1140,7 +1140,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <section id="ecog-responses-to-finger-flexion" class="level3">
 <h3 class="anchored" data-anchor-id="ecog-responses-to-finger-flexion">ECoG responses to finger flexion</h3>
 <p>Let’s visualize the ECoG signal, to see if we have to do any preprocessing on it. Recall that for the EEG signal we had to remove a slow baseline drift, EMG, 60 Hz noise, and EOG. Do these artifacts occur in the new data set? We will peak at the first 10 channels to see.</p>
-<div id="423de72b" class="cell" data-execution_count="18">
+<div id="a4dc3b51" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ecog <span class="op">=</span> data[<span class="st">'data'</span>]</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ecog signal</span></span>
@@ -1148,7 +1148,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>plot_stacked_signals(ecog[:,:<span class="dv">10</span>], t, sep<span class="op">=</span><span class="dv">16000</span>)</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Channel </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(k) <span class="cf">for</span> k <span class="kw">in</span> np.arange(<span class="dv">10</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -1172,14 +1172,14 @@ Creating legend with loc="best" can be slow with large amounts of data.
 </div>
 </div>
 <p>Thankfully, there is no obvious drift here, so we don’t need to remove that. There are some sharp deflections on channels 4 and 5, but they are not shared with other electrodes so it is unlikely that they reflect EOG artifacts. Perhaps 60 Hz noise is present. It is hard to see when viewing the entire recording session, so let’s zoom in.</p>
-<div id="0dd30d4c" class="cell" data-execution_count="19">
+<div id="10d83f1d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ecog signal</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plot_stacked_signals(ecog[:,:<span class="dv">10</span>], t, sep<span class="op">=</span><span class="dv">8000</span>)</span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Channel </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(k) <span class="cf">for</span> k <span class="kw">in</span> np.arange(<span class="dv">10</span>)])</span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">500</span>, <span class="dv">502</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 </code></pre>
@@ -1194,7 +1194,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>No obvious 60 Hz noise here. In fact, this data has already been preprocessed to remove it. As for EMG, we will not attempt to filter that out because subsequent analyses will depend on neural signals above 60 Hz, which was the cutoff we used for removing EMG data in our EEG dataset.</p>
 <p>Working with the signal as is, let’s get the ERP on each electrode in response to finger deflections.</p>
-<div id="09aab99e" class="cell" data-execution_count="20">
+<div id="25feac28" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_ecog_erp(sig, events, pre<span class="op">=</span><span class="fl">1.5</span>, post<span class="op">=</span><span class="fl">1.5</span>):</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the ERP for a given signal and set of events.</span></span>
@@ -1261,7 +1261,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 </div>
 <p>Well that is interesting, it appears that we have a consistent set of channels that are activated across fingers. Notice that the pattern appears to repeat across channels. This might reflect the grid pattern of the ECoG array, with a cluster of sites near each other showing the strongest activation.</p>
-<div id="2dfac340" class="cell" data-execution_count="21">
+<div id="af76ca8e" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot locs colored by erp</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> erp_grid(locs, erp, t, ax<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -1290,7 +1290,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>Broadly the same pattern is present across the grid for the ERP in response to different finger movements. But, there are some subtle differences which can be exploited down the line by feeding multiple channels into our decoder.</p>
 <p>To get a better grasp of the activity, let’s plot the ERP from the channel with a strong negative deflection.</p>
-<div id="4637e0f4" class="cell" data-execution_count="22">
+<div id="2126ef04" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>plt.plot(t_erp, erp_thumb[:, <span class="dv">20</span>])</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (s)'</span>)</span>
@@ -1309,7 +1309,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>Notice that at the trough of this ERP, we see a burst of high frequency activity, as we did in our simulations in week 1. To analyze this signal, we will now turn to spectral analysis. It might be easiest to start by showing the end point of this analysis, and then working towards it for the rest of this lecture.</p>
 <p>We will calculate the <em>spectrogram</em> of our ECoG signal, which takes a time series and breaks it apart into separate frequency bands with varying amplitude across time. Then, just as with the ERP, we can calculate the mean spectral response centered on a finger movement. Let’s do this for channel 20.</p>
-<div id="c6d45bbe" class="cell" data-execution_count="23">
+<div id="bf090d8c" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate spectrogram</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>freqs, t_spec, s <span class="op">=</span> spectrogram(ecog[:, <span class="dv">20</span>], fs, nperseg<span class="op">=</span><span class="dv">256</span>, noverlap<span class="op">=</span><span class="dv">200</span>, window<span class="op">=</span><span class="st">'hann'</span>)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>fs_spec <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>np.mean(np.diff(t_spec))</span>
@@ -1351,7 +1351,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 </div>
 <p>Notice the bright spot right before the thumb movement onset, and at frequencies between 50 and 150 Hz. This high frequency activity reflects activity in the cortex immediately below the electrode, a combination of spiking and locally generated fast oscillations. Numerous studies have found this high frequency activity when movements are initiated. In addition, you may notice a coincident decrease in low frequency activity, below 25 Hz. That too is a well established neural correlate of movement, known as <em>event-related desynchronization</em>.</p>
 <p>These high frequency bursts are even evident on individual trials.</p>
-<div id="aed3870e" class="cell" data-execution_count="24">
+<div id="4f151e89" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot individual trials</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, ind <span class="kw">in</span> <span class="bu">enumerate</span>([<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>]):</span>
@@ -1379,7 +1379,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <section id="basics" class="level3">
 <h3 class="anchored" data-anchor-id="basics">Basics</h3>
 <p>The starting point of spectral analysis is the fact that any signal can be broken down into a sum of sinusoidal waves. To refresh, a sinusoid (i.e.&nbsp;the sine and cosine functions) is a periodic function that fluctuates between positive and negative peaks, repeating itself over and over every <span class="math inline">2\pi</span> steps along the x-axis.</p>
-<div id="d9f8ca64" class="cell" data-execution_count="25">
+<div id="0e61d478" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot a sinusoid</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">2</span><span class="op">*</span>np.pi, <span class="dv">2</span><span class="op">*</span>np.pi, <span class="dv">1000</span>)</span>
@@ -1402,7 +1402,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <p>We can modify a sinusoid wave in three ways, illustrated by the following equation:</p>
 <p><span class="math display"> y = Asin(fx2\pi+p) </span></p>
 <p><span class="math inline">A</span> controls the <em>amplitude</em>, allowing the sine wave to peak at values greater or less than 1/-1. Next is <span class="math inline">f</span>, which controls the frequency. The frequency determines how many cycles of the wave occur per a step of 1 along the x-axis. To get the increments in terms of steps of 1, we multiply <span class="math inline">x</span> by <span class="math inline">2\pi</span>. Last is <span class="math inline">p</span>, which shifts the sinusoid forward or backward. It is also known as the phase offset. See the visualizations of these three parameters.</p>
-<div id="c6b9a470" class="cell" data-execution_count="26">
+<div id="ca45ec0a" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>sin_func <span class="op">=</span> <span class="kw">lambda</span> x,a,f,p : a<span class="op">*</span>np.sin(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f<span class="op">*</span>x <span class="op">+</span> p)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1000</span>)</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 3 subplots, each with 3 different sine waves where one parameter is varied. The first subplot will be amplitude, second will be frequency, and third will be phase.</span></span>
@@ -1443,7 +1443,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <p>Recall how we identified the degree of fit between the EEG and the ERP by convolving them (taking their dot product). We can measure the degree to which a signal contains a reference sine wave at a specific frequency by convolving it with the signal. Below we create a reference sine with a frequency of 1 and phase offset of 0, and explore its dot products with sine wave signals that vary in their amplitude, frequency, and phase offset. We will refer to this dot product as <span class="math inline">b</span>:</p>
 <p><span class="math display"> b = y \cdot sin(2\pi ft + p) </span></p>
 <p>where <span class="math inline">y</span> is the signal we are assessing for the presence of the sine wave.</p>
-<div id="0016cd6d" class="cell" data-execution_count="27">
+<div id="2470daae" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># quantify the dot product between a 1 Hz sine wave and: </span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1000</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>ref_sin <span class="op">=</span> sin_func(x, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>) <span class="co"># 1 Hz sine wave</span></span>
@@ -1488,7 +1488,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <p>Lastly, when the signal and reference have the same frequency, but the phase is varied, we see a systematic fluctuation in the dot product. It peaks when the phase offset is at 0 or <span class="math inline">2\pi</span>, is most negative at <span class="math inline">\pi</span>, and zero at <span class="math inline">\pi/2</span> and <span class="math inline">3\pi/2</span>. This reflects the shifting overlap of the positive and negative phases of the sine wave. At 0 and <span class="math inline">2\pi</span> the phases align perfectly, so they add constructively. When the phase offset is at <span class="math inline">\pi</span> the positive peaks of the reference always overlap with the negative peaks of the signal, and vice versa, meaning that only negative values are returned when they are multiplied together for the dot product. In between those phases, the degree of overlap changes, with different degrees of overlap between positive and negative peaks. And lastly at <span class="math inline">\pi/2</span> and <span class="math inline">3\pi/2</span>, there is an equal proportion of overlap for peaks of the same or different signs overlapping, which balances out and sums to 0.</p>
 <p>In spectral analysis, we want to determine which frequencies are present in a signal, and at what amplitude and phase offset. Since the dot product varies with phase, sometimes even returning a 0, we need to find a way to detect a sine wave when its phase is offset by <span class="math inline">\pi/2</span>. If we shift the sine wave by that amount, we should be able to detect it. A sine wave shifted by <span class="math inline">\pi/2</span> is a cosine wave. So, we will create a new function for that.</p>
 <p><span class="math display"> a = y \cdot cos(2\pi ft + p) </span></p>
-<div id="a5106d44" class="cell" data-execution_count="28">
+<div id="80fe9cc1" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>cos_func <span class="op">=</span> <span class="kw">lambda</span> x,a,f,p : a<span class="op">*</span>np.cos(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f<span class="op">*</span>x <span class="op">+</span> p)</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>ref_cos <span class="op">=</span> cos_func(x, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>) <span class="co"># 1 Hz cosine wave</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1531,7 +1531,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 <p>Inspecting the phase plot, we can now detect when the signal sine wave is offset by <span class="math inline">\pi/2</span>, but we still have the problem with dot products with a value of 0, just now at multiples of <span class="math inline">\pi</span>. Since all our signals had an offset of 0, this means none of them are detectable with a cosine wave. This is evident in the Amplitude and Frequency plots, which are all zeros.</p>
 <p>If we want to detect whether a sine wave is present, irrespective of its phase offset, we need to combine the sine and cosine dot products. Instead of keeping these (<span class="math inline">a</span> and <span class="math inline">b</span>) separate for each frequency, we combine these into a single <em>complex number</em>. To briefly refresh, complex numbers have two components, a real part that lies along the x-axis, and an imaginary component that lies along the y-axis. The <span class="math inline">a</span> component associated with the cosine is the real part, and the <span class="math inline">b</span> component associated with sine is the imaginary component.</p>
 <p>To get of sense of how to combine these, let’s redo the phase plot, but this time have the dot product for sin plotted on the y-axis, and cosine on the x-axis.</p>
-<div id="2fd1f448" class="cell" data-execution_count="29">
+<div id="78f7803a" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vary the phase of the signal and calculate its dot product with the sine and cosine reference signals</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>ph_arr <span class="op">=</span> np.pi<span class="op">*</span>np.arange(<span class="dv">0</span>,<span class="dv">360</span>,<span class="dv">5</span>)<span class="op">/</span><span class="dv">180</span></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>var_p_sin <span class="op">=</span> [np.dot(ref_sin, cos_func(x, <span class="dv">1</span>, <span class="dv">1</span>, p)) <span class="cf">for</span> p <span class="kw">in</span> ph_arr]</span>
@@ -1583,7 +1583,7 @@ No artists with labels found to put in legend.  Note that artists whose label st
 Amp = \sqrt{a^2 + b^2}
 </span></p>
 <p>For a complex number, <span class="math inline">a</span> and <span class="math inline">b</span> can be replaced with the real and imaginary components, respectively. The numpy function <code>abs</code>, when passed a complex number, calculates the Euclidean distance in this way. Let’s see if this gives us a consistent answer.</p>
-<div id="65b5515e" class="cell" data-execution_count="30">
+<div id="d30c86b4" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the euclidean distance of the dot products from the origin</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>dist <span class="op">=</span> np.<span class="bu">abs</span>(var_p_cpx)</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
@@ -1604,7 +1604,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>Great, so now we have a way to measure the amplitude of a sinusoidal wave irrespective of its phase. The next thing we want to measure with spectral analysis is the phase. This too can be derived from the <span class="math inline">a</span> and <span class="math inline">b</span> parameters. We measure the angle with respect to the x-axis using the <code>angle</code> function in numpy.</p>
-<div id="410aab15" class="cell" data-execution_count="31">
+<div id="f2da7705" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>plot_complex(var_p_cpx, sel_ind<span class="op">=</span>disp_p, lbl_sel<span class="op">=</span><span class="st">'Amp'</span>)</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># draw curved arrow at the angle of the dot product</span></span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>arrow <span class="op">=</span> FancyArrowPatch((<span class="dv">100</span>, <span class="dv">0</span>), (var_p_cpx[disp_p].real<span class="op">/</span><span class="dv">5</span>, var_p_cpx[disp_p].imag<span class="op">/</span><span class="dv">5</span>), arrowstyle<span class="op">=</span><span class="st">'Simple,tail_width=0.5,head_width=4,head_length=8'</span>, color<span class="op">=</span><span class="st">'k'</span>, connectionstyle<span class="op">=</span><span class="st">'arc3,rad=-.5'</span>)</span>
@@ -1621,7 +1621,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>Let’s calculate the angle now. The numpy <code>angle</code> function takes a complex number (which corresponds to the black arrow in the above graph), and returns its angle with respect to a line on the x-axis pointing to the right.</p>
-<div id="c2d42962" class="cell" data-execution_count="32">
+<div id="9a2bcf11" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>var_p_ang <span class="op">=</span> np.angle(var_p_cpx)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>var_p_45 <span class="op">=</span> var_p_ang[disp_p]</span>
@@ -1631,7 +1631,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>-45 degrees? Strange, we had phase shifted the sine wave to be at +45 degrees (pi/4 = 45 degrees). Let’s plot the relationship between the phase derived from <span class="math inline">a</span> and <span class="math inline">b</span> and the actual phase.</p>
-<div id="0ef01a26" class="cell" data-execution_count="33">
+<div id="5d7e9e1e" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>plt.plot(ph_arr, var_p_ang)</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>plt.xticks(np.linspace(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>np.pi, <span class="dv">5</span>), [<span class="st">'0'</span>, <span class="st">'$\pi/2$'</span>, <span class="st">'$\pi$'</span>, <span class="st">'$3\pi/2$'</span>, <span class="st">'$2\pi$'</span>])</span>
@@ -1651,7 +1651,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>It appears that the sign is wrong. As we increase the actual phase from 0 to <span class="math inline">\pi</span> (180 degrees), the angle matches the magnitude, but is negative instead of positive. Once we go past <span class="math inline">\pi</span>, the angle flips. To fix this, we can negate the sine (imaginary) component.</p>
-<div id="1c6f402a" class="cell" data-execution_count="34">
+<div id="801ac4f2" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>var_p_cpx <span class="op">=</span> np.array([<span class="bu">complex</span>(a,<span class="op">-</span>b) <span class="cf">for</span> a,b <span class="kw">in</span> <span class="bu">zip</span>(var_p_cos, var_p_sin)])</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>var_p_ang <span class="op">=</span> np.angle(var_p_cpx)</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1685,7 +1685,7 @@ Amp = \sqrt{a^2 + b^2}
     \end{align}
 </span></p>
 <p>We will refer to <span class="math inline">Y(f)</span> as a spectrum. The frequencies, <span class="math inline">f</span>, that make up the spectrum are determined by the duration of the signal and sample rate. The minimum frequency we can measure is 0, which is just the mean value of the signal. We then increase from 0 in steps of <span class="math inline">1/T</span>, where <span class="math inline">T</span> is the duration of the signal. To unambiguously measure the presence of a sinusoid, you need to have at least one full cycle of it. Thus, a sinusoid with a frequency of <span class="math inline">1/T</span> will have the smallest frequency that can be measured. We then increase the frequency in steps of <span class="math inline">1/T</span>, for as many time points as there are in the signal. For instance, if we record a signal for 1 second, and sample at a rate of 1kHz, that gives us a frequency step of <span class="math inline">1/1 sec = 1 Hz</span>. With 1000 samples, that means we have up to 1000 Hz. Let’s try to code this.</p>
-<div id="e2d36cd9" class="cell" data-execution_count="35">
+<div id="13364828" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># discrete fourier transform function</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dft(y, fs<span class="op">=</span><span class="dv">1000</span>):</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -1756,7 +1756,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 <p>We can see that each spectrum shows a peak at the frequency of the sine wave we created, either 1, 50, or 200 Hz. However, we also see that these are mirrored above 500 Hz. The DFT found an 800 Hz wave with the 200 Hz signal, a 950 Hz wave at the 50 Hz signal, and a 999 Hz signal with the 1 Hz signal. The reasons for this are a bit beyond this course, but put simply arise because sinusoids greater than one half of the sample rate (here 500 Hz) cannot be adequately identified and in fact can be spuriously detected. Thus, we usually cut off the spectrum at half the sample rate, commonly referred to as the Nyquist frequency.</p>
 <p>What happens if we have multiple sine waves combined together for our signal? Can we see individual peaks for each of them?</p>
-<div id="8aab0e70" class="cell" data-execution_count="36">
+<div id="c893c83c" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>dur <span class="op">=</span> <span class="dv">1</span> <span class="co"># duration of signal in seconds</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> <span class="dv">1000</span> <span class="co"># sampling rate in Hz</span></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, dur, dur<span class="op">*</span>fs)</span>
@@ -1784,7 +1784,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>It works! Notice our spectral peaks are not single lines at the frequency we injected, but spread a bit to adjacent frequencies. When calculating the DFT, a sinusoid at frequency F will be similar enough to ones at frequencies near F that the finite length of the signal does not give enough time for them to fully cancel out. Consequently, if we increase the length of the signal, we should see less spread. Let’s test this out.</p>
-<div id="b195e820" class="cell" data-execution_count="37">
+<div id="e3a7de93" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>dur <span class="op">=</span> <span class="dv">5</span> <span class="co"># duration of signal in seconds</span></span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, dur, dur<span class="op">*</span>fs)</span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1815,7 +1815,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>Note how the sharpness of the spectral peak changes with the duration of our signal. The longer we sample, the more precisely we can estimate our spectral peak. This is because our frequency resolution increases, since the step between frequencies is 1/signal duration. An additional change with sample length is the DFT magnitude. The increase in magnitude is because we are adding additional data points to our dot product, so it grows in proportion to the signal duration. We can correct for this by dividing the spectral powers by the duration of the signal used to calculate them.</p>
-<div id="52bc6599" class="cell" data-execution_count="38">
+<div id="8d8f9bb0" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replot spectra but now divided by the duration of the signals that were sampled</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>ax.plot(f_05, np.<span class="bu">abs</span>(Y_sin_05)<span class="op">/</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'0.5 s'</span>)</span>
@@ -1835,7 +1835,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>The DFT function we wrote was helpful for understanding how spectral analysis is performed, but it is not very efficient. There are faster implementations that exploit the fact that some calculations are repeated by the DFT, so they only need to be performed once. This algorithm is called the <em>fast Fourier transform</em> (FFT), and it is built in to Numpy. Let’s use it to recalculate our spectra. First we call the <code>fft</code> function.</p>
-<div id="aa14a432" class="cell" data-execution_count="39">
+<div id="e5fbfdb8" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use the fft function from numpy to recalculate the DFT</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>Y_sin_05_np <span class="op">=</span> np.fft.fft(test_sin_5[:<span class="bu">int</span>(<span class="fl">0.5</span><span class="op">*</span>fs)])</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>Y_sin_1_np <span class="op">=</span> np.fft.fft(test_sin_5[:<span class="bu">int</span>(<span class="dv">1</span><span class="op">*</span>fs)])</span>
@@ -1852,7 +1852,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>Just as with our DFT function, the spectrum is returned with a length equal to the signal we passed to it and in the form of a complex number. The numpy <code>fft</code> function does not return the frequencies, but it does provide a function for calculating that based on the signal length and sample rate.</p>
-<div id="f0eb593b" class="cell" data-execution_count="40">
+<div id="53fb1870" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the frequency vector</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>f_05_np <span class="op">=</span> np.fft.fftfreq(<span class="bu">len</span>(Y_sin_05_np), <span class="dv">1</span><span class="op">/</span>fs)</span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>f_1_np <span class="op">=</span> np.fft.fftfreq(<span class="bu">len</span>(Y_sin_1_np), <span class="dv">1</span><span class="op">/</span>fs)</span>
@@ -1878,7 +1878,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>The outputs of our functions agree up till the Nyquist frequency, 500 Hz (index 250). After that, the <code>fftfreq</code> switches to giving the frequencies as negative. Representing frequencies this way is related to the complex values used to represent spectra, and becomes relevant when using the FFT on signals that are complex. Since the voltage signals we record and pass to the FFT are real, we don’t have to worry about these and will ignore them. We can now compare the output of our <code>DFT</code> function and numpy’s <code>FFT</code>.</p>
-<div id="1ae16941" class="cell" data-execution_count="41">
+<div id="36f046b7" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each of the signals, plot the DFT and numpy fft versions, with the numpy overlaid on the dft version as a dashed red line. Make sure to label the axes and include a legend.</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>nyq_ind_05 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(f_05<span class="op">-</span>fs<span class="op">/</span><span class="dv">2</span>))</span>
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>nyq_ind_1 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(f_1<span class="op">-</span>fs<span class="op">/</span><span class="dv">2</span>))</span>
@@ -1919,7 +1919,7 @@ Amp = \sqrt{a^2 + b^2}
 <h3 class="anchored" data-anchor-id="spectrograms-of-ecog-data">Spectrograms of ECoG data</h3>
 <p>So far we have been analyzing simple sinusoids. Those were either one or a few constant sine waves present throughout the entire signal. But, the ECoG signals we want to analyze have neither of those properties. They do not contain pure sine waves, and the presence of waves in different frequency bands varies with time.</p>
 <p>First we will examine how a spectrum appears when the signal is derived from the ECoG.</p>
-<div id="d6a4d59a" class="cell" data-execution_count="42">
+<div id="2d85a486" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a snippet of the ecog signal around the time of thumb flexion</span></span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>thumb_flex <span class="op">=</span> thumb_starts[<span class="dv">10</span>]</span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>pre <span class="op">=</span> <span class="fl">1.5</span></span>
@@ -1953,7 +1953,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>We can see a few prominent features here. The spectral power decreases dramatically from low to high. Most of the spectral power seems to be below 100 Hz. There are also sharp peaks evident at a few frequencies above 100 Hz. We are visualizing the spectrum on a linear scale, both the x- and y-axes increase in values from the origin at a steady rate. However, the spectrum of brain signals is often best visualized with axes on a logarithmic scale, where values increase as powers of 10. This effectively stretches out lower values and compresses higher values. Referrred to as a ‘log-log’ plot, here is one for the spectrum above.</p>
-<div id="80124556" class="cell" data-execution_count="43">
+<div id="da0a080c" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># log-log plot of power spectrum</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>ax.loglog(f_ecog[:nyq_ind], np.<span class="bu">abs</span>(Y_ecog[:nyq_ind]))</span>
@@ -1971,7 +1971,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 <p>Here we can see that on a log-log scale the ECoG spectrum seems to decrease linearly. This is characteristic of the spectrums for many natural processes, including brain signals, and human created ones (e.g.&nbsp;stock market returns). However, where is the decrease in low frequency and increase in high frequency power during the movement? Recall that these changes were constrained to the finger flexion event, while our window is 3 seconds around that time.</p>
 <p>One way to overcome this is to make our window shorter, from 3 seconds down to 250 ms. This will lower our frequency resolution, from 1/3s = 0.3 Hz to 1/0.2s = 4 Hz. How does this spectrum look?</p>
-<div id="94019544" class="cell" data-execution_count="44">
+<div id="bda253e5" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>thumb_flex <span class="op">=</span> thumb_starts[<span class="dv">10</span>]</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>pre <span class="op">=</span> <span class="fl">0.125</span></span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>post <span class="op">=</span> <span class="fl">0.125</span></span>
@@ -2004,7 +2004,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 </div>
 <p>The spectrum has lost some of its frequency resolution, the comprise we have to pay for a shorter window. Something to be careful about when taking such short windows is that ‘spectral leakage’ can occur when the start and end values of the window are different. This is the case with the window above, where the starting value is near 0, but the ending value is around -4000. A fundamental assumption of spectral analysis is that the signal we apply it to is periodic, that it repeats over and over. If we stacked these windows together, you would see a sharp transition between repeats. Spectrally, this manifests as a spurious broad increase in power.</p>
-<div id="bfe15f30" class="cell" data-execution_count="45">
+<div id="1b93e68d" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ecog_win signal repeated 3 times</span></span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">2</span>))</span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.tile(ecog_win, <span class="dv">3</span>))</span>
@@ -2027,7 +2027,7 @@ Amp = \sqrt{a^2 + b^2}
 <p><span class="math display">w(n) = 0.5 - 0.5 \cos\left(\frac{2\pi n}{N-1}\right)</span></p>
 <p>In this notation, <span class="math inline">n</span> is the index of the sample in the window, <span class="math inline">N</span> is the total number of samples in the window.</p>
 <p>As always, let’s first try coding it ourselves and then apply it to our windowed ECoG. Here is how it looks and its effect on a data snippet.</p>
-<div id="5291e0ef" class="cell" data-execution_count="46">
+<div id="c7946d2a" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hann(N):</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the Hann window.</span></span>
@@ -2071,7 +2071,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 <p>Now the both edges of the window are 0, so we no longer have the step. How does the Hann window affect the spectrum? Instead of using our scratch built Hann function, we will use the ones from the scipy signals package. It offers a wide variety of <a href="https://docs.scipy.org/doc/scipy/reference/signal.windows.html#module-scipy.signal.windows">windowing functions</a>.</p>
 <p>Note that if we do not apply an explicit windowing function, we are using a ‘Rectangular’ window, where the all values in the signal are multiplied by 1 inside the window interval.</p>
-<div id="0df4b8bb" class="cell" data-execution_count="47">
+<div id="53e982cd" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get hamming window</span></span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>win <span class="op">=</span> hann(<span class="bu">len</span>(ecog_win))</span>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2104,7 +2104,7 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 <p>The windowing function has reduced the power at higher frequencies, which are where the spectral leakage should be most prominent since a sharp transition from -4000 to 0 would be high frequency event.</p>
 <p>Now we want to apply our spectral analysis across the entire recording. For this we will move our window from the start to the end, stepping along at a fixed interval less than our window duration. At each spot we will apply the windowing function and calculate the FFT.</p>
-<div id="6ff43067" class="cell" data-execution_count="48">
+<div id="d64b8f75" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> specgram(y, window<span class="op">=</span><span class="fl">0.25</span>, step<span class="op">=</span><span class="fl">0.05</span>, fs<span class="op">=</span><span class="dv">1000</span>):</span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the spectrogram of a signal.</span></span>
@@ -2156,7 +2156,7 @@ Amp = \sqrt{a^2 + b^2}
 <span id="cb68-49"><a href="#cb68-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> freqs, t, Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To evaluate our <code>specgram</code> function, we will compare it with the <code>spectrogram</code> function in the SciPy package. The SciPy version has a few differences from ours. It allows you to specify the type of windowing function, including the Hann window. The size of the window, <code>nperseg</code> is given in terms of samples, instead of seconds. To set the sample window size, multiply the window duration in seconds by the sample rate, and then convert to an integer. Lastly, instead of specifying the step size, the SciPy version takes a <code>noverlap</code> argument, which is the number of samples shared between adjacent windows. The step size will be equal to <code>nperseg</code> - <code>noverlap</code>. Lastly, it returns only the spectral power (a real number), and not the phase/amplitude (a complex number).</p>
-<div id="fdb09c56" class="cell" data-execution_count="49">
+<div id="7008c0c8" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the spectrogram of the ecog signal</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>freqs_ours, t_ours, Y_ours <span class="op">=</span> specgram(ecog_snip)</span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2189,7 +2189,7 @@ Amp = \sqrt{a^2 + b^2}
 <p>They are mostly similar, but the spectral power is much higher for the Scipy version. This is because instead of just returning the normal FFT output, it squares and divides the power by the frequency. This converts to power spectral density. We can put this mathematically as:</p>
 <p><span class="math display"> PSD = \frac{S_{xx}^2}{Freq} </span></p>
 <p>In addition, it is difficult to see other differences in the spectrograms, since the power falls off so dramatically as frequency increases. To compensate for this, we can take the z-score across time for each frequency. This will place the power fluctuations at each frequency on the same scale.</p>
-<div id="12f6cccf" class="cell" data-execution_count="50">
+<div id="0fa5cd10" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert our spectrogram amplitude to PSD, just like scipy does</span></span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> amp2psd(Y, freqs):</span>
@@ -2252,7 +2252,7 @@ Amp = \sqrt{a^2 + b^2}
 <h2 class="anchored" data-anchor-id="evoked-and-induced-brain-activity">Evoked and induced brain activity</h2>
 <p>When we analyzed ERPs, we took the average neural response to a stimulus across trials. The ERP emerged from this analysis because the activity of the brain driven by the stimulus had a reliable time course following the stimulus. Averaging across trials would reinforce this response, while activities that are not time-locked cancel out because they are equally likely to have positive or negative values at any given time point. This is referred to as the <em>evoked response</em>.</p>
 <p>Alternatively, if we subtract the evoked response from each trial, calculate their spectrograms, and then average those spectrograms, we get the <em>induced response</em>. This captures the activities that are not time-locked to the stimulus. The high frequency bursts associated with movements are induced activities.</p>
-<div id="269cfeec" class="cell" data-execution_count="51">
+<div id="1a026e9c" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># snippets of thumb movement periods</span></span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>thumb_flex <span class="op">=</span> thumb_starts[<span class="dv">10</span>]</span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>pre <span class="op">=</span> <span class="fl">1.5</span></span>
@@ -2317,7 +2317,7 @@ Amp = \sqrt{a^2 + b^2}
 <li>Return epochs as time series (<code>get_sig</code>)</li>
 <li>Plot ECoG grid data (<code>plot_ecog_surf</code> and <code>plot_ecog_data</code>)</li>
 </ol>
-<div id="21c37d4a" class="cell" data-execution_count="52">
+<div id="b922cafe" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EcogFingerData():</span>
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, fpath, fs<span class="op">=</span><span class="dv">1000</span>, finger_lut<span class="op">=</span><span class="va">None</span>, spec_win<span class="op">=</span><span class="fl">0.25</span>, spec_step<span class="op">=</span><span class="fl">0.05</span>):</span>
 <span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
@@ -2600,11 +2600,11 @@ Amp = \sqrt{a^2 + b^2}
 </div>
 <p>Now we should test this class to make sure each of its functions works.</p>
 <p>First we will initialize it using the same file we have been working with so far.</p>
-<div id="5c16c64a" class="cell" data-execution_count="53">
+<div id="155b3e37" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>ecog_data <span class="op">=</span> EcogFingerData(ecog_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Can we reproduce the map of the ECoG grid on the brain surface.</p>
-<div id="4d34afcf" class="cell" data-execution_count="54">
+<div id="3b832045" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>ecog_data.plot_ecog_surf()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="54">
 <iframe srcdoc="<!doctype html>
@@ -2979,7 +2979,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 </div>
 <p>Looks good.</p>
 <p>Now we will detect finger flexion events. Let’s get the movements of the index finger.</p>
-<div id="6fbeae17" class="cell" data-execution_count="55">
+<div id="c0490ef6" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get index finger flexion onset times</span></span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>index_onsets <span class="op">=</span> ecog_data.detect_flex_onsets(<span class="st">'index'</span>)</span>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Index finger onsets: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(index_onsets))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2991,7 +2991,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 </div>
 </div>
 <p>Let’s get the ERPs for index finger flexions. The <code>get_sigs</code> function returns the ECoG signal as a numpy array with the format epoch x channel x time.</p>
-<div id="efd8ce7f" class="cell" data-execution_count="56">
+<div id="027febaf" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>rel_t_sig, index_sigs <span class="op">=</span> ecog_data.get_sig(event_times<span class="op">=</span>index_onsets, pre_t<span class="op">=</span><span class="fl">1.5</span>, post_t<span class="op">=</span><span class="fl">1.5</span>)</span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>chans <span class="op">=</span> np.arange(index_sigs.shape[<span class="dv">1</span>])</span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate ERP by averaging over epochs</span></span>
@@ -3015,7 +3015,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 </div>
 </div>
 <p>Now let’s check out the spectrograms surrounding index finger movements. We will plot just a few channels based on those with distinctive ERPs. Channel 9 with a strong positivity, 19 with a strong negativity, and 61 with nothing noticeable.</p>
-<div id="f8304c4b" class="cell" data-execution_count="57">
+<div id="dcbf7638" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the event-related spectrogram for channels 9, 19, and 61</span></span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>f, rel_t_spec, index_spec <span class="op">=</span> ecog_data.get_spec(event_ts<span class="op">=</span>index_onsets, chans<span class="op">=</span>[<span class="dv">9</span>,<span class="dv">19</span>,<span class="dv">61</span>], pre_t<span class="op">=</span><span class="fl">1.5</span>, post_t<span class="op">=</span><span class="fl">1.5</span>, freq_max<span class="op">=</span><span class="dv">200</span>)</span>
 <span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3049,7 +3049,7 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 </section>
 <section id="code-summary" class="level2">
 <h2 class="anchored" data-anchor-id="code-summary">Code summary</h2>
-<div id="08cb8790" class="cell" data-execution_count="58">
+<div id="1b482235" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data files</span></span>
 <span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>subj <span class="op">=</span> <span class="st">'cc'</span></span>
 <span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>ecog_path <span class="op">=</span> [<span class="st">'data'</span>, <span class="st">'ecog'</span>, subj, <span class="st">'</span><span class="sc">{}</span><span class="st">_fingerflex.mat'</span>.<span class="bu">format</span>(subj)]</span>
@@ -3108,11 +3108,11 @@ function decodeHemisphere(surfaceInfo, surface, hemisphere){
 <span id="cb80-56"><a href="#cb80-56" aria-hidden="true" tabindex="-1"></a>fig.colorbar(pc, ax<span class="op">=</span>ax)</span>
 <span id="cb80-57"><a href="#cb80-57" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2632181006.py:7: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2632181006.py:7: UserWarning:
 
 No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_13965/2533963266.py:41: DeprecationWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_17264/2533963266.py:41: DeprecationWarning:
 
 Conversion of an array with ndim &gt; 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
 </code></pre>
