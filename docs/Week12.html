@@ -182,7 +182,7 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week3.html"> 
-<span class="menu-text">Week3</span></a>
+<span class="menu-text">Week 3</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Week4.html"> 
@@ -277,7 +277,7 @@ window.Quarto = {
 <section id="naive-bayes-decoding" class="level1">
 <h1>Naive Bayes Decoding</h1>
 <p>This week’s lecture will cover Naive Bayesian decoders. These rely on calculating the probability of an event occurring, <span class="math inline">y</span>, given some data, <span class="math inline">x</span>. In our case, that is the probability a certain stimulus was presented given the spiking activity of a population of neurons. Such decoders are easy to train and operate under a fundamentally different principle than the logistic classifiers we used in previous lectures. Moreover, they give us the opportunity to work with probability theory, which is something we only tangentially covered in previous lectures.</p>
-<div id="3ffefb76" class="cell" data-execution_count="1">
+<div id="1fa66e83" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">'..'</span>)</span>
@@ -319,7 +319,7 @@ window.Quarto = {
 <section id="bayes-theorem-and-the-single-neuron" class="level2">
 <h2 class="anchored" data-anchor-id="bayes-theorem-and-the-single-neuron">Bayes’ theorem and the single neuron</h2>
 <p>To start, we will load in the neurons from last week and select one with well defined tuning for orientation.</p>
-<div id="c89fea65" class="cell" data-execution_count="2">
+<div id="46e1f2a3" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize data cache</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>allen_dir <span class="op">=</span> [<span class="st">'data'</span>,<span class="st">'spike_allen'</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -353,11 +353,11 @@ window.Quarto = {
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># get the empirical orientation tuning curve</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_ori_emp'</span>] <span class="op">=</span> spks[<span class="st">'rf_ori'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.rf())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_16823/3754280767.py:17: DtypeWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_97842/3754280767.py:17: DtypeWarning:
 
 Columns (5,14) have mixed types. Specify dtype option on import or set low_memory=False.
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_16823/3754280767.py:19: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_97842/3754280767.py:19: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -365,7 +365,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_16823/3754280767.py:20: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_97842/3754280767.py:20: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -373,7 +373,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_16823/3754280767.py:21: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_97842/3754280767.py:21: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -381,7 +381,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_16823/3754280767.py:22: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_97842/3754280767.py:22: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -392,14 +392,14 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <p>Then we will load a selected neuron and extract its spike counts across trials.</p>
-<div id="7cc37d73" class="cell" data-execution_count="3">
+<div id="2a4574cc" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sel_unit <span class="op">=</span> <span class="dv">951815599</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rf_ori_counts <span class="op">=</span> spks.loc[sel_unit,<span class="st">'rf_ori'</span>].stim_counts</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>rf_ori_mean <span class="op">=</span> spks.loc[sel_unit,<span class="st">'rf_ori_emp'</span>]</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ori_vals <span class="op">=</span> rf_ori_mean[<span class="dv">2</span>][<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We are interested in the distribution of those spike counts as a function of drifting grating orientation. We can use a violin plot to visualize that.</p>
-<div id="ee9e7758" class="cell" data-execution_count="4">
+<div id="ae27dd81" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the orientation tuning curve</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ax.plot(ori_vals, rf_ori_mean[<span class="dv">0</span>].flatten(), <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
@@ -430,7 +430,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <p>An alternative way to visualize this is the joint probability of observing some spike count, <span class="math inline">x</span>, and orientation, <span class="math inline">y</span>. This is expressed as <span class="math inline">p(x,y)</span>.</p>
 <p>We can do this by counting the number of times each number of spike counts occurred for each orientation and placing that into an array. The rows will be the spike counts and the columns the orientations. This is just another example of binning. In previous lectures we binned spike times across time by counting the number of spikes in small intervals of time. That is, we grouped spikes together that fell in a time window and counted how many there were. Here, we are counting trials based on the orientation presented and number of spikes that occurred in response.</p>
 <p>To convert this to a probability, we divide the count in each bin by the total number of trials.</p>
-<div id="74c77a4e" class="cell" data-execution_count="5">
+<div id="7ff3bed0" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># range of values to bin over</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>num_stim <span class="op">=</span> rf_ori_counts.shape[<span class="dv">0</span>] <span class="co"># number of stimuli</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>max_counts <span class="op">=</span> <span class="bu">int</span>(rf_ori_counts[<span class="st">'spike_counts'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">max</span>()).<span class="bu">max</span>()) <span class="co"># max spike count</span></span>
@@ -444,7 +444,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>joint_dist <span class="op">=</span> joint_dist <span class="op">/</span> joint_dist.<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that the probability has been calculated and stored in <code>joint_dist</code>, let’s plot it.</p>
-<div id="6c791b49" class="cell" data-execution_count="6">
+<div id="7a6c16c9" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># grid of joint distribution points</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> np.meshgrid(np.append(ori_vals, <span class="dv">360</span>), np.arange(max_counts<span class="op">+</span><span class="dv">2</span>))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -466,7 +466,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <p>Notice that the probabilities are not smooth but spotty and sometimes have gaps between them. This becomes easily seen if we color white those bins with 0 counts.</p>
-<div id="b7d0dcbf" class="cell" data-execution_count="7">
+<div id="ad17ff3b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove zeros for better visualization</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>joint_dist_nan <span class="op">=</span> joint_dist.copy()</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>joint_dist_nan[joint_dist_nan<span class="op">==</span><span class="dv">0</span>] <span class="op">=</span> np.nan</span>
@@ -489,7 +489,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <p>Here we have some combinations of orientation and spike count that never occurred, and so they are given a probability of 0. For instance, there were no trials with an orientation of 45 degrees that had 17 spikes. But, there were trials when 45 degree oriented gratings were presented that had 16 or 18 spikes.</p>
-<div id="be074d43" class="cell" data-execution_count="8">
+<div id="1f49dafd" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Orientation of 45 degrees and spike count of 16: </span><span class="sc">{:.3f}</span><span class="st"> probability'</span>.<span class="bu">format</span>(joint_dist[<span class="dv">16</span>,<span class="dv">1</span>]))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Orientation of 45 degrees and spike count of 17: </span><span class="sc">{:.3f}</span><span class="st"> probability'</span>.<span class="bu">format</span>(joint_dist[<span class="dv">17</span>,<span class="dv">1</span>]))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Orientation of 45 degrees and spike count of 18: </span><span class="sc">{:.3f}</span><span class="st"> probability'</span>.<span class="bu">format</span>(joint_dist[<span class="dv">18</span>,<span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -502,7 +502,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <p>So now you might be wondering: Why is this a problem? Afterall, if something never occurred then it should have a probability of 0. Well, imagine we had only given a single presentation of each orientation, and constructed our joint probability distribution from that. In that case, we would only have one bin filled in for each orientation column, with the rest being 0. This extreme sparseness is because we did not sample the neuron’s responses sufficiently. To overcome this, we would increase the number of trials. In theory, if we gave an infinite number of trials, we would expect a smooth joint probability distribution with no missing spots.</p>
 <p>Since it is impossible to give an infinite number of trials, we will instead fit a curve to the neuron’s response to each stimulus. That curve will give an estimate of the neuron’s response that is continuous, i.e.&nbsp;without gaps. The challenge now is to choose the curve we want to use. In the last lecture we discussed how neuronal spike counts follow a Poisson distribution, and fit a curve to those. We can do the same thing here, fitting the Poisson distribution to each orientation.</p>
 <p>To calculate the Poisson probability distribution, <span class="math inline">p(x) = \frac{\lambda^xe^{-\lambda}}{x!}</span>, we only need to specify one parameter, <span class="math inline">\lambda</span>, which is the mean value of the distribution. For our case, that will be the mean spike count for each orientation. For the Poisson distribution function we will call the <code>poisson_pdf</code> function we created last week.</p>
-<div id="a4f755fa" class="cell" data-execution_count="9">
+<div id="f4b04ded" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a Poisson distribution based on the mean spike counts for each orientation</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>p_xgy_pois <span class="op">=</span> np.zeros((max_counts<span class="op">+</span><span class="dv">1</span>, num_stim))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_stim):</span>
@@ -533,7 +533,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 <p>The match is not perfect. The values in our Poisson distribution probabilities are generally higher than those of the observed joint distribution. This is because when we calculate the Poisson probability for each orientation separately, we are really calculating <span class="math inline">p(x|y_k)</span>, which is a conditional probability. With a conditional probability the sum of <span class="math inline">p(x|y_k)</span> across all values of <span class="math inline">x</span> for event <span class="math inline">y_k</span> must equal 1. On the other hand, the joint distribution, <span class="math inline">p(x,y)</span>, must sum to 1 across all orientations.</p>
 <p>You may also have noticed that the Poisson distribution generally tends to be more concentrated around the mean spike count, with the observed joint distribution showing greater spread. This can be seen clearly if we plot the distribution for a single orientation. To do this, we will convert the fitted distribution which is conditional on <span class="math inline">y</span> to the joint probability, using <span class="math inline">p(x,y)=p(x|y)p(y)</span>. It is easy to calculate <span class="math inline">p(y)</span> by just counting the number of trials for each orientation, and dividing by the total number of trials. We can use the observed joint probability distribution for that.</p>
-<div id="148cbb42" class="cell" data-execution_count="10">
+<div id="9d8e698a" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate probability of each orientation being presented</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>p_y <span class="op">=</span> joint_dist.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>) <span class="op">/</span> joint_dist.<span class="bu">sum</span>()</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -559,7 +559,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <p>Plotting the observed and fitted distributions this way lays bear the problem with assuming a Poisson distribution. There are two likely explanations. The first is that the neuron’s spiking does not behave like a Poisson process. When we specify the wrong model for the process generating some data, this is referred to as <em>model misspecification</em>. As discussed in the last lecture, neuronal spiking is only approximately Poisson. Another reason is that we have pooled together all gratings that had the same orientation, but they vary in their temporal frequency. If the neuron was sensitive to temporal frequency, it would have a different <span class="math inline">\lambda</span> for each one. Some temporal frequencies might elicit little or no spiking (producing a low <span class="math inline">\lambda</span>), and others could activate robustly (high <span class="math inline">\lambda</span>). This would give us a broad distribution of spike counts.</p>
 <p>Nevertheless, the Poisson distribution approximation might be good enough for the purpose of decoding which orientation was presented based on the spike count. Since we are using Bayes’ rule, we know that <span class="math inline">p(y|x) \propto p(x|y)p(y)</span>. Thus, we can use the joint probability of the fitted distribution we just calculated, <code>p_xy_pois</code>, to determine the most likely stimulus for a given spike count.</p>
 <p>Let’s range over the various spike counts that were recorded and return the orientation that was most likely for each based on <span class="math inline">p(x|y)p(y)</span>.</p>
-<div id="937d7d42" class="cell" data-execution_count="11">
+<div id="c9e008f0" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the spike counts and predicted orientations</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>spk_counts <span class="op">=</span> np.arange(max_counts<span class="op">+</span><span class="dv">1</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pred_ori <span class="op">=</span> np.zeros(spk_counts.shape)</span>
@@ -606,7 +606,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <p>Well that was way easier than logistic regression! Once you have calculated the approximation of <span class="math inline">p(y|x)</span> from the the fitted Poisson distribution (Poisson fit of <span class="math inline">p(x|y)</span>, <code>p_xgy_pois</code>) and the probability of an orientation (<span class="math inline">p(y)</span>, <code>p_y</code>), you just plug in the observed spike count (<code>x</code>) and select the orientation that had the highest probability using <code>np.argmax</code>.</p>
 <p>We can see here that for very low spike counts the stimulus eliciting the fewest spikes, 180 degrees, was selected (‘Worst’). As we increase the number of observed spikes, the selected orientations bounces between the various stimuli that it shows a moderate response (‘Zone of Mid’). Further increasing the spike count has the decoder returning the second most preferred stimulus (‘Second’), which was 90 degrees. Finally, above a count of ~20 spikes the decoder always returns the preferred stimulus of 270 degrees (‘Best’).</p>
 <p>So how does this decoder perform? For the moment, let’s ignore issues with dividing our data into training and test sets and just evaluate the overall performance. This stacks the deck in the decoder’s favor due to the potential for overfitting, so the performance we see here will probably be the highest it can be.</p>
-<div id="f594bbae" class="cell" data-execution_count="12">
+<div id="f6848b96" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an array of actual orientations and their corresponding spike counts</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># first we take our counts dataframe and give each trial its own row</span></span>
@@ -627,7 +627,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 </div>
 <p>Wow, only 19.5%! Given that there are 8 orientations, that gives us a chance performance of <span class="math inline">100\%/8=12.5\%</span>. So we are better than chance, but still abysmal. Ok, but why are we poor? Let’s use a confusion matrix to figure this out.</p>
-<div id="6acccef0" class="cell" data-execution_count="13">
+<div id="9797b148" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a confusion matrix</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(eval_nb[<span class="st">'orientation'</span>], eval_nb[<span class="st">'pred_ori'</span>])</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -668,7 +668,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <h2 class="anchored" data-anchor-id="putting-the-naive-into-a-naive-bayesian-decoder">Putting the <em>naive</em> into a Naive Bayesian decoder</h2>
 <p>So far we have tried to infer orientation from a single neuron using Bayes’ rule. To do this, we calculated the probability of a spike count (<span class="math inline">x</span>) given an orientation (<span class="math inline">y</span>) multiplied by the probability that the orientation was presented. Mathematically we expressed this as <span class="math inline">p(x|y)p(y)</span>. The orientation that yielded the highest probability is the one we predict was presented. However, symmetries in orientation tuning impeded our ability to decode with a single neuron. We could distinguish between orientations that were 180 degrees apart.</p>
 <p>To overcome this, we will try to use the spiking from multiple neurons, presumably each with a different preferred orientation and some degree of asymmetry in their orientation tuning.</p>
-<div id="108ba221" class="cell" data-execution_count="14">
+<div id="a93c3667" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>asym_unit <span class="op">=</span>  <span class="dv">951815256</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>rf_ori_asym_mean <span class="op">=</span> spks.loc[asym_unit,<span class="st">'rf_ori_emp'</span>]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -702,7 +702,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </span></p>
 <p>We can do this because the joint probability of two independent events is equal to their individual probabilities multiplied together, i.e.&nbsp;<span class="math inline">p(x_1,x_2)=p(x_1)p(x_2)</span>. Making those probabilities conditional on <span class="math inline">y</span> (e.g.&nbsp;<span class="math inline">p(x_1|y)</span>) does not change this so long as their independence is maintained for all possible values of <span class="math inline">y</span>.</p>
 <p>Thus, to decode the orientation we just need to multiply the Poisson count probabilities for the two units and plug in their corresponding observed spike counts.</p>
-<div id="3d252694" class="cell" data-execution_count="15">
+<div id="59df2f50" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>rf_ori_asym_counts <span class="op">=</span> spks.loc[asym_unit,<span class="st">'rf_ori'</span>].stim_counts</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>max_counts_asym <span class="op">=</span> <span class="bu">int</span>(rf_ori_asym_counts[<span class="st">'spike_counts'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">max</span>()).<span class="bu">max</span>())</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -742,7 +742,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 <p>This asymmetric unit shows many of the same differences between its observed spike counts and the Poisson fits, such as sparseness of the observed counts and less dispersion of the counts at the preferred orientations.</p>
 <p>Now that we have Poisson approximations for <span class="math inline">p(x|y)</span> for both units, let’s try doing some decoding with them.</p>
-<div id="9687a768" class="cell" data-execution_count="16">
+<div id="e790b07a" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict the orientation based on the spike count using p(x_1|y) * p(x_2|y) * p(y)</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># here x1 and x2 are the observed spike counts, which we use to index into the rows of p_xgy_pois and p_xgy_pois_asym</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>nb_pred_2 <span class="op">=</span> <span class="kw">lambda</span> x1, x2: ori_vals[np.argmax(p_xgy_pois[<span class="bu">int</span>(x1),:] <span class="op">*</span> p_xgy_pois_asym[<span class="bu">int</span>(x2),:] <span class="op">*</span> p_y)]</span>
@@ -764,7 +764,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 </div>
 <p>Nice! We almost doubled our accuracy. Mind you, it is still bad, but now we are about 3 times above chance. Let’s examine the confusion matrix to see what is driving the improved performance.</p>
-<div id="bb1025ba" class="cell" data-execution_count="17">
+<div id="a5bec2a7" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a confusion matrix</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cmd_2 <span class="op">=</span> confusion_matrix(eval_nb_2[<span class="st">'orientation'</span>], eval_nb_2[<span class="st">'pred_ori'</span>])</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -800,7 +800,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <section id="creating-a-naive-bayes-decoder-class" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-naive-bayes-decoder-class">Creating a Naive Bayes decoder class</h2>
 <p>At this point it will only get more cumbersome to scale up our piecemeal approach to decoding. Instead, we will create a class to encapsulate the process and make some improvements. We want it to behave similar to estimator classes in SciKit learn, which means at least defining <code>__init__()</code>, <code>fit</code>, <code>predict</code>, and <code>score</code> methods. In addition, instead of calculating a table of conditional probabilities (<span class="math inline">p(x|y)</span>), for each unit we will just define <span class="math inline">\lambda</span> for each orientation, which can be passed with the spike counts to the Poisson distribution equation to solve for the probability. This allows us to accommodate spike counts exceeding the maximum we had observed. Since it will be working with Poisson count data, in the spirit of naming conventions for Naive Bayes classifiers in SciKit learn that use the distribution name, we will call our class <code>PoissonNB</code>.</p>
-<div id="75defd80" class="cell" data-execution_count="18">
+<div id="f00a6cce" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PoissonNB():</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vals_y <span class="op">=</span> <span class="va">None</span></span>
@@ -993,7 +993,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </tbody>
 </table>
 <p>With our new class, we can easily train a variety of decoders. Let’s start with the same two cells we tried predicting with before. Since the model parameters are fitted by just taking the mean, there is none of the randomness found in stochastic gradient descent and so we should get the exact same performance.</p>
-<div id="41d034e6" class="cell" data-execution_count="19">
+<div id="6ce2739c" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> eval_nb_2[[<span class="st">'spike_counts'</span>, <span class="st">'spike_counts_asym'</span>]].values.astype(<span class="bu">int</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> eval_nb_2[<span class="st">'orientation'</span>].values</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1007,7 +1007,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 <p>Fantastic, the same performance! No reason to limit ourselves to just two neurons, let’s feed in all the neurons that were recorded from and see how the decoder performs.</p>
 <p>To do this, we will breakout each of their <code>spike_counts</code> data frames into a ‘tall’ data frame using <code>explode</code>. Then after some renaming and removing of columns we will concatenate them together. Essentially we are doing the same thing we did above to combine the spike counts across orientations for two neurons, but doing it with a for loop so we can handle all neurons in the <code>spikes</code> dataframe.</p>
-<div id="e5f84343" class="cell" data-execution_count="20">
+<div id="2241f8f5" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> spike_counts_dataframe(spikes, column):</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Create a dataframe with the spike counts across all units.</span></span>
@@ -1355,7 +1355,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 </div>
 <p>This new dataframe is fairly straightforward. The index column is each trial that was presented, of which there was 600. The orientation for a given trial is stored in the <code>orientation</code> column, and the corresponding spike count for each neuron is stored in a column with the format <code>counts_{unit id number}</code>. With this, we can get our X and y inputs for the Naive Bayes decoder and train it up. Unlike last time, we will split our data into train and test sets to evaluate its performance more realistically.</p>
-<div id="ea8719f5" class="cell" data-execution_count="21">
+<div id="af213678" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> counts_ori.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">'counts'</span>).values.astype(<span class="bu">int</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> counts_ori[<span class="st">'orientation'</span>].values</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1397,7 +1397,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <h2 class="anchored" data-anchor-id="decoding-temporal-frequency">Decoding temporal frequency</h2>
 <p>While the symmetry of orientation tuning limited our ability to decode it, the same should not be true for temporal frequency. Neurons typically changed their responses to temporal frequency as either increases or decreases in firing rate that did not reverse or repeat. This lack of a systematic similarity in the responses to different temporal frequencies should prevent a decoder from confusing them.</p>
 <p>Let’s train a Naive Bayes decoder for temporal frequency.</p>
-<div id="44812e6d" class="cell" data-execution_count="22">
+<div id="7e4b8951" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># spike counts for temporal frequency</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tf'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: rf(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>]).compute(x, dims<span class="op">=</span>[<span class="st">'temporal_frequency'</span>]))</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tf_counts'</span>] <span class="op">=</span> spks[<span class="st">'rf_tf'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.stim_counts)</span>
@@ -1444,7 +1444,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <section id="decoding-both-temporal-frequency-and-orientation" class="level2">
 <h2 class="anchored" data-anchor-id="decoding-both-temporal-frequency-and-orientation">Decoding both temporal frequency and orientation</h2>
 <p>When decoding either orientation or temporal frequency we grouped together stimuli that had the same parameter for one of those dimensions, but varied in the other. For instance, when decoding orientation we pooled together those trials with orientations at 45 degrees, but those differed in their temporal frequency. Thus, the errors in performance could arise from the fact that variability in spiking driven by the non-decoded dimension interfered with the to-be-decoded dimension. One way to account for this is to train our decoder on both orientation and temporal frequency. To do this, each combination of orientation and temporal frequency is given a unique ID and the decoder learns to predict that ID based on spiking. We can then convert back from that ID to the corresponding orientation and temporal frequency.</p>
-<div id="d9369ac7" class="cell" data-execution_count="23">
+<div id="c7d59be4" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_oritf'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: </span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    rf(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>]).compute(x, dims<span class="op">=</span>[<span class="st">'orientation'</span>, <span class="st">'temporal_frequency'</span>]))</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_oritf_counts'</span>] <span class="op">=</span> spks[<span class="st">'rf_oritf'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.stim_counts)</span>
@@ -1503,7 +1503,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 </div>
 <p>Trying to decode the ID resulted in relatively poor performance. At ~33% we are much worse than our performance purely on orientation or temporal frequency. You can see in the confusion matrix that the symmetry in orientation responsiveness is still cropping up. However, perhaps when we assign the IDs to their corresponding orientations and temporal frequencies the performance will be improved.</p>
-<div id="8d33aabf" class="cell" data-execution_count="24">
+<div id="2739a1ca" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the predicted orientation and temporal frequency</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>y_pred_ori <span class="op">=</span> stim_ids[<span class="st">'orientation'</span>].loc[y_pred].values</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>y_test_ori <span class="op">=</span> stim_ids[<span class="st">'orientation'</span>].loc[y_test].values</span>
@@ -1548,7 +1548,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <h2 class="anchored" data-anchor-id="shared-variability-and-noise-correlations">Shared variability and noise correlations</h2>
 <p>One possible source of noise in our spike counts is if neurons were spontaneously active irrespective of the stimuli presented. These unrelated increases or decreases in firing rate would throw off the decoder. When this variability is unique to a neuron, there is not much we can do about it since for a single trial it is unclear what component of the spiking is driven by the stimulus versus something else. However, if neurons are correlated in their variability across trials, then we can pool them together to estimate it.</p>
 <p>There is a great deal of covariation in the spiking of neurons that is shared and is independent of the stimuli presented. Much work has been done on this under the name of <a href="https://www.nature.com/articles/nn.2842"><em>noise correlations</em></a> or <em>correlated variability</em>. For instance, we can measure the covariation in spike counts between the symmetric and asymmetric neurons we have been using when their best stimulus is presented, 90 degrees.</p>
-<div id="43bc9b49" class="cell" data-execution_count="25">
+<div id="df1e14a2" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get responses to the 90 degree orientation and 2 hz temporal frequency</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pair_count <span class="op">=</span> counts_oritf[(counts_oritf[<span class="st">'orientation'</span>]<span class="op">==</span><span class="dv">90</span>) <span class="op">&amp;</span> (counts_oritf[<span class="st">'temporal_frequency'</span>]<span class="op">==</span><span class="dv">2</span>)][</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'counts_</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(sel_unit), <span class="st">'counts_</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(asym_unit)]].values</span>
@@ -1579,7 +1579,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <p>The correlation here is quite high, typically the noise correlation between two neurons is between 0.05 and 0.2. This could be by chance; we just happened to choose two neurons with a high correlation. It could also arise because we chose neurons with similar tuning, so factors that affect the processing of the stimulus that are upstream of our neurons (e.g.&nbsp;where the mouse is looking), could elevate their correlation.</p>
 <p>To get a sense of how our population of neurons are correlated, we can calculate the correlation in responding between all pairs of neurons. To do this, first, for each neuron we remove the part of the response that is explained by the stimulus by z-scoring a neuron’s spike counts across trials for each stimulus type. This removes the mean response to the stimulus, and scales the response by the standard deviation. This leaves us with the variability across trials (i.e.&nbsp;noise).</p>
 <p>Next, we take the correlation in these z-scored responses between all pairs of neurons. Finally, we can visualize distribution of these correlations using a histogram. By pooling across all pairs of neurons, irrespective of their tuning similarity, and all stimuli, we get an unbiased estimate of the noise correlation in our population of neurons.</p>
-<div id="611dfe94" class="cell" data-execution_count="26">
+<div id="1e6af539" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># z-transform each unit's response to each stimulus</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># removing the stimulus driven component of the response</span></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_oritf_noise'</span>] <span class="op">=</span> spks[<span class="st">'rf_oritf_counts'</span>].<span class="bu">apply</span>(</span>
@@ -1623,7 +1623,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <p>If we do this transformation to our data, then we will convert our count data, which were integers from 0 to infinity, to real numbers that can be positive or negative. This does not agree with the Poisson distribution we use to calculate the probability. Instead, we will switch to a Gaussian distribution, which has the form:</p>
 <p><span class="math display"> p(x) = \frac{1}{\sqrt{2\pi} SD}e^{\frac{-(x-M)^2}{2 SD^2}} </span></p>
 <p>where <span class="math inline">SD</span> is the standard deviation and <span class="math inline">M</span> is the mean. This means we have to change our Naive Bayes estimator class to use the Gaussian distribution. We can accomplish this by inheriting from the <code>PoissonNB</code> class and changing the <code>_pdf</code> and <code>fit</code> methods. We will also need to store both the mean and standard deviation in the <code>params</code> attribute.</p>
-<div id="d1dd1e4a" class="cell" data-execution_count="27">
+<div id="f7735843" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GaussNB(PoissonNB):</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _pdf(<span class="va">self</span>, x):</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
@@ -1687,7 +1687,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <span id="cb41-61"><a href="#cb41-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> score        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that we have our new class, let’s give it a try on decoding orientation, but this time without controlling for shared variability. This will test how changing the probability distribution affects performance.</p>
-<div id="64470e11" class="cell" data-execution_count="28">
+<div id="7e8185a1" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> counts_ori.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">'counts'</span>).values.astype(<span class="bu">int</span>)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> counts_ori[<span class="st">'orientation'</span>].values</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1723,7 +1723,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 </div>
 <p>Switching to a Gaussian probability function left our decoder performance virtually unchanged. Note that this was despite doubling the number of parameters (mean and standard deviation, instead of just mean) we used to describe each neuron’s response to a stimulus. Now, let’s try it with the shared variability removed.</p>
-<div id="f89a9855" class="cell" data-execution_count="29">
+<div id="f397ed93" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rem_shared(data):</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># remove the shared component of the data</span></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1773,7 +1773,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 <section id="impact-of-number-of-neurons-on-decoder-performance" class="level2">
 <h2 class="anchored" data-anchor-id="impact-of-number-of-neurons-on-decoder-performance">Impact of number of neurons on decoder performance</h2>
 <p>At this point you might be wondering if the performance could reach 100% if we increased the number of neurons we recorded. Perhaps this would happen if we had enough units with even a slight asymmetry in their response to orientations that were 180 degrees apart. We can explore this question by seeing how our decoder performs as we vary the number of units. To do this, we will train the decoder on <code>n_units</code> randomly selected units, and repeat this 10 times to sample a different subset of the population and get a more reliable estimate of performance. As we increase the number of units sampled, we should observe a systematic improvement in the decoder performance. Few units should yield poor performance, and using all the units should yield the performance we saw above. The curve traced out by intermediate numbers of units will tell us what to predict as we add more units beyond what we have in the current data set.</p>
-<div id="81a5dc22" class="cell" data-execution_count="30">
+<div id="132c439f" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate over different numbers of units, train the model and calculate the score on test data 10 times</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># store the scores in a numpy array</span></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>num_units <span class="op">=</span> X.shape[<span class="dv">1</span>]</span>
@@ -1804,7 +1804,7 @@ Orientation of 45 degrees and spike count of 18: 0.002 probability</code></pre>
 </div>
 <p>As we increase the number of units used for decoding, we can see the performance asymptote just below 80%. Performance rapidly increased from chance to ~50% at 10 units, then got slower and slower for each additional 10 units that were added. This indicates that adding more units, even doubling them, would not substantially improve performance. This may reflect a fundamental limitation of the symmetry in how orientations are represented in primary visual cortex.</p>
 <p>We can test this hypothesis by examining how performance varies with number of units for coding of temporal frequency, which does not exhibit any such symmetry.</p>
-<div id="e7e4bc64" class="cell" data-execution_count="31">
+<div id="d899e5d4" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># determine how the number of untis affects the test score for decoding temporal frequency</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> counts_tf.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">'counts'</span>).values.astype(<span class="bu">int</span>)</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> counts_tf[<span class="st">'temporal_frequency'</span>].values</span>
