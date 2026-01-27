@@ -255,8 +255,8 @@ window.Quarto = {
   <li><a href="#detecting-the-activity-of-neurons" id="toc-detecting-the-activity-of-neurons" class="nav-link" data-scroll-target="#detecting-the-activity-of-neurons">Detecting the activity of neurons</a>
   <ul class="collapse">
   <li><a href="#physics-of-extracellular-potentials" id="toc-physics-of-extracellular-potentials" class="nav-link" data-scroll-target="#physics-of-extracellular-potentials">Physics of extracellular potentials</a></li>
-  <li><a href="#modeling-the-relationship-between-electrode-distance-and-recorded-potential" id="toc-modeling-the-relationship-between-electrode-distance-and-recorded-potential" class="nav-link" data-scroll-target="#modeling-the-relationship-between-electrode-distance-and-recorded-potential">Modeling the relationship between electrode distance and recorded potential</a></li>
   <li><a href="#the-dipole-model-of-the-neuron" id="toc-the-dipole-model-of-the-neuron" class="nav-link" data-scroll-target="#the-dipole-model-of-the-neuron">The dipole model of the neuron</a></li>
+  <li><a href="#modeling-the-relationship-between-electrode-distance-and-recorded-potential" id="toc-modeling-the-relationship-between-electrode-distance-and-recorded-potential" class="nav-link" data-scroll-target="#modeling-the-relationship-between-electrode-distance-and-recorded-potential">Modeling the relationship between electrode distance and recorded potential</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -294,7 +294,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="mixing-code-theory-and-practice">Mixing code, theory, and practice</h2>
 <p>Lectures will introduce the theory behind what we do, practical details of how to go about doing it, and code that does the doing. The astounding thing about BCI design is how accessible the algorithms and plentiful the data sources are. Of course, a real BCI system uses specialized hardware implanted in or on a person and is run in near real-time, which is not feasible in a classroom setting.</p>
 <p>We will use Python throughout this course, and publicly available data sets.</p>
-<div id="0b7105bc" class="cell" data-execution_count="1">
+<div id="1fef015f" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will be the standard set of packages we import for most lectures. </span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -358,7 +358,7 @@ window.Quarto = {
 <figcaption>Membrane and ions</figcaption>
 </figure>
 </div>
-<div id="47ae28ea" class="cell" data-execution_count="2">
+<div id="70e1fa9e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ion_props <span class="op">=</span> pd.DataFrame({<span class="st">'Ion'</span>: [<span class="st">'Na'</span>, <span class="st">'K'</span>, <span class="st">'Cl'</span>, <span class="st">'Ca'</span>],</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'Out_mM'</span>: [<span class="dv">140</span>, <span class="dv">3</span>, <span class="dv">140</span>, <span class="fl">1.5</span>],</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'In_mM'</span>: [<span class="dv">7</span>, <span class="dv">140</span>, <span class="dv">7</span>, <span class="fl">0.0001</span>],</span>
@@ -386,7 +386,7 @@ Ca      1.5    0.0001       2</code></pre>
 <p><span class="math display">E = \frac{RT}{zF}ln\frac{[Out]}{[In]}</span></p>
 <p><span class="math inline">R</span> is the gas constant and <span class="math inline">F</span> is Faraday’s constant, while <span class="math inline">T</span> is temperature in Kelvin and <span class="math inline">z</span> is the charge of the ion. <span class="math inline">[Out]</span> and <span class="math inline">[In]</span> are the extracellular and intracellular concentrations of that ion, respectively.</p>
 <p>Most of the time when an equation is introduced, we will try to translate it into Python. A method that calculates the equilibrium potential of a given ion can be given as:</p>
-<div id="15e409e6" class="cell" data-execution_count="3">
+<div id="568e011c" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate Nernst equilibrium potential for an ion</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nernst(conco<span class="op">=</span><span class="dv">3</span>, conci<span class="op">=</span><span class="dv">140</span>, z<span class="op">=</span><span class="dv">1</span>, t<span class="op">=</span><span class="dv">310</span>):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calculate Nernst potential for an ion.</span></span>
@@ -412,7 +412,7 @@ Ca      1.5    0.0001       2</code></pre>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (r<span class="op">*</span>t)<span class="op">/</span>(z<span class="op">*</span>f) <span class="op">*</span> np.log(conco<span class="op">/</span>conci) <span class="op">*</span> <span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Using this function and the dataframe of ionic concentrations above, we can calculate the equilibrium potentials for each of the major ionic species found in the nervous system.</p>
-<div id="11d86f42" class="cell" data-execution_count="4">
+<div id="4ef9c560" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ion_props[<span class="st">'E'</span>] <span class="op">=</span> ion_props.<span class="bu">apply</span>(<span class="kw">lambda</span> ion: nernst(ion[<span class="st">'Out_mM'</span>], ion[<span class="st">'In_mM'</span>], ion[<span class="st">'Charge'</span>]), axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ion_props)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -444,7 +444,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <p><span class="math display"> V = IR </span></p>
 <p>where <span class="math inline">V</span> is voltage (volts, V), <span class="math inline">I</span> is current (amperes, A), and <span class="math inline">R</span> is resistance (ohms, <span class="math inline">\Omega</span>). Rewriting the equation to solve for <span class="math inline">I</span> gives us: <span class="math display"> I = \frac{V}{R} </span> The inverse of resistance is conductance (siemens, S), so this equation can be rewritten as: <span class="math display"> I = gV </span> Here <span class="math inline">g</span> is the ease with which our conductor allows current to flow. Now, if we include the effect of the reversal potential, <span class="math inline">E_{r}</span> acting as a battery, then the equation can be written as: <span class="math display"> I_{leak} = g_{leak}(V_{m}-E_{r}) \tag{1} </span> Let’s consider the behavior of this equation. It shows that as we increase the ion channel’s conductance, <span class="math inline">g_{leak}</span>, the current will increase as well. It also shows that the magnitude and direction of the current will depend on the membrane voltage, <span class="math inline">V_{m}</span>. If <span class="math inline">V_{m}</span> is below <span class="math inline">E_{r}</span>, current will be negative. If it is above, then it will be positive. As <span class="math inline">V_{m}</span> approaches <span class="math inline">E_{r}</span>, the current gets smaller. When they are equal, no current flows because the electrical forces perfectly balance the concentration gradient.</p>
 <p>Let’s graph these relationships between <span class="math inline">V_{m}</span> and <span class="math inline">I_{leak}</span> by systematically varying <span class="math inline">E_{r}</span> and <span class="math inline">g_{leak}</span>.</p>
-<div id="f62e666a" class="cell" data-execution_count="5">
+<div id="2facb451" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here are somme realistic parameters for a neuron</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mem_r <span class="op">=</span> <span class="fl">25e3</span> <span class="co"># ohm*cm^2, taken from Egger et al 2020</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>cell_radius <span class="op">=</span> <span class="fl">30e-4</span> <span class="co"># cm, 30 microns, this is larger than the cell body itself to account for membrane from dendrites</span></span>
@@ -472,7 +472,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g <span class="op">*</span> (v <span class="op">-</span> e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="77a8bce2" class="cell" data-execution_count="6">
+<div id="2cc65f6c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine how varying the conductance affects the I-V curve</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>g_factors <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
@@ -499,7 +499,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 </div>
 </div>
 <p>It is evident that increasing the conductance dramatically increases the ionic current. Now let’s examine the effect of equilibrium potential.</p>
-<div id="df499678" class="cell" data-execution_count="7">
+<div id="74df44dc" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine how varying the equilibrium potential affects the I-V curve</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>e_values <span class="op">=</span> [<span class="op">-</span><span class="fl">0.070</span>, <span class="op">-</span><span class="fl">0.035</span>, <span class="dv">0</span>, <span class="fl">0.035</span>, <span class="fl">0.070</span>]</span>
@@ -570,7 +570,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <p>This is a differential equation that can be solved to give voltage as a function of time: <span class="math display"> V_{m}(t) = E_{rest}(1-e^{\frac{-t}{\frac{g_{m}}{C_{m}}}}) </span></p>
 <p>Rewriting <span class="math inline">g_{m}</span>, as its inverse, referred to as membrane resistance, <span class="math inline">R_{m}</span>, we get the equation: <span class="math display"> V_{m}(t) = E_{rest}(1-e^{\frac{-t}{R_{m}C_{m}}}) \tag{3}</span></p>
 <p>The product of <span class="math inline">R_{m}</span> and <span class="math inline">C_{m}</span> sets how fast the membrane charges. Larger it is, the slower the membrane capacitor will charge, and the smaller it is, the faster it charges. Given realistic values of <span class="math inline">R_{m}</span> and <span class="math inline">C_{m}</span>, what would be a reasonable time constant to expect from a neuron?</p>
-<div id="f5f70d45" class="cell" data-execution_count="8">
+<div id="feb93515" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate membrane resistance and capacitance</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mem_cap <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># F/cm^2</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cell_c <span class="op">=</span> mem_cap <span class="op">*</span> cell_area <span class="co"># F</span></span>
@@ -587,7 +587,7 @@ Membrane resistance: 221 MOhm
 Membrane time constant: 25 ms</code></pre>
 </div>
 </div>
-<div id="d5eb101b" class="cell" data-execution_count="9">
+<div id="b53656de" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot examples of V changing over time for different RC time constants</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tau_factors <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)</span>
@@ -629,7 +629,7 @@ Membrane time constant: 25 ms</code></pre>
     \end{align}
 </span></p>
 <p>Since we know how the membrane voltage will change, <span class="math inline">\frac{dV_{m}}{dt}</span>, based on its present value, <span class="math inline">V_{m}</span>, and the current injected, <span class="math inline">I_{in}</span>, we can simulate its response. To do this, we will create a class, <code>PassiveNeuron</code>. This class will encapsulate the data and methods needed to simulate the passive properties of a neuron’s membrane.</p>
-<div id="fb5b1517" class="cell" data-execution_count="10">
+<div id="cd56e8a2" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PassiveNeuron:</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, v_rest<span class="op">=-</span><span class="dv">65</span>, c_m<span class="op">=</span><span class="dv">1</span>, r_m<span class="op">=</span><span class="dv">25</span>, radius<span class="op">=</span><span class="dv">30</span>):</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._vrest <span class="op">=</span> v_rest<span class="op">/</span><span class="dv">1000</span> <span class="co"># mV</span></span>
@@ -731,7 +731,7 @@ Membrane time constant: 25 ms</code></pre>
 <span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> v, i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="5e6820a5" class="cell" data-execution_count="11">
+<div id="91a7b23a" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a neuron with default parameters</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pas_nrn <span class="op">=</span> PassiveNeuron()</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sim_dur <span class="op">=</span> <span class="fl">0.2</span> <span class="co"># sec</span></span>
@@ -772,7 +772,7 @@ Membrane time constant: 25 ms</code></pre>
 <span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    plt.suptitle(title)</span>
 <span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="fl">0.03</span>, <span class="dv">1</span>, <span class="fl">0.95</span>])</span>
 <span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, <span class="op">-</span>pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -784,10 +784,10 @@ Membrane time constant: 25 ms</code></pre>
 <p>When we inject a current step into the neuron, the membrane begins to depolarize from its resting potential towards a new voltage. This is accompanied by an strong current crossing the membrane, which reflects the injected current charging up the membrane capacitance. As the membrane capacitance charges up, this current decays because it is offset by the leak current, which flows in the opposite direction of the injected current. The leak current is driven by the difference between <span class="math inline">V_{m}</span> and <span class="math inline">E_{r}</span>. For the leak current to balance out the injected current, the membrane potential must reach:</p>
 <p><span class="math display"> V_{m} = \frac{I_{in}}{g_{leak}}+E_{r}</span></p>
 <p>Thus, a increasing <span class="math inline">g_{leak}</span> (or lowering membrane resistance, <span class="math inline">R_{m}</span>), lowers the change in membrane potential to an injected current. We can see this here:</p>
-<div id="30f308f3" class="cell" data-execution_count="12">
+<div id="d6e855f1" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pas_nrn_hig <span class="op">=</span> PassiveNeuron(v_rest<span class="op">=-</span><span class="dv">65</span>, c_m<span class="op">=</span><span class="dv">1</span>, r_m<span class="op">=</span><span class="dv">5</span>, radius<span class="op">=</span><span class="dv">30</span>) <span class="co"># we lowered the membrane resistance, r_m, which increased the membrane conductance, g_m</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pas_v_hig, pas_i_hig <span class="op">=</span> pas_nrn_hig.run(dur<span class="op">=</span>sim_dur, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span>in_step)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v_hig, <span class="op">-</span>pas_i_hig, in_step, title<span class="op">=</span><span class="st">'Passive neuron with higher $g_</span><span class="sc">{leak}</span><span class="st">$'</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v_hig, pas_i_hig, in_step, title<span class="op">=</span><span class="st">'Passive neuron with higher $g_</span><span class="sc">{leak}</span><span class="st">$'</span>)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get values of g_leak for each model</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'g_leak for regular model: </span><span class="sc">{:.0f}</span><span class="st"> nS'</span>.<span class="bu">format</span>(pas_nrn._gleak<span class="op">*</span><span class="fl">1e9</span>))</span>
@@ -806,10 +806,10 @@ g_leak for high g model: 23 nS</code></pre>
 </div>
 <p>Increasing <span class="math inline">g_{leak}</span> lowered the change in membrane potential from around 12 mV to 3 mV. Notice also that <span class="math inline">V_{m}</span> changes much faster now, because the membrane time constant is shorter.</p>
 <p>Increasing the amount of current we inject also increases the change in <span class="math inline">V_{m}</span>.</p>
-<div id="8e68bcf1" class="cell" data-execution_count="13">
+<div id="56ceb207" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>in_step <span class="op">=</span> step_current(t_pts, amp<span class="op">=</span><span class="fl">2e-10</span>) <span class="co"># increase input current by 2x</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pas_v, pas_i <span class="op">=</span> pas_nrn.run(dur<span class="op">=</span>sim_dur, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span>in_step)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, <span class="op">-</span>pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron with $2xI_</span><span class="sc">{in}</span><span class="st">$'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron with $2xI_</span><span class="sc">{in}</span><span class="st">$'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -819,11 +819,11 @@ g_leak for high g model: 23 nS</code></pre>
 </div>
 </div>
 <p>So far we have been giving positive current injections, which pushes the membrane towards positive values. If <span class="math inline">V_{m}</span> moves towards positive values, we say it is <em>depolarizing</em>. By contrast, if it is pushed towards negative values, it is <em>hyperpolarizing</em>. To hyperpolarize, we inject a negative current.</p>
-<div id="ae437821" class="cell" data-execution_count="14">
+<div id="443d416d" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># hyperpolarize the membrane potential</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>in_step <span class="op">=</span> step_current(t_pts, amp<span class="op">=-</span><span class="fl">1e-10</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>pas_v, pas_i <span class="op">=</span> pas_nrn.run(dur<span class="op">=</span>sim_dur, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span>in_step)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, <span class="op">-</span>pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron with being hyperpolarized'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron with being hyperpolarized'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -865,7 +865,7 @@ A note about coding and neuronal firing
 <section id="creating-a-simplified-active-neuron-model" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-simplified-active-neuron-model">Creating a simplified active neuron model</h3>
 <p>When we include voltage-gated ion channels in a model neuron, it goes from being a passive model to an <em>active model</em>. We can build upon our existing <code>PassiveNeuron</code> class to create an <code>ActiveNeuron</code> class that generates an approximation of action potentials. To do this, we will add the voltage-dependent Na<sup>+</sup> and K<sup>+</sup> currents. This requires specifying the equilibrium potential for those ions, a <span class="math inline">V_{m}</span> threshold that initiates the action potential, and designing voltage- and time-dependent conductances to gate the active currents.</p>
-<div id="1c63f6d8" class="cell" data-execution_count="15">
+<div id="c102ab6e" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create active neuron class that inheriting from the passive neuron model</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ActiveNeuron(PassiveNeuron):</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, v_thresh<span class="op">=-</span><span class="dv">50</span>, ena<span class="op">=</span><span class="dv">50</span>, ek<span class="op">=-</span><span class="dv">90</span>, gna<span class="op">=</span><span class="fl">8e-8</span>, gk<span class="op">=</span><span class="fl">4e-8</span>, <span class="op">**</span>kwargs):</span>
@@ -901,7 +901,7 @@ A note about coding and neuronal firing
 <span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gen_ap()</span>
 <span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().update_currents(<span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="869040ca" class="cell" data-execution_count="16">
+<div id="6ffa147c" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an active neuron and deliver a subthreshold and over threshold current</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>act_nrn <span class="op">=</span> ActiveNeuron()</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>sim_dur_act <span class="op">=</span> <span class="fl">0.5</span></span>
@@ -921,7 +921,7 @@ A note about coding and neuronal firing
 </div>
 <p>For this model we set the action potential threshold to -50 mV, and if we depolarize below that level we get the passive subthreshold depolarization that we saw in the previous model. If the current step is increased, then the membrane depolarizes passively until the threshold is reached, at which point an action potential is triggered. The action potential voltage approaches the equilibrium potential for Na<sup>+</sup>, and then quickly reverses towards the equilibrium potential of K<sup>+</sup>. The transmembrane currents associated with the action potential are substantially greater than those from the subthreshold depolarization. This is due to the very high conductance of the voltage-gated channels (Na<sup>+</sup> channel: 80 nS vs.&nbsp;<span class="math inline">g_{leak}</span>: 5 nS).</p>
 <p>More than one action potential is emitted during the 100 ms over-threshold current step. The time between action potentials depends on two factors. First is the refractory period, with a stronger or longer refractory period delaying the time to the next action potential. The other is the strength of the injected current, with a stronger current able to overcome the refractory effect and elicit another action potential sooner. We can explore the effect of current strength by delivering a series of current pulses to our model with increasing amplitudes.</p>
-<div id="2b5ae140" class="cell" data-execution_count="17">
+<div id="29c9f1e1" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine how firing rate varies with curent injected</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>act_nrn <span class="op">=</span> ActiveNeuron()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>sim_dur_act <span class="op">=</span> <span class="fl">1.1</span></span>
@@ -976,7 +976,7 @@ Modeling a synaptic current
 </div>
 </div>
 <p>We can incorporate synapses into our active model to explore they affect the membrane potential and drive action potentials.</p>
-<div id="ebe8c2e6" class="cell" data-execution_count="18">
+<div id="8df9eac7" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an active neuron with synapse class that inherits from the active neuron model</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SynapticNeuron(ActiveNeuron):</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, esyn<span class="op">=</span><span class="dv">50</span>, gsyn<span class="op">=</span><span class="fl">5e-9</span>, asyn<span class="op">=</span><span class="dv">900</span>, bsyn<span class="op">=</span><span class="dv">500</span>, tdur<span class="op">=</span><span class="dv">3</span>, <span class="op">**</span>kwargs):</span>
@@ -1012,7 +1012,7 @@ Modeling a synaptic current
 <span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gen_syn(prespk<span class="op">=</span>prespk)</span>
 <span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().update_currents(<span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="122a7b16" class="cell" data-execution_count="19">
+<div id="d49996f3" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MODIFY PLOTTING CODE HERE</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_sim_prespk(t, v, i, inp, spk, title<span class="op">=</span><span class="st">''</span>):</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1049,7 +1049,7 @@ Modeling a synaptic current
 <span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>    spk[np.<span class="bu">round</span>(spk_times <span class="op">/</span> sim_dt).astype(<span class="bu">int</span>)] <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a53dd2c7" class="cell" data-execution_count="20">
+<div id="b2752e46" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examine response to a single presynaptic spike</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>syn_nrn <span class="op">=</span> SynapticNeuron()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">0.2</span></span>
@@ -1069,7 +1069,7 @@ Modeling a synaptic current
 </div>
 <p>Activating the synapse at 50 ms leads to a rapid negative current that charges the membrane capacitance and depolarizes <span class="math inline">V_{m}</span>. This is soon followed by a decay in the synaptic current, as the proportion of synaptic ion channels that were open shrinks. Within ~10 ms the synaptic current is finished, and replaced by a positive leak current, which is the membrane returning to its resting potential. The rate of this return to rest is determined by the membrane time constant.</p>
 <p>A single synaptic input is usually insufficient to drive an action potential. Typically multiple synaptic events have to be combined in close temporal proximity. We can explore this by delivering two presynaptic spikes and varying the time between them.</p>
-<div id="900f2f3b" class="cell" data-execution_count="21">
+<div id="1e0c6e2a" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># delivery multiple presynaptic spikes with varying inter-spike intervals</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">1.1</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_pts <span class="op">=</span> syn_nrn.get_t_vec(dur<span class="op">=</span>sim_dur_syn, dt<span class="op">=</span>sim_dt)</span>
@@ -1089,7 +1089,7 @@ Modeling a synaptic current
 </div>
 </div>
 <p>The dashed line for the membrane potential plot is the action potential threshold. A single synaptic response is not sufficient to cross this threshold. If two are delivered, they must be close enough together, less than 25 ms between them, to trigger an action potential. Note also that making them closer does not increase the number of action potentials, only one is generated. To elicit multiple action potentials would require a sustained train of presynaptic spikes, such as below:</p>
-<div id="fbd54e75" class="cell" data-execution_count="22">
+<div id="23ca9941" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># deliver a train of presynaptic spikes at 40 hz</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>t_pts <span class="op">=</span> syn_nrn.get_t_vec(dur<span class="op">=</span>sim_dur_syn, dt<span class="op">=</span>sim_dt)</span>
@@ -1128,12 +1128,9 @@ Modeling a synaptic current
 <p><span class="math display"> V = \frac{1}{4\pi\sigma}\sum_{i=0}^{n}\frac{I_i}{|d_e - d_i|} \tag{6}</span></p>
 <p>In this equation we sum the resulting voltages from all currents, with each current <span class="math inline">I_i</span> divided by its distance from the recording electrode, <span class="math inline">|d_e - d_i|</span>. Stronger currents will tend to dominate over weaker ones. However, if there are a large number widely distributed of weak currents with similar waveforms then when added together they can produce a prominent potential.</p>
 </section>
-<section id="modeling-the-relationship-between-electrode-distance-and-recorded-potential" class="level3">
-<h3 class="anchored" data-anchor-id="modeling-the-relationship-between-electrode-distance-and-recorded-potential">Modeling the relationship between electrode distance and recorded potential</h3>
-<p>Using our <code>SynapticNeuron</code> model, we can explore how different types of neural activity are detected by extracellular electrodes. This model will simulate a collection of neurons arranged in a circular sheet. To capture the kinds of activities observed in the brain, we will include a slow global fluctuation in membrane potential across all the neurons (<code>slow_noise</code>), noise that is unique to each neuron (<code>noise</code>), and a pulse of synaptic drive (<code>mean_t</code> and <code>std_t</code>). It will also require a method to calculate the extracellular potential, using equation 6 (<code>calc_extracell</code>).</p>
-</section>
 <section id="the-dipole-model-of-the-neuron" class="level3">
 <h3 class="anchored" data-anchor-id="the-dipole-model-of-the-neuron">The dipole model of the neuron</h3>
+<p>Using our <code>SynapticNeuron</code> model, we can explore how different types of neural activity are detected by extracellular electrodes. This model will simulate a collection of neurons arranged in a circular sheet. To capture the kinds of activities observed in the brain, we will include a slow global fluctuation in membrane potential across all the neurons (<code>slow_noise</code>), noise that is unique to each neuron (<code>noise</code>), and a pulse of synaptic drive (<code>mean_t</code> and <code>std_t</code>). It will also require a method to calculate the extracellular potential, using equation 6 (<code>calc_extracell</code>).</p>
 <p>The extracellular recording model we implement below requires us to consider the spatial extent of the neuron. Recall that Kirchoff’s current law requires the total current flowing into a point in a circuit to equal the amount flowing out. For a single compartment model, like the ones we have used so far, the sum of all currents crossing the membrane (capacitive, leak, active, synaptic, and injected) must equal zero. <span class="math display"> I_{cap} + I_{leak} + I_{active} + I_{syn} = I_{inj} </span> If there is no injected current, the sum is zero. Since the extracellular potential is proportional to the sum of currents, a single compartment neuron would theoretically produce no extracellular potential!</p>
 <p>However, real neurons are not points; they have spatial extent. Currents can enter the neuron at one location (e.g., synaptic current at a dendrite) and leave at another (e.g., leak current at the soma). This spatial separation of inward and outward currents creates a <em>dipole</em>. To capture this, we need a <strong>two-compartment model</strong>: a somatic compartment and a dendritic compartment, connected by an axial resistance.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -1146,7 +1143,7 @@ Modeling a synaptic current
 <p><span class="math display"> I_{axial} = \frac{V_{soma} - V_{dend}}{R_a} </span></p>
 <p>From the perspective of the extracellular space, the current leaving the soma is <span class="math inline">-I_{axial}</span> and the current entering the dendrite is <span class="math inline">+I_{axial}</span> (assuming no other injected currents). These two equal and opposite currents, separated by a distance, generate the extracellular field.</p>
 <p>We will implement this <code>DipoleNeuron</code> class inheriting from <code>SynapticNeuron</code>.</p>
-<div id="3e89c0c7" class="cell" data-execution_count="23">
+<div id="c6a050f6" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DipoleNeuron(SynapticNeuron):</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, ra<span class="op">=</span><span class="fl">4e7</span>, rd<span class="op">=</span><span class="dv">25</span>, cd<span class="op">=</span><span class="dv">1</span>, len_d<span class="op">=</span><span class="dv">500</span>, diam_d<span class="op">=</span><span class="dv">2</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(<span class="op">**</span>kwargs)</span>
@@ -1185,189 +1182,243 @@ Modeling a synaptic current
 <span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().set_input(inp)</span>
 <span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._add_d <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> gen_syn(<span class="va">self</span>, prespk<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># synaptic mechanism for dendrite</span></span>
-<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> prespk:</span>
-<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._syn_timer <span class="op">=</span> <span class="va">self</span>._tdur</span>
-<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="va">self</span>._syn_timer <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._syn_timer <span class="op">-=</span> <span class="va">self</span>._dt</span>
-<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># update fraction of open channels</span></span>
-<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._r <span class="op">=</span> <span class="va">self</span>._r <span class="op">+</span> <span class="va">self</span>._dt <span class="op">*</span> ((<span class="va">self</span>._asyn <span class="op">*</span> (<span class="va">self</span>._syn_timer<span class="op">&gt;</span><span class="dv">0</span>) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span><span class="va">self</span>._r)) <span class="op">\</span></span>
-<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">-</span> (<span class="va">self</span>._bsyn <span class="op">*</span> (<span class="va">self</span>._r)))</span>
-<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># add synaptic current to dendrite</span></span>
-<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._add_d <span class="op">=</span> <span class="va">self</span>._add_d <span class="op">+</span> <span class="va">self</span>._gsyn <span class="op">*</span> <span class="va">self</span>._r <span class="op">*</span> (<span class="va">self</span>._vd <span class="op">-</span> <span class="va">self</span>._esyn)</span>
-<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> update_membrane(<span class="va">self</span>):</span>
-<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use sub-stepping to handle the fast dynamics of the axial current </span></span>
-<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># and small dendritic compartment</span></span>
-<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>        n_steps <span class="op">=</span> <span class="dv">10</span> </span>
-<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>        dt_sub <span class="op">=</span> <span class="va">self</span>._dt <span class="op">/</span> n_steps</span>
-<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store external currents (from synapses, channels, injection)</span></span>
-<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>        i_ext_s <span class="op">=</span> <span class="va">self</span>._add</span>
-<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>        i_ext_d <span class="op">=</span> <span class="va">self</span>._add_d</span>
-<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_steps):</span>
-<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate axial current (Soma -&gt; Dendrite)</span></span>
-<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._i_axial <span class="op">=</span> (<span class="va">self</span>._vm <span class="op">-</span> <span class="va">self</span>._vd) <span class="op">/</span> <span class="va">self</span>._ra</span>
-<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Soma update</span></span>
-<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a>            <span class="co"># current = leak + external + axial_out</span></span>
-<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>            i_tot_s <span class="op">=</span> <span class="va">self</span>._gleak <span class="op">*</span> (<span class="va">self</span>._vm <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_s <span class="op">+</span> <span class="va">self</span>._i_axial</span>
-<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._vm <span class="op">-=</span> (i_tot_s <span class="op">/</span> <span class="va">self</span>._c) <span class="op">*</span> dt_sub</span>
-<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Dendrite update</span></span>
-<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a>            <span class="co"># current = leak + external + axial_in (which is -axial_out)</span></span>
-<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>            i_tot_d <span class="op">=</span> <span class="va">self</span>._gleak_d <span class="op">*</span> (<span class="va">self</span>._vd <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_d <span class="op">-</span> <span class="va">self</span>._i_axial</span>
-<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._vd <span class="op">-=</span> (i_tot_d <span class="op">/</span> <span class="va">self</span>._c_d) <span class="op">*</span> dt_sub</span>
-<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update final currents for recording</span></span>
-<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._im <span class="op">=</span> <span class="va">self</span>._gleak <span class="op">*</span> (<span class="va">self</span>._vm <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_s <span class="op">+</span> <span class="va">self</span>._i_axial</span>
-<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._id <span class="op">=</span> <span class="va">self</span>._gleak_d <span class="op">*</span> (<span class="va">self</span>._vd <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_d <span class="op">-</span> <span class="va">self</span>._i_axial</span>
-<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_state(<span class="va">self</span>):</span>
-<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>        <span class="co"># return membrane potential in mV (soma, dendrite), transmembrane current in nA (soma, dendrite)</span></span>
-<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="va">self</span>._vm<span class="op">*</span><span class="fl">1e3</span>, <span class="va">self</span>._vd<span class="op">*</span><span class="fl">1e3</span>], [<span class="va">self</span>._im<span class="op">*</span><span class="fl">1e9</span>, <span class="va">self</span>._id<span class="op">*</span><span class="fl">1e9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> set_input_d(<span class="va">self</span>, inp<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._add_d <span class="op">=</span> inp</span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> gen_syn(<span class="va">self</span>, prespk<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># synaptic mechanism for dendrite</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> prespk:</span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._syn_timer <span class="op">=</span> <span class="va">self</span>._tdur</span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="va">self</span>._syn_timer <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._syn_timer <span class="op">-=</span> <span class="va">self</span>._dt</span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>        <span class="co"># update fraction of open channels</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._r <span class="op">=</span> <span class="va">self</span>._r <span class="op">+</span> <span class="va">self</span>._dt <span class="op">*</span> ((<span class="va">self</span>._asyn <span class="op">*</span> (<span class="va">self</span>._syn_timer<span class="op">&gt;</span><span class="dv">0</span>) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span><span class="va">self</span>._r)) <span class="op">\</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">-</span> (<span class="va">self</span>._bsyn <span class="op">*</span> (<span class="va">self</span>._r)))</span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>        <span class="co"># add synaptic current to dendrite</span></span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._add_d <span class="op">=</span> <span class="va">self</span>._add_d <span class="op">+</span> <span class="va">self</span>._gsyn <span class="op">*</span> <span class="va">self</span>._r <span class="op">*</span> (<span class="va">self</span>._vd <span class="op">-</span> <span class="va">self</span>._esyn)</span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> update_membrane(<span class="va">self</span>):</span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Use sub-stepping to handle the fast dynamics of the axial current </span></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>        <span class="co"># and small dendritic compartment</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>        n_steps <span class="op">=</span> <span class="dv">10</span> </span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>        dt_sub <span class="op">=</span> <span class="va">self</span>._dt <span class="op">/</span> n_steps</span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store external currents (from synapses, channels, injection)</span></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>        i_ext_s <span class="op">=</span> <span class="va">self</span>._add</span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>        i_ext_d <span class="op">=</span> <span class="va">self</span>._add_d</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_steps):</span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate axial current (Soma -&gt; Dendrite)</span></span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._i_axial <span class="op">=</span> (<span class="va">self</span>._vm <span class="op">-</span> <span class="va">self</span>._vd) <span class="op">/</span> <span class="va">self</span>._ra</span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Soma update</span></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>            <span class="co"># current = leak + external + axial_out</span></span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>            i_tot_s <span class="op">=</span> <span class="va">self</span>._gleak <span class="op">*</span> (<span class="va">self</span>._vm <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_s <span class="op">+</span> <span class="va">self</span>._i_axial</span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._vm <span class="op">-=</span> (i_tot_s <span class="op">/</span> <span class="va">self</span>._c) <span class="op">*</span> dt_sub</span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Dendrite update</span></span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a>            <span class="co"># current = leak + external + axial_in (which is -axial_out)</span></span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>            i_tot_d <span class="op">=</span> <span class="va">self</span>._gleak_d <span class="op">*</span> (<span class="va">self</span>._vd <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_d <span class="op">-</span> <span class="va">self</span>._i_axial</span>
+<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._vd <span class="op">-=</span> (i_tot_d <span class="op">/</span> <span class="va">self</span>._c_d) <span class="op">*</span> dt_sub</span>
+<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update final currents for recording</span></span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._im <span class="op">=</span> <span class="va">self</span>._gleak <span class="op">*</span> (<span class="va">self</span>._vm <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_s <span class="op">+</span> <span class="va">self</span>._i_axial</span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._id <span class="op">=</span> <span class="va">self</span>._gleak_d <span class="op">*</span> (<span class="va">self</span>._vd <span class="op">-</span> <span class="va">self</span>._vrest) <span class="op">+</span> i_ext_d <span class="op">-</span> <span class="va">self</span>._i_axial</span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_state(<span class="va">self</span>):</span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>        <span class="co"># return membrane potential in mV (soma, dendrite), transmembrane current in nA (soma, dendrite)</span></span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="va">self</span>._vm<span class="op">*</span><span class="fl">1e3</span>, <span class="va">self</span>._vd<span class="op">*</span><span class="fl">1e3</span>], [<span class="va">self</span>._im<span class="op">*</span><span class="fl">1e9</span>, <span class="va">self</span>._id<span class="op">*</span><span class="fl">1e9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="91dfa808" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtracellRec():</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># class for extracellular recording of a sheet of neurons using the DipoleNeuron class</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># user can set the radius of the sheet, the density of neurons, the mean time and standard deviation </span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># around when a synaptic input arrives, the level of a shared slow input noise, and an individual gaussian noise</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># level for each neuron, electrode distance from the sheet</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, radius<span class="op">=</span><span class="dv">2</span>, density<span class="op">=</span><span class="dv">1000</span>, mean_t<span class="op">=</span><span class="fl">0.1</span>, std_t<span class="op">=</span><span class="fl">0.005</span>, slow_noise<span class="op">=</span><span class="dv">25</span>, <span class="op">\</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                 noise<span class="op">=</span><span class="dv">200</span>, extra_cond<span class="op">=</span><span class="fl">0.3</span>, dipole_sep<span class="op">=</span><span class="dv">200</span>, <span class="op">**</span>kwargs):</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._radius <span class="op">=</span> radius <span class="co"># cm</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._density <span class="op">=</span> density <span class="co"># neurons per cm^2</span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._mean_t <span class="op">=</span> mean_t <span class="co"># sec</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._std_t <span class="op">=</span> std_t <span class="co"># sec</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._slow_noise <span class="op">=</span> slow_noise <span class="op">*</span> <span class="fl">1e-12</span> <span class="co"># slow shared noise standard deviation in pA</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._noise <span class="op">=</span> noise <span class="op">*</span> <span class="fl">1e-12</span> <span class="co"># individual neuron gaussian standard deviation in pA</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._extra_cond <span class="op">=</span> extra_cond <span class="co"># extracellular conductivity in S/m</span></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._dipole_sep <span class="op">=</span> dipole_sep <span class="op">*</span> <span class="fl">1e-4</span> <span class="co"># cm</span></span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._v <span class="op">=</span> [] <span class="co"># voltage array (n_neurons, 2, n_t)</span></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._i <span class="op">=</span> [] <span class="co"># current array (n_neurons, 2, n_t)</span></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._t <span class="op">=</span> [] <span class="co"># time array</span></span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate number of neurons</span></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._n_neurons <span class="op">=</span> <span class="bu">int</span>(np.<span class="bu">round</span>(np.pi <span class="op">*</span> <span class="va">self</span>._radius<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> <span class="va">self</span>._density))</span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate positions of neurons, uniformly distributed in the circular sheet</span></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># place each neuron by setting a random angle and radius from the center</span></span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._neuron_pos <span class="op">=</span> np.zeros((<span class="va">self</span>._n_neurons, <span class="dv">2</span>))</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>._n_neurons):</span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>            curr_ang <span class="op">=</span> np.random.rand() <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi</span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>            curr_rad <span class="op">=</span> np.sqrt(np.random.rand()) <span class="op">*</span> <span class="va">self</span>._radius</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._neuron_pos[ind, <span class="dv">0</span>] <span class="op">=</span> np.cos(curr_ang) <span class="op">*</span> curr_rad</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._neuron_pos[ind, <span class="dv">1</span>] <span class="op">=</span> np.sin(curr_ang) <span class="op">*</span> curr_rad</span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># force one neuron to be at the center, so it can be easily picked up by the electrode</span></span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._neuron_pos[<span class="dv">0</span>, :] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create neurons</span></span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._neurons <span class="op">=</span> []</span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>._n_neurons):</span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._neurons.append(DipoleNeuron(<span class="op">**</span>kwargs))</span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># method to calculate extracellular potential based on currents from each neuron</span></span>
-<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calc_extracell(<span class="va">self</span>, h<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Soma distances</span></span>
-<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>        dists_s <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>(<span class="va">self</span>._neuron_pos<span class="op">**</span><span class="dv">2</span>,axis<span class="op">=</span><span class="dv">1</span>)<span class="op">+</span>h<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dendrite distances (dendrites are offset by dipole_sep in z direction)</span></span>
-<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>        dists_d <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>(<span class="va">self</span>._neuron_pos<span class="op">**</span><span class="dv">2</span>,axis<span class="op">=</span><span class="dv">1</span>)<span class="op">+</span>(h<span class="op">-</span><span class="va">self</span>._dipole_sep)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Currents i are now transmembrane currents [soma, dendrite] in nA</span></span>
-<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self._i shape: (n_neurons, 2, n_t)</span></span>
-<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># We need to sum contributions from soma and dendrite</span></span>
-<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Soma contribution</span></span>
-<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self._i[:, 0, :].T is (n_t, n_neurons)</span></span>
-<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>        term_s <span class="op">=</span> <span class="va">self</span>._i[:, <span class="dv">0</span>, :].T <span class="op">*</span> <span class="fl">1e-9</span> <span class="op">/</span> (dists_s <span class="op">*</span> <span class="fl">1e-2</span>)</span>
-<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dendrite contribution</span></span>
-<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a>        term_d <span class="op">=</span> <span class="va">self</span>._i[:, <span class="dv">1</span>, :].T <span class="op">*</span> <span class="fl">1e-9</span> <span class="op">/</span> (dists_d <span class="op">*</span> <span class="fl">1e-2</span>)</span>
-<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">4</span><span class="op">*</span>np.pi<span class="op">*</span><span class="va">self</span>._extra_cond) <span class="op">*</span> np.<span class="bu">sum</span>(term_s <span class="op">+</span> term_d, axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create run function that will run all neurons for a given duration</span></span>
-<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> run(<span class="va">self</span>, dur<span class="op">=</span><span class="fl">0.2</span>, dt<span class="op">=</span><span class="fl">0.0001</span>, seed<span class="op">=</span><span class="dv">47</span>):</span>
-<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a>        <span class="co"># set random seed</span></span>
-<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a>        np.random.seed(seed)</span>
-<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a>        <span class="co"># initialize arrays to store values</span></span>
-<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> <span class="va">self</span>._neurons[<span class="dv">0</span>].get_t_vec(dur, dt) <span class="co"># time array</span></span>
-<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a>        num_t <span class="op">=</span> <span class="bu">len</span>(t)</span>
-<span id="cb31-69"><a href="#cb31-69" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> np.zeros((<span class="va">self</span>._n_neurons, <span class="dv">2</span>, num_t)) <span class="co"># voltage array</span></span>
-<span id="cb31-70"><a href="#cb31-70" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> np.zeros((<span class="va">self</span>._n_neurons, <span class="dv">2</span>, num_t)) <span class="co"># current array</span></span>
-<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create synaptic inputs</span></span>
-<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a>        in_prespk <span class="op">=</span> []</span>
-<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>._n_neurons):</span>
-<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a>            in_prespk.append(spk_train(t, np.random.normal(<span class="va">self</span>._mean_t, <span class="va">self</span>._std_t, <span class="dv">1</span>)))</span>
-<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create slow noise input</span></span>
-<span id="cb31-79"><a href="#cb31-79" aria-hidden="true" tabindex="-1"></a>        slow_noise <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, num_t)</span>
-<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a>        slow_noise <span class="op">=</span> sig.detrend(np.cumsum(slow_noise))</span>
-<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a>        slow_noise <span class="op">=</span> (slow_noise<span class="op">/</span>(np.std(slow_noise))) <span class="op">*</span> <span class="va">self</span>._slow_noise</span>
-<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create individual noise inputs</span></span>
-<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a>        indiv_noise <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="va">self</span>._noise, (<span class="va">self</span>._n_neurons, <span class="bu">len</span>(t)))</span>
-<span id="cb31-85"><a href="#cb31-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-86"><a href="#cb31-86" aria-hidden="true" tabindex="-1"></a>        <span class="co"># run simulation</span></span>
-<span id="cb31-87"><a href="#cb31-87" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind, curr_nrn <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="va">self</span>._neurons):</span>
-<span id="cb31-88"><a href="#cb31-88" aria-hidden="true" tabindex="-1"></a>            inp_sig <span class="op">=</span> slow_noise <span class="op">+</span> indiv_noise[ind, :]</span>
-<span id="cb31-89"><a href="#cb31-89" aria-hidden="true" tabindex="-1"></a>            <span class="co"># return shape is (2, num_t)</span></span>
-<span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a>            v[ind, :, :], i[ind, :, :] <span class="op">=</span> curr_nrn.run(dur<span class="op">=</span>dur, dt<span class="op">=</span>dt, inp<span class="op">=</span>inp_sig, prespk<span class="op">=</span>in_prespk[ind])</span>
-<span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a>        <span class="co"># save simulation results</span></span>
-<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._t <span class="op">=</span> t</span>
-<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._v <span class="op">=</span> v</span>
-<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._i <span class="op">=</span> i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Now that our simulation class is all setup, let’s use it. We will create a sheet of neurons with a radius of 2 cm and 1000 neurons per cm<sup>2</sup>. Using <code>**kwargs</code>, we are also able to pass arguments to <code>SynapticNeuron</code>, to configure its electrophysiological properties. We will take advantage of this by increasing the synaptic conductance, <code>gsyn</code>, so that action potentials are more reliably driven. The timing of the presynaptic spikes is set by a normal distribution, with the mean time of their emission at 100 ms, and a standard deviation of 5 ms. Since the inputs to our model neurons are generated randomly, and we want to replicate our results, we will fix the random seed of the model to ensure that the same output is generated each time we run it.</p>
-<div id="766f45c7" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> ExtracellRec(gsyn<span class="op">=</span><span class="fl">7e-9</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>test.run(seed<span class="op">=</span><span class="dv">41</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>That is all it took to run our simulation. The more neurons we include, either by increasing the size of our sheet with the <code>radius</code> parameter or their packing with the <code>density</code> parameter, longer it takes to run. Once the simulation is finished running, we can calculate the extracellular potential for electrodes at different distances from the center of the model. We will choose a couple key values that are relevant to the recordings we will perform. An electrode on the scalp would be ~2 cm away from the surface of the brain. Intracranial surface electrodes that rest on the brain surface are picking up the activity of neurons with 0.5 mm. Lastly, depth electrodes that are inserted into the brain will detect neurons within tens of microns.</p>
-<div id="f3b3c78a" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>elec_dists <span class="op">=</span> [<span class="dv">2</span>, <span class="fl">0.05</span>, <span class="fl">0.0005</span>] <span class="co"># cm</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>dist_labels <span class="op">=</span> [<span class="st">'2 cm'</span>, <span class="st">'0.5 mm'</span>, <span class="st">'5 um'</span>]</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="bu">len</span>(elec_dists),<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">12</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ind, curr_dist <span class="kw">in</span> <span class="bu">enumerate</span>(elec_dists):</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    ax[ind].plot(test._t<span class="op">*</span><span class="fl">1e3</span>, test.calc_extracell(h<span class="op">=</span>curr_dist)<span class="op">*</span><span class="fl">1e6</span>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    ax[ind].set_title(dist_labels[ind])</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    ax[ind].set_xlabel(<span class="st">'Time (ms)'</span>)</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    ax[ind].set_ylabel(<span class="st">'Extracellular potential (uV)'</span>)</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With this class defined, we can explore how a dipole neuron responds to multiple presynaptic spikes, and how the somatic and dendritic potentials and currents evolve over time.</p>
+<div id="8f9ce4d4" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dipole neuron</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dip_nrn <span class="op">=</span> DipoleNeuron(gsyn<span class="op">=</span><span class="fl">7e-9</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># delivery multiple presynaptic spikes with varying inter-spike intervals</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">1.1</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>t_pts <span class="op">=</span> dip_nrn.get_t_vec(dur<span class="op">=</span>sim_dur_syn, dt<span class="op">=</span>sim_dt)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>in_prespk <span class="op">=</span> spk_train(t_pts, [<span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.4</span>, <span class="fl">0.425</span>, <span class="fl">0.7</span>, <span class="fl">0.7125</span>, <span class="fl">1.0</span>, <span class="fl">1.00625</span>])</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>dip_v, dip_i <span class="op">=</span> dip_nrn.run(dur<span class="op">=</span>sim_dur_syn, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span><span class="dv">0</span>, prespk<span class="op">=</span>in_prespk)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting results</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Voltages</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>plt.plot(t_pts<span class="op">*</span><span class="fl">1e3</span>, dip_v[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'Soma'</span>)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>plt.plot(t_pts<span class="op">*</span><span class="fl">1e3</span>, dip_v[<span class="dv">1</span>], label<span class="op">=</span><span class="st">'Dendrite'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>plt.vlines(t_pts[in_prespk<span class="op">==</span><span class="dv">1</span>]<span class="op">*</span><span class="fl">1e3</span>, plt.ylim()[<span class="dv">0</span>], plt.ylim()[<span class="dv">1</span>], color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, label<span class="op">=</span><span class="st">'Spikes'</span>)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>plt.axhline(dip_nrn._vthresh<span class="op">*</span><span class="fl">1e3</span>, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">':'</span>, label<span class="op">=</span><span class="st">'Threshold'</span>)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Potential (mV)'</span>)</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Dipole Neuron Potentials'</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Currents</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>plt.plot(t_pts<span class="op">*</span><span class="fl">1e3</span>, dip_i[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'Soma I_m'</span>)</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>plt.plot(t_pts<span class="op">*</span><span class="fl">1e3</span>, dip_i[<span class="dv">1</span>], label<span class="op">=</span><span class="st">'Dendrite I_m'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Current (nA)'</span>)</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Transmembrane Currents'</span>)</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Week1_files/figure-html/cell-27-output-1.png" width="470" height="1142" class="figure-img"></p>
+<p><img src="Week1_files/figure-html/cell-25-output-1.png" width="950" height="758" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see that the somatic and dendritic potentials and currents differ, reflecting the spatial separation of inputs and active conductances. The synaptic inputs at the dendrite lead to inward currents there, while the soma generates action potentials with large transmembrane currents.</p>
+<p>Now that we have a dipole neuron model, we can create a class to simulate extracellular recordings from a sheet of these neurons.</p>
+<div id="5fc3d12e" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtracellRec():</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># class for extracellular recording of a sheet of neurons using the DipoleNeuron class</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># user can set the radius of the sheet, the density of neurons, the mean time and standard deviation </span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># around when a synaptic input arrives, the level of a shared slow input noise, and an individual gaussian noise</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># level for each neuron, electrode distance from the sheet</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, radius<span class="op">=</span><span class="dv">2</span>, density<span class="op">=</span><span class="dv">1000</span>, mean_t<span class="op">=</span><span class="fl">0.1</span>, std_t<span class="op">=</span><span class="fl">0.005</span>, slow_noise<span class="op">=</span><span class="dv">25</span>, <span class="op">\</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                 noise<span class="op">=</span><span class="dv">200</span>, extra_cond<span class="op">=</span><span class="fl">0.3</span>, dipole_sep<span class="op">=</span><span class="dv">200</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._radius <span class="op">=</span> radius <span class="co"># cm</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._density <span class="op">=</span> density <span class="co"># neurons per cm^2</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._mean_t <span class="op">=</span> mean_t <span class="co"># sec</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._std_t <span class="op">=</span> std_t <span class="co"># sec</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._slow_noise <span class="op">=</span> slow_noise <span class="op">*</span> <span class="fl">1e-12</span> <span class="co"># slow shared noise standard deviation in pA</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._noise <span class="op">=</span> noise <span class="op">*</span> <span class="fl">1e-12</span> <span class="co"># individual neuron gaussian standard deviation in pA</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._extra_cond <span class="op">=</span> extra_cond <span class="co"># extracellular conductivity in S/m</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._dipole_sep <span class="op">=</span> dipole_sep <span class="op">*</span> <span class="fl">1e-4</span> <span class="co"># cm</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._v <span class="op">=</span> [] <span class="co"># voltage array (n_neurons, 2, n_t)</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._i <span class="op">=</span> [] <span class="co"># current array (n_neurons, 2, n_t)</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._t <span class="op">=</span> [] <span class="co"># time array</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate number of neurons</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._n_neurons <span class="op">=</span> <span class="bu">int</span>(np.<span class="bu">round</span>(np.pi <span class="op">*</span> <span class="va">self</span>._radius<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> <span class="va">self</span>._density))</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate positions of neurons, uniformly distributed in the circular sheet</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># place each neuron by setting a random angle and radius from the center</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._neuron_pos <span class="op">=</span> np.zeros((<span class="va">self</span>._n_neurons, <span class="dv">2</span>))</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>._n_neurons):</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>            curr_ang <span class="op">=</span> np.random.rand() <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>            curr_rad <span class="op">=</span> np.sqrt(np.random.rand()) <span class="op">*</span> <span class="va">self</span>._radius</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._neuron_pos[ind, <span class="dv">0</span>] <span class="op">=</span> np.cos(curr_ang) <span class="op">*</span> curr_rad</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._neuron_pos[ind, <span class="dv">1</span>] <span class="op">=</span> np.sin(curr_ang) <span class="op">*</span> curr_rad</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># force one neuron to be at the center, so it can be easily picked up by the electrode</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._neuron_pos[<span class="dv">0</span>, :] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create neurons</span></span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._neurons <span class="op">=</span> []</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>._n_neurons):</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._neurons.append(DipoleNeuron(<span class="op">**</span>kwargs))</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># method to calculate extracellular potential based on currents from each neuron</span></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calc_extracell(<span class="va">self</span>, h<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Soma distances</span></span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>        dists_s <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>(<span class="va">self</span>._neuron_pos<span class="op">**</span><span class="dv">2</span>,axis<span class="op">=</span><span class="dv">1</span>)<span class="op">+</span>h<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dendrite distances (dendrites are offset by dipole_sep in z direction)</span></span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>        dists_d <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>(<span class="va">self</span>._neuron_pos<span class="op">**</span><span class="dv">2</span>,axis<span class="op">=</span><span class="dv">1</span>)<span class="op">+</span>(h<span class="op">-</span><span class="va">self</span>._dipole_sep)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Currents i are now transmembrane currents [soma, dendrite] in nA</span></span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self._i shape: (n_neurons, 2, n_t)</span></span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># We need to sum contributions from soma and dendrite</span></span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Soma contribution</span></span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self._i[:, 0, :].T is (n_t, n_neurons)</span></span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>        term_s <span class="op">=</span> <span class="va">self</span>._i[:, <span class="dv">0</span>, :].T <span class="op">*</span> <span class="fl">1e-9</span> <span class="op">/</span> (dists_s <span class="op">*</span> <span class="fl">1e-2</span>)</span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dendrite contribution</span></span>
+<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a>        term_d <span class="op">=</span> <span class="va">self</span>._i[:, <span class="dv">1</span>, :].T <span class="op">*</span> <span class="fl">1e-9</span> <span class="op">/</span> (dists_d <span class="op">*</span> <span class="fl">1e-2</span>)</span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">4</span><span class="op">*</span>np.pi<span class="op">*</span><span class="va">self</span>._extra_cond) <span class="op">*</span> np.<span class="bu">sum</span>(term_s <span class="op">+</span> term_d, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create run function that will run all neurons for a given duration</span></span>
+<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> run(<span class="va">self</span>, dur<span class="op">=</span><span class="fl">0.2</span>, dt<span class="op">=</span><span class="fl">0.0001</span>, seed<span class="op">=</span><span class="dv">47</span>):</span>
+<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a>        <span class="co"># set random seed</span></span>
+<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a>        np.random.seed(seed)</span>
+<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a>        <span class="co"># initialize arrays to store values</span></span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> <span class="va">self</span>._neurons[<span class="dv">0</span>].get_t_vec(dur, dt) <span class="co"># time array</span></span>
+<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a>        num_t <span class="op">=</span> <span class="bu">len</span>(t)</span>
+<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> np.zeros((<span class="va">self</span>._n_neurons, <span class="dv">2</span>, num_t)) <span class="co"># voltage array</span></span>
+<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> np.zeros((<span class="va">self</span>._n_neurons, <span class="dv">2</span>, num_t)) <span class="co"># current array</span></span>
+<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create synaptic inputs</span></span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>        in_prespk <span class="op">=</span> []</span>
+<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>._n_neurons):</span>
+<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a>            in_prespk.append(spk_train(t, np.random.normal(<span class="va">self</span>._mean_t, <span class="va">self</span>._std_t, <span class="dv">1</span>)))</span>
+<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create slow noise input</span></span>
+<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a>        slow_noise <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, num_t)</span>
+<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a>        slow_noise <span class="op">=</span> sig.detrend(np.cumsum(slow_noise))</span>
+<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a>        slow_noise <span class="op">=</span> (slow_noise<span class="op">/</span>(np.std(slow_noise))) <span class="op">*</span> <span class="va">self</span>._slow_noise</span>
+<span id="cb32-82"><a href="#cb32-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a>        <span class="co"># create individual noise inputs</span></span>
+<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a>        indiv_noise <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="va">self</span>._noise, (<span class="va">self</span>._n_neurons, <span class="bu">len</span>(t)))</span>
+<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>        <span class="co"># run simulation</span></span>
+<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ind, curr_nrn <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="va">self</span>._neurons):</span>
+<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a>            inp_sig <span class="op">=</span> slow_noise <span class="op">+</span> indiv_noise[ind, :]</span>
+<span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a>            <span class="co"># return shape is (2, num_t)</span></span>
+<span id="cb32-90"><a href="#cb32-90" aria-hidden="true" tabindex="-1"></a>            v[ind, :, :], i[ind, :, :] <span class="op">=</span> curr_nrn.run(dur<span class="op">=</span>dur, dt<span class="op">=</span>dt, inp<span class="op">=</span>inp_sig, prespk<span class="op">=</span>in_prespk[ind])</span>
+<span id="cb32-91"><a href="#cb32-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-92"><a href="#cb32-92" aria-hidden="true" tabindex="-1"></a>        <span class="co"># save simulation results</span></span>
+<span id="cb32-93"><a href="#cb32-93" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._t <span class="op">=</span> t</span>
+<span id="cb32-94"><a href="#cb32-94" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._v <span class="op">=</span> v</span>
+<span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._i <span class="op">=</span> i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="modeling-the-relationship-between-electrode-distance-and-recorded-potential" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-the-relationship-between-electrode-distance-and-recorded-potential">Modeling the relationship between electrode distance and recorded potential</h3>
+<p>Now that our simulation class is all setup, let’s use it. We will create a sheet of neurons with a radius of 2 cm and 1000 neurons per cm<sup>2</sup>. Using <code>**kwargs</code>, we are also able to pass arguments to <code>SynapticNeuron</code>, to configure its electrophysiological properties. We will take advantage of this by increasing the synaptic conductance, <code>gsyn</code>, so that action potentials are more reliably driven. The timing of the presynaptic spikes is set by a normal distribution, with the mean time of their emission at 100 ms, and a standard deviation of 5 ms. Since the inputs to our model neurons are generated randomly, and we want to replicate our results, we will fix the random seed of the model to ensure that the same output is generated each time we run it.</p>
+<div id="c3196bcc" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> ExtracellRec(gsyn<span class="op">=</span><span class="fl">1.5e-8</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>test.run(seed<span class="op">=</span><span class="dv">41</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That is all it took to run our simulation. The more neurons we include, either by increasing the size of our sheet with the <code>radius</code> parameter or their packing with the <code>density</code> parameter, longer it takes to run. Once the simulation is finished running, we can calculate the extracellular potential for electrodes at different distances from the center of the model. We will choose a couple key values that are relevant to the recordings we will perform. An electrode on the scalp would be ~2 cm away from the surface of the brain. Intracranial surface electrodes that rest on the brain surface are picking up the activity of neurons with 0.5 mm. Lastly, depth electrodes that are inserted into the brain will detect neurons within tens of microns.</p>
+<div id="ffe10075" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>elec_dists <span class="op">=</span> [<span class="dv">2</span>, <span class="fl">0.05</span>, <span class="fl">0.0005</span>] <span class="co"># cm</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>dist_labels <span class="op">=</span> [<span class="st">'2 cm'</span>, <span class="st">'0.5 mm'</span>, <span class="st">'5 um'</span>]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="bu">len</span>(elec_dists),<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">12</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ind, curr_dist <span class="kw">in</span> <span class="bu">enumerate</span>(elec_dists):</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    ax[ind].plot(test._t<span class="op">*</span><span class="fl">1e3</span>, test.calc_extracell(h<span class="op">=</span>curr_dist)<span class="op">*</span><span class="fl">1e6</span>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    ax[ind].set_title(dist_labels[ind])</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    ax[ind].set_xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    ax[ind].set_ylabel(<span class="st">'Extracellular potential (uV)'</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Week1_files/figure-html/cell-28-output-1.png" width="470" height="1142" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Each of these distances reveal different features of neural activity. The most obvious difference is that the signals tend to get larger as the electrode is moved closer to the sheet of neurons. At 2 cm, slow potentials, both the slow global signal and the synaptic drive, are evident. Then, moving to 0.5 mm we start to pick up some weak local spiking, and still can reliably detect synaptic currents. Note that the weak spiking we see is concentrated at the peak of the synaptic drive, with numerous overlapping spikes filling in the negative trough made by the depolarizing synaptic current. If we push the electrode to within 10 um of a neuron, the action potential becomes the dominant part of the signal. While the synaptic current is still visible prior to the spike, it is masked by the action potential once that occurs.</p>
 <p>And going a little further, we can push the electrode right against the cell body of the neuron. This is <em>juxtacellular</em> recording, and it has a distinctive appearance where global and synaptic potentials are towered over by the robust currents generated by the action potential.</p>
-<div id="ae88654a" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>plt.plot(test._t<span class="op">*</span><span class="fl">1e3</span>, test.calc_extracell(h<span class="op">=</span><span class="fl">0.0001</span>)<span class="op">*</span><span class="fl">1e6</span>)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'1 um'</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Extracellular potential (uV)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div id="a9bd59ee" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>plt.plot(test._t<span class="op">*</span><span class="fl">1e3</span>, test.calc_extracell(h<span class="op">=</span><span class="fl">0.0001</span>)<span class="op">*</span><span class="fl">1e6</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'1 um'</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Extracellular potential (uV)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>Text(0, 0.5, 'Extracellular potential (uV)')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Week1_files/figure-html/cell-28-output-2.png" width="604" height="449" class="figure-img"></p>
+<p><img src="Week1_files/figure-html/cell-29-output-2.png" width="613" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
