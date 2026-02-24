@@ -320,7 +320,7 @@ window.Quarto = {
 <li>This knowledge will set us up for adding additional complexity to our logistic decoder.</li>
 </ol>
 <p>In subsequent lectures we will cover how to use logistic decoders with multiple inputs, and pool multiple decoders together to decode multiple categories of events.</p>
-<div id="09bc187d" class="cell" data-execution_count="1">
+<div id="b4c65359" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -336,7 +336,7 @@ window.Quarto = {
 <section id="the-problem" class="level2">
 <h2 class="anchored" data-anchor-id="the-problem">The problem</h2>
 <p>We have to find the parameters of a logistic function that best describe the relationship between neural features (ERP magnitude) and the trial class (Cue vs.&nbsp;No Cue). The space of possible parameters is infinite, and we want an approach to find them that is general enough to work with any data set we throw at it. One way is to randomly guess the parameters, and to keep guessing until we get a good fit. First we will load our data and the parameters from the model we fitted last week using the scikit-learn <code>LogisticRegression</code> estimator.</p>
-<div id="521524d3" class="cell" data-execution_count="2">
+<div id="9798103f" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load fitted parameters</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> <span class="st">'./data/eeg/'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>logreg_data <span class="op">=</span> json.load(<span class="bu">open</span>(os.path.join(data_dir, <span class="st">'logregdata.json'</span>), <span class="st">'r'</span>))</span>
@@ -357,7 +357,7 @@ b = -1.8628904500466827</code></pre>
 </div>
 </div>
 <p>Next we will plot some logistic curves for random guesses of the ‘w’ and ‘b’ parameters and see how they compare with the ones calculated by the <code>LogisticRegression</code> estimator.</p>
-<div id="779a6f26" class="cell" data-execution_count="3">
+<div id="716eda7f" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some functions to help us visualize the performance of our random guesses</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logistic(x, w, b):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(w<span class="op">*</span>x <span class="op">+</span> b)))</span>
@@ -372,7 +372,7 @@ b = -1.8628904500466827</code></pre>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ax</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here are some random guesses:</p>
-<div id="e21a6674" class="cell" data-execution_count="4">
+<div id="9e490773" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">4</span>,<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">6</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plot_logistic(X, y, <span class="dv">1</span>, <span class="dv">0</span>, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
@@ -422,7 +422,7 @@ b = -1.8628904500466827</code></pre>
 </span></p>
 <p>Each possibility is represented as a different case enclosed by the large bracket. Here y=1 when a cue occurs, and y=0 when no cue is present. If a cue occurred, then we return the probability of the cue, <span class="math inline">\hat{y}</span>. If no cue occurred, then we return the probability that no cue occurred, <span class="math inline">1-\hat{y}</span>.</p>
 <p>How does equation 1 behave depending on <span class="math inline">y</span> and <span class="math inline">\hat{y}</span>?</p>
-<div id="eb5199c5" class="cell" data-execution_count="5">
+<div id="29654017" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method for calculating Bernoulli distribution</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bernoulli_dist(y, y_hat):</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.power(y_hat, y) <span class="op">*</span> np.power(<span class="dv">1</span><span class="op">-</span>y_hat,<span class="dv">1</span><span class="op">-</span>y)</span>
@@ -449,7 +449,7 @@ b = -1.8628904500466827</code></pre>
 </div>
 <p>Using the Bernoulli distribution, if we fit a model successfully so that it correctly predicts <span class="math inline">y</span>, then trials with a cue (<span class="math inline">y=1</span>) will return high values of <span class="math inline">\hat{y}</span>. Correctly predicting no cue (<span class="math inline">y=0</span>) will give high values as well since <span class="math inline">1-\hat{y}</span> is returned. Performing this calculation for each pair of predicted and actual values, we can sum those together and evaluate the overall performance of our model. Put another way, a model with good performance will on average give larger values for <span class="math inline">p(y|\hat{y})</span>. We can use this to compare the random model fits above.</p>
 <p>To visualize this, we can add arrows to our logistic regression graph that represent the output of the Bernoulli probability function for each sample.</p>
-<div id="17bc4659" class="cell" data-execution_count="6">
+<div id="1a58d947" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method to plot the logistic model, </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># corresponding Bernoulli distribution values for each data point, </span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># and the mean of the Bernoulli distribution values</span></span>
@@ -487,7 +487,7 @@ b = -1.8628904500466827</code></pre>
 </div>
 </div>
 <p>Each data point has a black arrow pointing at it whose length is the Bernoulli distribution value for that particular observation. Longer arrows indicate a better match between the predicted and actual class. The top example has a high mean probability. This is because it has more of its Cue trials on the high probability side, and NoCue trials on the low probability side. The second example is similar, but the logistic function is so broad that the expected probabilities, <span class="math inline">\hat{y}</span>, are never close to 0 or 1. The worst is the third example, whose sign is flipped with peak probability predicted for low x-values that is only summing probabilities for NoCue trials. Lastly, the fitted parameters derived from the scikit-learn logistic regression object have the highest, and best, mean probability.</p>
-<p>The behavior of the Bernoulli probability function makes it a good basis for constructing our loss function. To make it an actual loss function, we will make two changes. First, we will take its logarithm. This has several benefits. For now, we will just note that it changes the shape of the probability curves to give stronger weight to mismatches between the predicted and actual classes. Put another way, wrong answers are penalized more than correct ones. Second, we negate it so that lower values correspond to better fits. This is because the process we use for optimization is <em>gradient</em> <strong><em>descent</em></strong>, which tries to minimize the loss function. Semantically, this makes sense: a smaller loss value should correspond to a better fit. So how does our loss function look?</p>
+<p>The behavior of the Bernoulli probability function makes it a good basis for constructing our loss function. To make it an actual loss function, we will make two changes. First, we will take its logarithm. This has several benefits: (1) it converts products of probabilities into sums, which is numerically more stable and computationally easier to differentiate; (2) it changes the shape of the probability curves to give stronger weight to mismatches between the predicted and actual classes—wrong answers are penalized more than correct ones; and (3) the logarithm is a monotonic function, so maximizing the log-probability is equivalent to maximizing the probability itself. Second, we negate it so that lower values correspond to better fits. This is because the process we use for optimization is <em>gradient</em> <strong><em>descent</em></strong>, which tries to minimize the loss function. Semantically, this makes sense: a smaller loss value should correspond to a better fit. So how does our loss function look?</p>
 <p><span class="math display"> \begin{align}
     \notag -\log(p(y|\hat{y})) &amp;= -\log(\hat{y}^y(1-\hat{y})^{1-y}) \\
     \notag &amp;= -(y\log(\hat{y}) + (1-y)\log(1-\hat{y})) \\
@@ -514,7 +514,7 @@ Rules for working with logarithms
 </div>
 </div>
 <p>This loss function is referred to as the cross-entropy loss and is used in many machine learning applications that perform binary classification besides just logistic regression. Let’s convert this equation to code and visualize its behavior depending on whether the actual class (<span class="math inline">\hat{y}</span>) is supposed to be 0 or 1</p>
-<div id="66f0d394" class="cell" data-execution_count="7">
+<div id="a3093151" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross entropy loss function</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cross_entropy(y, y_hat):</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>(y<span class="op">*</span>np.log(y_hat) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat))</span>
@@ -550,11 +550,11 @@ Rules for working with logarithms
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
 <span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Cross-entropy loss'</span>, y<span class="op">=</span><span class="fl">1.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/1054478998.py:3: RuntimeWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/1054478998.py:3: RuntimeWarning:
 
 divide by zero encountered in log
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/1054478998.py:3: RuntimeWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/1054478998.py:3: RuntimeWarning:
 
 invalid value encountered in multiply
 </code></pre>
@@ -572,9 +572,9 @@ invalid value encountered in multiply
 </div>
 <p>Here we can see that the cross-entropy loss function has the desired properties of a loss function. It is larger the more incorrect our probability is (e.g.&nbsp;<span class="math inline">y=0</span> has largest loss when <span class="math inline">\hat{y}=1</span>). As the predicted probability approaches the true probability, the loss approaches 0, reaching it when our prediction is correct. This is the case for both types of outcomes, 0 or 1, or in our specific case Cue or NoCue.</p>
 <p>The cross-entropy loss function as written above only applies to a single sample. However, when fitting the logistic regression we have to minimize the loss across multiple samples. We can do this by taking the mean of the cross-entropy loss across samples like so:</p>
-<p><span class="math display"> loss = -\frac{1}{N}\sum_{i=0}^{N}y_{i}\log(\hat{y}_{i}) + (1-y_{i})\log(1-\hat{y}_{i}) \tag{2}</span></p>
+<p><span class="math display"> loss = -\frac{1}{N}\sum_{i=1}^{N}\left[y_{i}\log(\hat{y}_{i}) + (1-y_{i})\log(1-\hat{y}_{i})\right] \tag{2}</span></p>
 <p>Here <span class="math inline">i</span> refers to a sample and we have <span class="math inline">N</span> total samples in our data set. Translating this into code we get:</p>
-<div id="7d390d79" class="cell" data-execution_count="8">
+<div id="7501b52a" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Version of the cross entropy loss function that explicitly shows the mean calculation</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cross_entropy_loss_verbose(y, y_hat):</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -621,7 +621,7 @@ invalid value encountered in multiply
 <span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(<span class="op">-</span>(y<span class="op">*</span>np.log(y_hat)<span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that we can calculate the loss, we can see what value it takes for each of our guesses for the logistic regression parameters, and for the one returned by scikit-learn.</p>
-<div id="8c2df927" class="cell" data-execution_count="9">
+<div id="522c08c7" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the cross-entropy loss for each set of model parameters</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">4</span>,<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">6</span>))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plot_logistic_bern(X, y, <span class="dv">1</span>, <span class="dv">0</span>, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
@@ -643,11 +643,11 @@ invalid value encountered in multiply
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>fig.supylabel(<span class="st">'y'</span>)</span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/3423839434.py:44: RuntimeWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/3423839434.py:44: RuntimeWarning:
 
 divide by zero encountered in log
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/3423839434.py:44: RuntimeWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/3423839434.py:44: RuntimeWarning:
 
 invalid value encountered in multiply
 </code></pre>
@@ -660,8 +660,8 @@ invalid value encountered in multiply
 </div>
 </div>
 </div>
-<p>Uh oh, we can already see some problems here. The first and third guesses give a loss of ‘nan’ and ‘inf’, respectively. These likely reflect instances where a 0 is passed to <code>np.log</code>, which returns -infinity. To address this problem, we can set all instances of <code>y_hat</code> equal to 0 to the smallest possible floating point value, and <code>'y_hat</code> equal to 1 to its closest value.</p>
-<div id="78253bc3" class="cell" data-execution_count="10">
+<p>Uh oh, we can already see some problems here. The first and third guesses give a loss of ‘nan’ and ‘inf’, respectively. These likely reflect instances where a 0 is passed to <code>np.log</code>, which returns -infinity. To address this problem, we can clip <code>y_hat</code> so that values at 0 are replaced with the smallest representable floating point number, and values at 1 are replaced with the closest value below 1.</p>
+<div id="4f3a5cfd" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixed version of the cross entropy loss function that uses numpy mean</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cross_entropy_loss(y, y_hat):</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -680,18 +680,15 @@ invalid value encountered in multiply
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">        The mean cross entropy loss</span></span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># replace 0s with machine epsilon, the smallest possible floating point number</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    y_hat[y_hat<span class="op">==</span><span class="dv">0</span>] <span class="op">=</span> np.finfo(<span class="bu">float</span>).eps </span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># replace 1s with 1 minus machine epsilon</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    y_hat[y_hat<span class="op">==</span><span class="dv">1</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>np.finfo(<span class="bu">float</span>).eps </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># clip predicted probabilities to avoid log(0) and log(1)</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="op">=</span> np.clip(y_hat, np.finfo(<span class="bu">float</span>).eps, <span class="dv">1</span> <span class="op">-</span> np.finfo(<span class="bu">float</span>).eps)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculate the loss</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> np.mean(<span class="op">-</span>(y<span class="op">*</span>np.log(y_hat)<span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat)))</span>
 <span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculate the loss</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> np.mean(<span class="op">-</span>(y<span class="op">*</span>np.log(y_hat)<span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat)))</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1f9b1ca5" class="cell" data-execution_count="11">
+<div id="261f1a07" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the fixed version of the cross-entropy loss for each set of parameters</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">4</span>,<span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">6</span>))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plot_logistic_bern(X, y, <span class="dv">1</span>, <span class="dv">0</span>, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
@@ -727,7 +724,7 @@ invalid value encountered in multiply
 <h2 class="anchored" data-anchor-id="gradient-descent">Gradient descent</h2>
 <p>Now that we have a function that captures the performance of our logistic model, we want to find the combination of <span class="math inline">w</span> and <span class="math inline">b</span> parameters that minimize the cross-entropy loss. Scikit-learn offers several different approaches, but all of these are essentially engaging in some form of gradient descent. Indeed, virtually all neural networks are trained at least in part via some form of gradient descent. Thus, what we cover here will apply broadly.</p>
 <p>To start off, let’s consider how gradient descent works with a toy example. Imagine we have a loss function of the form: <span class="math display">loss(x) = x^2</span> This is a quadratic function, where <span class="math inline">x</span> is the parameter that we seek to change to minimize the value of our loss, <span class="math inline">x^2</span>. We can imagine that <span class="math inline">loss(x)</span> is a surface, so to start exploring that surface we choose a random value of <span class="math inline">x</span> that will be our starting position.</p>
-<div id="dd9b7b52" class="cell" data-execution_count="12">
+<div id="007a0bb7" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># toy loss function</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> toy_loss(x):</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">2</span></span>
@@ -788,7 +785,7 @@ invalid value encountered in multiply
 <p>Here the blue line is the loss landscape, a typical quadratic function with a minimum at <span class="math inline">x=0</span>. We have chosen a random start point that is denoted by an orange dot. Our starting point is at <span class="math inline">x=-3.86</span>, which is not at the minimum.</p>
 <p>To get closer to the minimum, we can measure the slope of the loss landscape at our starting point, and then move our dot in the direction where that slope is descending. To get that slope, we need the derivative of our loss function, which is <span class="math inline">2x</span> (solved using the derivative power rule <span class="math inline">\frac{d}{dx}x^n=nx^{n-1}</span>).</p>
 <p>Let’s code this now:</p>
-<div id="6a27d088" class="cell" data-execution_count="13">
+<div id="77408722" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate toy loss derivative</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> toy_loss_derivative(x):</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>x</span>
@@ -833,7 +830,7 @@ invalid value encountered in multiply
 </div>
 </div>
 <p>Oh no, we moved our dot in the right direction, towards <span class="math inline">x=0</span>, but proceeded to go too far and are now on the other side of the quadratic function. We may want to slow down how fast we are moving our dot so that we minimize the risk of overshooting. For that, we will add an additional argument to our <code>gd_step</code> function, <code>lr</code>, which stands for <em>learning rate</em> (also referred to as eta, <span class="math inline">\eta</span>). The learning rate is a factor (usually much less than 1) that we multiply the gradient by to slow down the speed at which the parameters update.</p>
-<div id="b8f86c84" class="cell" data-execution_count="14">
+<div id="dce498fd" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># undo the last, ill-advised step</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x_hist <span class="op">=</span> x_hist[:<span class="op">-</span><span class="dv">1</span>]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -879,7 +876,7 @@ invalid value encountered in multiply
 </div>
 </div>
 <p>Much better. We have moved closer to the minimum of our loss function, and without overshooting it. Let’s keep going for several more iterations.</p>
-<div id="e47ae4db" class="cell" data-execution_count="15">
+<div id="17176c90" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run gradient descent for 5 more steps</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    x_hist <span class="op">=</span> np.append(x_hist, gd_step(x_hist[<span class="op">-</span><span class="dv">1</span>]))</span>
@@ -899,7 +896,7 @@ invalid value encountered in multiply
 </div>
 </div>
 <p>After 6 iterations we are closer to the bottom, but still not quite there. Note that the loss changes less and less as we get closer to the minimum. Instead of trying to guess how many iterations are required, we could keep running the gradient descent process until the changes in the loss falls below a predetermined level, known as a <em>tolerance</em>. Here is how we can code that:</p>
-<div id="602a6409" class="cell" data-execution_count="16">
+<div id="abb728cb" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># incorporate a stopping criterion into the gradient descent step method</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gd_run(x, d_loss<span class="op">=</span>toy_loss_derivative, lr<span class="op">=</span><span class="fl">0.1</span>, tol<span class="op">=</span><span class="fl">0.01</span>, max_iter<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -948,7 +945,7 @@ invalid value encountered in multiply
 <span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x_hist, i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This method automates our calls to the <code>gd_step</code> function. Given a starting point specified by <code>x</code>, and a learning rate (<code>lr</code>), it will iteratively run <code>gd_step</code> until either our loss is below tolerance (<code>tol</code>) or maximum number of iterations is reached (<code>max_iter</code>).</p>
-<div id="668b9c9e" class="cell" data-execution_count="17">
+<div id="78f2e6bc" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">47</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>x_init <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -970,7 +967,7 @@ invalid value encountered in multiply
 </div>
 </div>
 <p>Just for fun, let’s increase the learning rate and see if we can reach the minimum faster.</p>
-<div id="e885c3bc" class="cell" data-execution_count="18">
+<div id="270fb5c5" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">47</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>x_init <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -995,13 +992,13 @@ invalid value encountered in multiply
 <p>So far it seems that if we let gradient run for long enough we can get arbitrarily close to the minimum. But this is because we have chosen a function, <span class="math inline">x^2</span> that is well behaved for being solved with gradient descent. On the other hand, there are some functions whose minimum is not guaranteed to be found by gradient descent. On what functions could gradient descent fail? Gradient descent will find the minimum loss if the landscape is <em>convex</em>. A simple geometric intuition for whether a curve is convex is if you can draw a line between any two points on it, no points on the curve exceed that line.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/Convex.png" class="img-fluid figure-img"></p>
+<p><img src="./images/Convex.png" class="img-fluid figure-img" alt="Diagram comparing a convex curve and a non-convex curve to illustrate Jensen's inequality. On the convex curve, a line connecting any two points a and b lies entirely at or above the curve. On the non-convex curve, the connecting line dips below a bump between a and b (highlighted in red), showing the midpoint condition is violated and demonstrating why gradient descent can get trapped at local minima on non-convex loss surfaces."></p>
 <figcaption>Convexity</figcaption>
 </figure>
 </div>
-<p>In the diagram above, the non-convex curve has a bump in the middle that prevents us from drawing a line between <span class="math inline">a</span> and <span class="math inline">b</span> that is not exceeded by the curve (red shaded region). This is commonly expressed mathematically as Jensen’s inequality: <span class="math display"> f\left(\frac{a+b}{2}\right)\le\frac{f(a)+f(b)}{2} </span></p>
+<p>In the diagram above, the non-convex curve has a bump in the middle that prevents us from drawing a line between <span class="math inline">a</span> and <span class="math inline">b</span> that is not exceeded by the curve (red shaded region). This is commonly expressed mathematically as Jensen’s inequality<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>: <span class="math display"> f\left(\frac{a+b}{2}\right)\le\frac{f(a)+f(b)}{2} </span></p>
 <p>When a function is non-convex, gradient descent can fail. It may get trapped on its path to the minimum value of the function, known as the global minimum. These points where it gets trapped are known as local minima. We can see all of this with a new toy model. In this case, we will use the polynomial function $ y=0.2x^4-4x^2-x $.</p>
-<div id="7d0f0a6b" class="cell" data-execution_count="19">
+<div id="e4e2dfda" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a non-convex toy loss function</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nc_toy_loss(x):</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">0.2</span><span class="op">*</span>x<span class="op">**</span><span class="dv">4</span> <span class="op">-</span> <span class="dv">4</span><span class="op">*</span>x<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> x</span>
@@ -1035,13 +1032,13 @@ invalid value encountered in multiply
 </div>
 </div>
 </div>
-<p>If we start our fitting with a negative value of <code>x</code>, we get stuck in a valley that is at a higher level than the global minimum. This demonstrates how valuable it is to know whether your loss function is convex. If it is convex, then gradient descent will find the global minimum if run for long enough.</p>
+<p>If we start our fitting with a negative value of <code>x</code>, we get stuck in a valley that is at a higher level than the global minimum. This demonstrates how valuable it is to know whether your loss function is convex. If it is convex, then gradient descent is guaranteed to find the global minimum, provided the learning rate is sufficiently small (or an appropriate learning rate schedule is used).</p>
 </section>
 <section id="gradient-descent-for-the-logistic-function" class="level2">
 <h2 class="anchored" data-anchor-id="gradient-descent-for-the-logistic-function">Gradient descent for the logistic function</h2>
 <p>Now that we have defined the loss of the logistic function (eq. 2), and the gradient descent process that optimizes over it to find the best combination of parameters, we can write our own function from scratch to fit a logistic model! But before we do that, let’s get a little bit more intuition about how the loss landscape for the logistic model behaves. The two parameters we are varying to fit the logistic function are <code>b</code> and <code>w</code>. We will systematically vary both of them over a range of values, and with each set of values we will calculate the loss. The result of this can be visualized as an image plot. Our x and y-axes will be the parameters <code>b</code> and <code>w</code>, respectively, while the color at each point indicates the loss.</p>
 <p>To get an intuition for how the loss function behaves, we will first explore how the number of samples influences the loss landscape. Since the loss function is the mean loss across all samples in our data set, varying the number or types of samples we include should impact it.</p>
-<div id="2f4960fa" class="cell" data-execution_count="20">
+<div id="ed4cff40" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a function that plots the loss landscape for the logistic model on our data</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_loss_landscape(ax<span class="op">=</span><span class="va">None</span>, sel_data<span class="op">=</span><span class="va">None</span>, loss<span class="op">=</span>cross_entropy_loss):</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parameters</span></span>
@@ -1113,7 +1110,7 @@ invalid value encountered in multiply
 </div>
 <p>If we only specify one data point, then the loss landscape is a relatively simple surface that slopes down towards lower values (dark blue) as either <code>w</code> or <code>b</code> are increased. This is because only one of the samples has to be fit, so as long as the orientation and decision point of our logistic function is set to classify that one data point correctly, our fit will be perfect. When four samples are included, we now have a mixture of trial types. This constrains the logistic model because we cannot push <code>w</code> or <code>b</code> towards infinity and still expect perfect performance. A zone starts to emerge with loss minimal for larger values of <code>w</code> and negative values of <code>b</code>. Further increasing the number of samples to 20 and then all of them creates a well defined valley where loss is minimal.</p>
 <p>Besides the number of samples, the loss landscape also depends on the <em>kinds</em> of samples one includes. If you only include trials of one type, then the loss function will show a minimum where the parameters <code>w</code> and <code>b</code> are only optimal for that type of trial. However, including another type of trial could dramatically alter the loss landscape. We can explore that here by keeping the number of Cue trials fixed and ramping up the number of No-Cue trials included in the loss calculation.</p>
-<div id="374cb8c8" class="cell" data-execution_count="21">
+<div id="fab216ae" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the loss landscape for the logistic model on our data</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using different numbers of samples</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">3</span>))</span>
@@ -1139,7 +1136,7 @@ invalid value encountered in multiply
 <h3 class="anchored" data-anchor-id="determining-the-gradient-in-the-loss-landscape">Determining the gradient in the loss landscape</h3>
 <p>So far we have mapped the loss landscape by doing a grid search over a range of <code>w</code> and <code>b</code> values. This is a tedious way to find the optimal value. If we want to use gradient descent to find the minimum, we need an equation that describes the gradient of the loss landscape at each pair of <code>w</code> and <code>b</code> values. But first, if gradient descent is going to find the global minimum of the loss landscape, we need to determine if the loss landscape is convex.</p>
 <p>On its own, the logistic function is non-convex. This can be demonstrated simply by plotting the logistic function, <span class="math inline">\frac{1}{1+e^{-x}}</span>, and then drawing a line between x=-5 and 5, which the logistic function crosses.</p>
-<div id="c65b59ac" class="cell" data-execution_count="22">
+<div id="60a6e63a" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the logistic function</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
@@ -1168,7 +1165,7 @@ invalid value encountered in multiply
     \end{align}
 </span></p>
 <p>We can imagine that as <span class="math inline">x \to \infty</span> the term <span class="math inline">e^{-x}</span> approaches 0, heading towards <span class="math inline">-ln(1)+ln(1)=0</span>. And, as <span class="math inline">x \to -\infty</span> the term <span class="math inline">ln(1+e^{-x})</span> becomes a straight line, since the <span class="math inline">1+</span> becomes negligible and <span class="math inline">ln(e^{-x})=-x</span>. Let’s do some plotting to confirm these intuitions.</p>
-<div id="928cefff" class="cell" data-execution_count="23">
+<div id="9569dd5a" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the cross-entropy of the logistic function</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
@@ -1253,7 +1250,7 @@ Alternative loss functions
 <p><span class="math display"> MSE(y,\hat{y}) = \frac{1}{N}\sum_{i}^{N}(y-\hat{y})^2 </span></p>
 <p>This error function is often used when fitting linear systems of equations. If we tried to to use it with our logistic model, what would its loss landscape look like?</p>
 <p>Let’s see what happens when we apply the mean squared error loss to the logistic function.</p>
-<div id="3e372e34" class="cell" data-execution_count="24">
+<div id="6d360177" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the mean squared error of the logistic function</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
@@ -1276,7 +1273,7 @@ Alternative loss functions
 </div>
 </div>
 <p>The mean squared error does not transform the logistic function in such a manner as to remove the convexity. This is also apparent when we look at the loss landscape.</p>
-<div id="4f5506f0" class="cell" data-execution_count="25">
+<div id="54a53a05" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function for calculating mean squared error loss</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mse_loss(y, y_hat):</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -1319,7 +1316,7 @@ Alternative loss functions
 </div>
 </div>
 <p>While the landscapes for the cross-entropy and MSE loss look broadly similar, there are important differences. Note that as the number of samples increases, the landscape has a faceted appearance, with straight lines running through it. These correspond to edges in the landscape that make it non-convex. This is best visualized by taking a slice of the landscape and comparing it with the same slice from one generated using the cross-entropy loss.</p>
-<div id="b35857d1" class="cell" data-execution_count="26">
+<div id="4f23f40e" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>ax.plot(loss_mse[:,<span class="dv">60</span>])</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>ax_ce <span class="op">=</span> ax.twinx()</span>
@@ -1338,7 +1335,7 @@ Alternative loss functions
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Week4_files/figure-html/cell-27-output-2.png" width="633" height="450" class="figure-img"></p>
+<p><img src="Week4_files/figure-html/cell-27-output-2.png" width="634" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1351,7 +1348,7 @@ Alternative loss functions
 <section id="creating-a-logistic-regression-class-from-scratch-with-numpy" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-logistic-regression-class-from-scratch-with-numpy">Creating a logistic regression class from scratch with Numpy</h2>
 <p>Now that we have all the background and theory under our belt, let’s create an object for fitting a logistic model. We will use the same standards as the scikit learn package when designing it.</p>
-<div id="ceef70b7" class="cell" data-execution_count="27">
+<div id="507ef3d0" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogisticModel():</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, w<span class="op">=</span><span class="dv">0</span>, b<span class="op">=</span><span class="dv">0</span>):</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
@@ -1425,87 +1422,86 @@ Alternative loss functions
 <span id="cb44-71"><a href="#cb44-71" aria-hidden="true" tabindex="-1"></a>        <span class="co"># loss : float</span></span>
 <span id="cb44-72"><a href="#cb44-72" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Cross-entropy loss</span></span>
 <span id="cb44-73"><a href="#cb44-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-74"><a href="#cb44-74" aria-hidden="true" tabindex="-1"></a>        y_hat[y_hat<span class="op">==</span><span class="dv">0</span>] <span class="op">=</span> np.finfo(<span class="bu">float</span>).eps</span>
-<span id="cb44-75"><a href="#cb44-75" aria-hidden="true" tabindex="-1"></a>        y_hat[y_hat<span class="op">==</span><span class="dv">1</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>np.finfo(<span class="bu">float</span>).eps </span>
-<span id="cb44-76"><a href="#cb44-76" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.mean(<span class="op">-</span>(y<span class="op">*</span>np.log(y_hat)<span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat)))</span>
-<span id="cb44-77"><a href="#cb44-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-78"><a href="#cb44-78" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, x, y, lr<span class="op">=</span><span class="fl">0.1</span>, tol<span class="op">=</span><span class="fl">0.01</span>, max_iter<span class="op">=</span><span class="dv">100</span>):</span>
-<span id="cb44-79"><a href="#cb44-79" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
-<span id="cb44-80"><a href="#cb44-80" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
-<span id="cb44-81"><a href="#cb44-81" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x : array-like</span></span>
-<span id="cb44-82"><a href="#cb44-82" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Input data</span></span>
-<span id="cb44-83"><a href="#cb44-83" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y : array-like</span></span>
-<span id="cb44-84"><a href="#cb44-84" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Target values</span></span>
-<span id="cb44-85"><a href="#cb44-85" aria-hidden="true" tabindex="-1"></a>        <span class="co"># lr : float, optional</span></span>
-<span id="cb44-86"><a href="#cb44-86" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Learning rate</span></span>
-<span id="cb44-87"><a href="#cb44-87" aria-hidden="true" tabindex="-1"></a>        <span class="co"># tol : float, optional</span></span>
-<span id="cb44-88"><a href="#cb44-88" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Tolerance for stopping criterion</span></span>
-<span id="cb44-89"><a href="#cb44-89" aria-hidden="true" tabindex="-1"></a>        <span class="co"># max_iter : int, optional</span></span>
-<span id="cb44-90"><a href="#cb44-90" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Maximum number of iterations</span></span>
-<span id="cb44-91"><a href="#cb44-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-92"><a href="#cb44-92" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns</span></span>
-<span id="cb44-93"><a href="#cb44-93" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -------</span></span>
-<span id="cb44-94"><a href="#cb44-94" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self : LogisticModel</span></span>
-<span id="cb44-95"><a href="#cb44-95" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     The fitted model</span></span>
-<span id="cb44-96"><a href="#cb44-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-97"><a href="#cb44-97" aria-hidden="true" tabindex="-1"></a>        <span class="co"># initialize the history of w and b values</span></span>
-<span id="cb44-98"><a href="#cb44-98" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.w_hist <span class="op">=</span> [<span class="va">self</span>.w]</span>
-<span id="cb44-99"><a href="#cb44-99" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.b_hist <span class="op">=</span> [<span class="va">self</span>.b]</span>
-<span id="cb44-100"><a href="#cb44-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-101"><a href="#cb44-101" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ensure y and x are formatted as column vectors</span></span>
-<span id="cb44-102"><a href="#cb44-102" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> y.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
-<span id="cb44-103"><a href="#cb44-103" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
-<span id="cb44-104"><a href="#cb44-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-105"><a href="#cb44-105" aria-hidden="true" tabindex="-1"></a>        <span class="co"># run gradient descent until the stopping criterion is met</span></span>
-<span id="cb44-106"><a href="#cb44-106" aria-hidden="true" tabindex="-1"></a>        <span class="co"># or until we reach the maximum number of iterations</span></span>
-<span id="cb44-107"><a href="#cb44-107" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(max_iter):</span>
-<span id="cb44-108"><a href="#cb44-108" aria-hidden="true" tabindex="-1"></a>            <span class="co"># predict y values using the current w and b values</span></span>
-<span id="cb44-109"><a href="#cb44-109" aria-hidden="true" tabindex="-1"></a>            y_hat <span class="op">=</span> <span class="va">self</span>._logistic(x)</span>
-<span id="cb44-110"><a href="#cb44-110" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.loss_hist.append(<span class="va">self</span>._cross_entropy_loss(y, y_hat))</span>
-<span id="cb44-111"><a href="#cb44-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-112"><a href="#cb44-112" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.w <span class="op">-=</span> lr<span class="op">*</span><span class="va">self</span>._derivative_w(x, y, y_hat)</span>
-<span id="cb44-113"><a href="#cb44-113" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.b <span class="op">-=</span> lr<span class="op">*</span><span class="va">self</span>._derivative_b(y, y_hat)</span>
-<span id="cb44-114"><a href="#cb44-114" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb44-115"><a href="#cb44-115" aria-hidden="true" tabindex="-1"></a>            <span class="co"># add the new w and b values to the history</span></span>
-<span id="cb44-116"><a href="#cb44-116" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.w_hist.append(<span class="va">self</span>.w)</span>
-<span id="cb44-117"><a href="#cb44-117" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.b_hist.append(<span class="va">self</span>.b)</span>
-<span id="cb44-118"><a href="#cb44-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-119"><a href="#cb44-119" aria-hidden="true" tabindex="-1"></a>            <span class="co"># check if the stopping criterion is met</span></span>
-<span id="cb44-120"><a href="#cb44-120" aria-hidden="true" tabindex="-1"></a>            <span class="co"># if so, break out of the loop</span></span>
-<span id="cb44-121"><a href="#cb44-121" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (i<span class="op">&gt;</span><span class="dv">0</span>) <span class="kw">and</span> (np.<span class="bu">abs</span>(<span class="va">self</span>.loss_hist[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> <span class="va">self</span>.loss_hist[<span class="op">-</span><span class="dv">2</span>]) <span class="op">&lt;</span> tol):</span>
-<span id="cb44-122"><a href="#cb44-122" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
-<span id="cb44-123"><a href="#cb44-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-124"><a href="#cb44-124" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, x):</span>
-<span id="cb44-125"><a href="#cb44-125" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
-<span id="cb44-126"><a href="#cb44-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
-<span id="cb44-127"><a href="#cb44-127" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x : array-like</span></span>
-<span id="cb44-128"><a href="#cb44-128" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Input data</span></span>
-<span id="cb44-129"><a href="#cb44-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-130"><a href="#cb44-130" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns</span></span>
-<span id="cb44-131"><a href="#cb44-131" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -------</span></span>
-<span id="cb44-132"><a href="#cb44-132" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y_hat : array-like</span></span>
-<span id="cb44-133"><a href="#cb44-133" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Predicted probabilities</span></span>
-<span id="cb44-134"><a href="#cb44-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-135"><a href="#cb44-135" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._logistic(x).ravel() <span class="op">&gt;=</span> <span class="fl">0.5</span> <span class="co"># ravel converts to 1D array</span></span>
-<span id="cb44-136"><a href="#cb44-136" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb44-137"><a href="#cb44-137" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> score(<span class="va">self</span>, x, y):</span>
-<span id="cb44-138"><a href="#cb44-138" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
-<span id="cb44-139"><a href="#cb44-139" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
-<span id="cb44-140"><a href="#cb44-140" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x : array-like</span></span>
-<span id="cb44-141"><a href="#cb44-141" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Input data</span></span>
-<span id="cb44-142"><a href="#cb44-142" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y : array-like</span></span>
-<span id="cb44-143"><a href="#cb44-143" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Target values</span></span>
-<span id="cb44-144"><a href="#cb44-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-145"><a href="#cb44-145" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns</span></span>
-<span id="cb44-146"><a href="#cb44-146" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -------</span></span>
-<span id="cb44-147"><a href="#cb44-147" aria-hidden="true" tabindex="-1"></a>        <span class="co"># score : float</span></span>
-<span id="cb44-148"><a href="#cb44-148" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Accuracy of the model</span></span>
-<span id="cb44-149"><a href="#cb44-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-150"><a href="#cb44-150" aria-hidden="true" tabindex="-1"></a>        y_hat <span class="op">=</span> <span class="va">self</span>.predict(x)</span>
-<span id="cb44-151"><a href="#cb44-151" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.mean(y_hat <span class="op">==</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-74"><a href="#cb44-74" aria-hidden="true" tabindex="-1"></a>        y_hat <span class="op">=</span> np.clip(y_hat, np.finfo(<span class="bu">float</span>).eps, <span class="dv">1</span> <span class="op">-</span> np.finfo(<span class="bu">float</span>).eps)</span>
+<span id="cb44-75"><a href="#cb44-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.mean(<span class="op">-</span>(y<span class="op">*</span>np.log(y_hat)<span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat)))</span>
+<span id="cb44-76"><a href="#cb44-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-77"><a href="#cb44-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, x, y, lr<span class="op">=</span><span class="fl">0.1</span>, tol<span class="op">=</span><span class="fl">0.01</span>, max_iter<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb44-78"><a href="#cb44-78" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
+<span id="cb44-79"><a href="#cb44-79" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
+<span id="cb44-80"><a href="#cb44-80" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x : array-like</span></span>
+<span id="cb44-81"><a href="#cb44-81" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Input data</span></span>
+<span id="cb44-82"><a href="#cb44-82" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y : array-like</span></span>
+<span id="cb44-83"><a href="#cb44-83" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Target values</span></span>
+<span id="cb44-84"><a href="#cb44-84" aria-hidden="true" tabindex="-1"></a>        <span class="co"># lr : float, optional</span></span>
+<span id="cb44-85"><a href="#cb44-85" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Learning rate</span></span>
+<span id="cb44-86"><a href="#cb44-86" aria-hidden="true" tabindex="-1"></a>        <span class="co"># tol : float, optional</span></span>
+<span id="cb44-87"><a href="#cb44-87" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Tolerance for stopping criterion</span></span>
+<span id="cb44-88"><a href="#cb44-88" aria-hidden="true" tabindex="-1"></a>        <span class="co"># max_iter : int, optional</span></span>
+<span id="cb44-89"><a href="#cb44-89" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Maximum number of iterations</span></span>
+<span id="cb44-90"><a href="#cb44-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-91"><a href="#cb44-91" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns</span></span>
+<span id="cb44-92"><a href="#cb44-92" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -------</span></span>
+<span id="cb44-93"><a href="#cb44-93" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self : LogisticModel</span></span>
+<span id="cb44-94"><a href="#cb44-94" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     The fitted model</span></span>
+<span id="cb44-95"><a href="#cb44-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-96"><a href="#cb44-96" aria-hidden="true" tabindex="-1"></a>        <span class="co"># initialize the history of w and b values</span></span>
+<span id="cb44-97"><a href="#cb44-97" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.w_hist <span class="op">=</span> [<span class="va">self</span>.w]</span>
+<span id="cb44-98"><a href="#cb44-98" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.b_hist <span class="op">=</span> [<span class="va">self</span>.b]</span>
+<span id="cb44-99"><a href="#cb44-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-100"><a href="#cb44-100" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ensure y and x are formatted as column vectors</span></span>
+<span id="cb44-101"><a href="#cb44-101" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> y.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb44-102"><a href="#cb44-102" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb44-103"><a href="#cb44-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-104"><a href="#cb44-104" aria-hidden="true" tabindex="-1"></a>        <span class="co"># run gradient descent until the stopping criterion is met</span></span>
+<span id="cb44-105"><a href="#cb44-105" aria-hidden="true" tabindex="-1"></a>        <span class="co"># or until we reach the maximum number of iterations</span></span>
+<span id="cb44-106"><a href="#cb44-106" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(max_iter):</span>
+<span id="cb44-107"><a href="#cb44-107" aria-hidden="true" tabindex="-1"></a>            <span class="co"># predict y values using the current w and b values</span></span>
+<span id="cb44-108"><a href="#cb44-108" aria-hidden="true" tabindex="-1"></a>            y_hat <span class="op">=</span> <span class="va">self</span>._logistic(x)</span>
+<span id="cb44-109"><a href="#cb44-109" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.loss_hist.append(<span class="va">self</span>._cross_entropy_loss(y, y_hat))</span>
+<span id="cb44-110"><a href="#cb44-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-111"><a href="#cb44-111" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.w <span class="op">-=</span> lr<span class="op">*</span><span class="va">self</span>._derivative_w(x, y, y_hat)</span>
+<span id="cb44-112"><a href="#cb44-112" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.b <span class="op">-=</span> lr<span class="op">*</span><span class="va">self</span>._derivative_b(y, y_hat)</span>
+<span id="cb44-113"><a href="#cb44-113" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb44-114"><a href="#cb44-114" aria-hidden="true" tabindex="-1"></a>            <span class="co"># add the new w and b values to the history</span></span>
+<span id="cb44-115"><a href="#cb44-115" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.w_hist.append(<span class="va">self</span>.w)</span>
+<span id="cb44-116"><a href="#cb44-116" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.b_hist.append(<span class="va">self</span>.b)</span>
+<span id="cb44-117"><a href="#cb44-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-118"><a href="#cb44-118" aria-hidden="true" tabindex="-1"></a>            <span class="co"># check if the stopping criterion is met</span></span>
+<span id="cb44-119"><a href="#cb44-119" aria-hidden="true" tabindex="-1"></a>            <span class="co"># if so, break out of the loop</span></span>
+<span id="cb44-120"><a href="#cb44-120" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (i<span class="op">&gt;</span><span class="dv">0</span>) <span class="kw">and</span> (np.<span class="bu">abs</span>(<span class="va">self</span>.loss_hist[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> <span class="va">self</span>.loss_hist[<span class="op">-</span><span class="dv">2</span>]) <span class="op">&lt;</span> tol):</span>
+<span id="cb44-121"><a href="#cb44-121" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb44-122"><a href="#cb44-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-123"><a href="#cb44-123" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, x):</span>
+<span id="cb44-124"><a href="#cb44-124" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
+<span id="cb44-125"><a href="#cb44-125" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
+<span id="cb44-126"><a href="#cb44-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x : array-like</span></span>
+<span id="cb44-127"><a href="#cb44-127" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Input data</span></span>
+<span id="cb44-128"><a href="#cb44-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-129"><a href="#cb44-129" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns</span></span>
+<span id="cb44-130"><a href="#cb44-130" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -------</span></span>
+<span id="cb44-131"><a href="#cb44-131" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y_hat : array-like</span></span>
+<span id="cb44-132"><a href="#cb44-132" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Predicted probabilities</span></span>
+<span id="cb44-133"><a href="#cb44-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-134"><a href="#cb44-134" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._logistic(x).ravel() <span class="op">&gt;=</span> <span class="fl">0.5</span> <span class="co"># ravel converts to 1D array</span></span>
+<span id="cb44-135"><a href="#cb44-135" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-136"><a href="#cb44-136" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> score(<span class="va">self</span>, x, y):</span>
+<span id="cb44-137"><a href="#cb44-137" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
+<span id="cb44-138"><a href="#cb44-138" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ----------</span></span>
+<span id="cb44-139"><a href="#cb44-139" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x : array-like</span></span>
+<span id="cb44-140"><a href="#cb44-140" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Input data</span></span>
+<span id="cb44-141"><a href="#cb44-141" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y : array-like</span></span>
+<span id="cb44-142"><a href="#cb44-142" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Target values</span></span>
+<span id="cb44-143"><a href="#cb44-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-144"><a href="#cb44-144" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Returns</span></span>
+<span id="cb44-145"><a href="#cb44-145" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -------</span></span>
+<span id="cb44-146"><a href="#cb44-146" aria-hidden="true" tabindex="-1"></a>        <span class="co"># score : float</span></span>
+<span id="cb44-147"><a href="#cb44-147" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     Accuracy of the model</span></span>
+<span id="cb44-148"><a href="#cb44-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-149"><a href="#cb44-149" aria-hidden="true" tabindex="-1"></a>        y_hat <span class="op">=</span> <span class="va">self</span>.predict(x)</span>
+<span id="cb44-150"><a href="#cb44-150" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.mean(y_hat <span class="op">==</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Our logistic model class has the same methods as those found in scikit learn, and so it can be used in a similar way. Let’s run it and compare its fitted parameters with the ones returned by the scikit learn LogisticRegression class.</p>
-<div id="cc14efc0" class="cell" data-execution_count="28">
+<div id="0bf0673b" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>lm_scratch <span class="op">=</span> LogisticModel()</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>lm_scratch.fit(X, y, lr<span class="op">=</span><span class="fl">0.01</span>, tol<span class="op">=</span><span class="fl">0.000001</span>, max_iter<span class="op">=</span><span class="dv">2000</span>)</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Our fitted model parameters: w=</span><span class="sc">{:.2f}</span><span class="st">, b=</span><span class="sc">{:.2f}</span><span class="st">'</span>.<span class="bu">format</span>(lm_scratch.w, lm_scratch.b))</span>
@@ -1517,8 +1513,8 @@ Scikit learn model parameters: w=0.05, b=-1.86
 Our fitted model score: 87.04%</code></pre>
 </div>
 </div>
-<p>If we compare the logistic functions, it is apparent that they have a similar threshold. The slope of the one we fitted is tighter, and this is because our <code>w</code> parameter is larger (0.07 vs 0.05).</p>
-<div id="785b0f4b" class="cell" data-execution_count="29">
+<p>If we compare the logistic functions, it is apparent that they have a similar threshold. The slope of the one we fitted is tighter, and this is because our <code>w</code> parameter is larger (0.07 vs 0.05). Part of this difference is due to the fact that scikit-learn’s <code>LogisticRegression</code> applies L2 regularization by default (controlled by the parameter <code>C=1.0</code>), which penalizes large weights and tends to shrink them toward zero. Our scratch-built version has no such regularization penalty.</p>
+<div id="7ebb269f" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">1</span>)</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>plot_logistic(X, y, lm_scratch.w, lm_scratch.b, ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot sample points colored by their predicted class</span></span>
@@ -1540,7 +1536,7 @@ Our fitted model score: 87.04%</code></pre>
 </div>
 </div>
 <p>The parameters are pretty close, and the performance is comparable. Since we have access to the history of values for the <code>b</code> and <code>w</code> parameters during the iterations of gradient descent, we can see how they evolve during the fitting process.</p>
-<div id="a68ecd4c" class="cell" data-execution_count="30">
+<div id="27128838" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>ax,_ <span class="op">=</span> plot_loss_landscape(sel_data<span class="op">=</span>np.arange(<span class="dv">0</span>, X.size))</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>ax.plot(lm_scratch.b_hist, lm_scratch.w_hist, <span class="st">'k'</span>, label<span class="op">=</span><span class="st">'GD path'</span>, color<span class="op">=</span><span class="st">'white'</span>)</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>ax.text(lm_scratch.b_hist[<span class="dv">0</span>], lm_scratch.w_hist[<span class="dv">0</span>], <span class="st">'Start'</span>, ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'top'</span>, color<span class="op">=</span><span class="st">'white'</span>)</span>
@@ -1552,7 +1548,7 @@ Our fitted model score: 87.04%</code></pre>
 <span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">False</span>)</span>
 <span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Loss landscape with gradient descent path'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/2917809726.py:2: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/2917809726.py:2: UserWarning:
 
 color is redundantly defined by the 'color' keyword argument and the fmt string "k" (-&gt; color=(0.0, 0.0, 0.0, 1)). The keyword argument will take precedence.
 </code></pre>
@@ -1571,7 +1567,7 @@ color is redundantly defined by the 'color' keyword argument and the fmt string 
 <p>Looking at the path taken, we can see there is some initial fluctuation before it starts to descend along the path towards the minimum. It does not reach it, but neither did the output of scikit-learn! There are ways to improve the gradient process by modifying the learning rate based on the decrease in the loss, or integrating information from the trajectories past into how we calculate its present one.</p>
 <p>Another modification to the gradient descent algorithm is to make it operate on a different random subset of the data for each iteration. This is known as <em>stochastic gradient descent</em>. Since our loss function is the mean loss across all samples, it may be that only a small subset of the samples are required to get a good estimate of the mean. Indeed, looking back on how the loss landscape was affected by the number of samples, we saw that it changed little after 20 samples. This can make the algorithm more computationally efficient, since fewer predictions must be computed on each iteration. It can also lead to better generalization, since a few outlier observations will not skew each update of our model parameters.</p>
 <p>To do this, we will add a new parameter to our fitting process, <em>batch size</em>. This specifies how many samples are to be used for each step of gradient descent.</p>
-<div id="df0a39de" class="cell" data-execution_count="31">
+<div id="d19e1c14" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogisticModelSGD(LogisticModel):</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, x, y, lr<span class="op">=</span><span class="fl">0.1</span>, tol<span class="op">=</span><span class="fl">0.01</span>, max_iter<span class="op">=</span><span class="dv">100</span>, batch_size<span class="op">=</span><span class="dv">1</span>):</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
@@ -1625,7 +1621,7 @@ color is redundantly defined by the 'color' keyword argument and the fmt string 
 <span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Inheriting from our <code>LogisticModel</code> class, we modify the <code>fit</code> function to include a <code>batch_size</code> parameter. This sets the number of samples used. How does this version perform?</p>
-<div id="b300eb4a" class="cell" data-execution_count="32">
+<div id="985be477" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>lm_sgd <span class="op">=</span> LogisticModelSGD()</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>lm_sgd.fit(X, y, lr<span class="op">=</span><span class="fl">0.01</span>, tol<span class="op">=</span><span class="fl">0.000001</span>, max_iter<span class="op">=</span><span class="dv">2000</span>, batch_size<span class="op">=</span><span class="dv">30</span>)</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Our fitted model parameters: w=</span><span class="sc">{:.2f}</span><span class="st">, b=</span><span class="sc">{:.2f}</span><span class="st">'</span>.<span class="bu">format</span>(lm_sgd.w, lm_sgd.b))</span>
@@ -1648,7 +1644,7 @@ Scikit learn model parameters: w=0.05, b=-1.86
 Our fitted model score: 85.19%</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/4246139248.py:8: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/4246139248.py:8: UserWarning:
 
 color is redundantly defined by the 'color' keyword argument and the fmt string "k" (-&gt; color=(0.0, 0.0, 0.0, 1)). The keyword argument will take precedence.
 </code></pre>
@@ -1684,7 +1680,7 @@ Note on Momentum Implementation
 </div>
 </div>
 <p>Here the <span class="math inline">\gamma</span> (gamma) parameter sets how much the past change in value of the model parameter contributes to its current update. <span class="math inline">\gamma</span> ranges from 0 to 1, with 0 making the update equivalent to normal gradient descent, and values close to 1 making the update almost wholly dependent on its previous value. Note that <span class="math inline">\gamma=1</span> would result in no descent since the gradient would never update. A physical intuition for <span class="math inline">\gamma</span> is that increasing it makes the path taken by gradient descent more ‘sticky’, less likely to be swayed from batch to batch.</p>
-<div id="53803d55" class="cell" data-execution_count="33">
+<div id="598cf826" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic regression model with momentum added to the gradient descent step</span></span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LogisticModelSGD_Mom(LogisticModel):</span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, x, y, lr<span class="op">=</span><span class="fl">0.1</span>, tol<span class="op">=</span><span class="fl">0.01</span>, max_iter<span class="op">=</span><span class="dv">100</span>, batch_size<span class="op">=</span><span class="dv">1</span>, gamma<span class="op">=</span><span class="fl">0.9</span>):</span>
@@ -1754,7 +1750,7 @@ Note on Momentum Implementation
 <span id="cb56-67"><a href="#cb56-67" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s run it and see how it performs!</p>
-<div id="9a4e04a8" class="cell" data-execution_count="34">
+<div id="0aad231c" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>lm_sgd <span class="op">=</span> LogisticModelSGD_Mom()</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>lm_sgd.fit(X, y, lr<span class="op">=</span><span class="fl">0.015</span>, tol<span class="op">=</span><span class="fl">0.000001</span>, max_iter<span class="op">=</span><span class="dv">2000</span>, batch_size<span class="op">=</span><span class="dv">30</span>, gamma<span class="op">=</span><span class="fl">0.99</span>)</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Our fitted model parameters: w=</span><span class="sc">{:.2f}</span><span class="st">, b=</span><span class="sc">{:.2f}</span><span class="st">'</span>.<span class="bu">format</span>(lm_sgd.w, lm_sgd.b))</span>
@@ -1777,7 +1773,7 @@ Scikit learn model parameters: w=0.05, b=-1.86
 Our fitted model score: 87.04%</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52743/2917554854.py:8: UserWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_64002/2917554854.py:8: UserWarning:
 
 color is redundantly defined by the 'color' keyword argument and the fmt string "k" (-&gt; color=(0.0, 0.0, 0.0, 1)). The keyword argument will take precedence.
 </code></pre>
@@ -1804,7 +1800,7 @@ color is redundantly defined by the 'color' keyword argument and the fmt string 
 <p>There are three methods we must specify when creating a custom <code>Dataset</code> class. The <code>__init__</code> method is used to initialize the object. Its input parameters allow us to specify the paths or variables where predictors and labels are stored, and transforms we want to apply to those before passing on to the decoder. Separate transform functions can be applied to the predictors and labels.</p>
 <p>We then specify the <code>__len__</code> function, whose role is simply to indicate how many samples are part of the dataset.</p>
 <p>Finally, we create a <code>__getitem__</code> method, which gives access to samples in the dataset. An index parameter is passed to this method that specifies the sample to return, and it in turn transforms and returns the corresponding predictor and labels.</p>
-<div id="62ccb359" class="cell" data-execution_count="35">
+<div id="45232fde" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ERPData(Dataset):</span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, erp_pred, trial_lbl, transform<span class="op">=</span><span class="va">None</span>, target_transform<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Parameters</span></span>
@@ -1853,7 +1849,7 @@ color is redundantly defined by the 'color' keyword argument and the fmt string 
 <span id="cb61-46"><a href="#cb61-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> erp, lbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s give it a try!</p>
-<div id="b89e5e7d" class="cell" data-execution_count="36">
+<div id="3ef6a20d" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>erp_ds <span class="op">=</span> ERPData(X, y)</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print the number of samples in the dataset</span></span>
@@ -1900,7 +1896,7 @@ ERP data for the last sample: [-53.37683445], [False]</code></pre>
 </div>
 </div>
 <p>Once we have created a <code>Dataset</code> object for our ERP data, we can pass it to the PyTorch <code>DataLoader</code> object. It partitions the data into batches that can be used for stochastic gradient descent later in the training.</p>
-<div id="12635a07" class="cell" data-execution_count="37">
+<div id="41ac8985" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataLoader object</span></span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>erp_dl <span class="op">=</span> DataLoader(erp_ds, batch_size<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1918,18 +1914,18 @@ ERP data for the last sample: [-53.37683445], [False]</code></pre>
 <pre><code>ERP data dimensions: torch.Size([5, 1])
 Label dimensions: torch.Size([5, 1])
 ERP data for the first batch:
-tensor([9.5355], dtype=torch.float64), tensor([False])
-tensor([-53.3768], dtype=torch.float64), tensor([False])
-tensor([64.4758], dtype=torch.float64), tensor([True])
-tensor([-20.1126], dtype=torch.float64), tensor([False])
-tensor([39.3210], dtype=torch.float64), tensor([True])</code></pre>
+tensor([103.4521], dtype=torch.float64), tensor([True])
+tensor([32.0763], dtype=torch.float64), tensor([False])
+tensor([-11.9091], dtype=torch.float64), tensor([False])
+tensor([46.6107], dtype=torch.float64), tensor([True])
+tensor([41.2124], dtype=torch.float64), tensor([False])</code></pre>
 </div>
 </div>
 <p>Here we created a <code>DataLoader</code> object and customized its behavior. The <code>batch_size</code> argument specified how many samples go into each batch, in this case 5. Using the <code>shuffle</code> argument set it up so that samples were drawn at random, instead of in the order they are natively stored. This is needed to ensure our samples are a mixture of trial types when evaluating the loss gradient for each batch.</p>
 <p>When samples are returned by the <code>DataLoader</code>, they come as the <code>tensor</code> data type. A tensor is a multidimensional array, similar to the <code>array</code> data type in Numpy. Compared with python data types for storing numeric data, such as lists, tensors offer several advantages. These are largely on the low-level backend side. They take up less memory by storing numbers with <em>C</em> data types instead of as python objects (a python number is an object with lots of metadata associated with it that fills up memory). They are faster because they are stored in memory as contiguous blocks, which can be read and written to faster. And equally important, they can be stored or processed on graphical processing units (GPUs) that dramatically speed up the computations for optimization and prediction.</p>
 <p>The tensor returned by the <code>DataLoader</code> has a shape of 5x1. The first dimension is the number of samples in the batch, and each subsequent dimension corresponds to the number of features we want to decode with (often referred to as the dimensionality). In the case of the ERP fit, that is only a single number, so the dimension is 1. If we were training an algorithm to classify images, hypothetically, it might have the shape 5x3x256x256, where the dimensions correspond to <em>sample</em> x <em>channel</em> x <em>height</em> x <em>width</em>.</p>
 <p>The <code>DataLoader</code> can be used in a for loop to return multiple batches of samples. To do this, use the <code>enumerate</code> function built in to Python that repeatedly calls an objects <code>__getitem__</code> method until the number of samples returned equals the total number of samples in the <code>Dataset</code> referenced by <code>DataLoader</code>.</p>
-<div id="806e1921" class="cell" data-execution_count="38">
+<div id="2ef19c02" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (erp, lbl) <span class="kw">in</span> <span class="bu">enumerate</span>(erp_dl):</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Batch </span><span class="sc">{}</span><span class="st">: erp shape = </span><span class="sc">{}</span><span class="st">, lbl shape = </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(i, erp.shape, lbl.shape))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1953,36 +1949,36 @@ Batch 10: erp shape = torch.Size([4, 1]), lbl shape = torch.Size([4, 1])</code><
 <p>Pytorch offers objects to handle both of these functions. The linear equation can be found in <code>torch.nn.linear</code>. The ‘nn’ stands for <em>neural network</em>. Many neural networks make use of a linear transform layer, so that is implemented as part of that module. This object implements a linear equation, essentially a matrix that can be multiplied by an incoming vector. It has the form:</p>
 <p><span class="math display"> z_j = b_j+\sum_{i=0}^{n}w_{i,j}x_i </span> where n is the number of inputs, <span class="math inline">x_i</span>, each is multiplied by a distinct weight, <span class="math inline">w_{i,j}</span>. These are summed together and a bias, <span class="math inline">b_j</span>, is added to give an output <span class="math inline">z_j</span>. Since our logistic model has only one input and output, the equation simplifies to:</p>
 <p><span class="math display"> z = b + wx </span> To implement this using PyTorch we code:</p>
-<div id="2b2ad541" class="cell" data-execution_count="39">
+<div id="d938a93b" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a linear transformation with 1 input, 1 output, and a bias</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>lin_trans <span class="op">=</span> torch.nn.Linear(<span class="dv">1</span>, <span class="dv">1</span>, bias<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The first argument of <code>Linear</code> is the number of inputs, while the second is the number of outputs. Settings the <code>bias</code> argument to <code>True</code> adds the bias term, <span class="math inline">b</span>. When the <code>Linear</code> layer is initialized, its weight (<span class="math inline">w</span>) and bias are given random values. You can directly inspect them as properties of the <code>Linear</code> object you created.</p>
-<div id="d5e6a4c4" class="cell" data-execution_count="40">
+<div id="f980a6d2" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the weight and bias values</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Linear layer weight value is: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(lin_trans.weight))</span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Linear layer bias value is: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(lin_trans.bias))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear layer weight value is: Parameter containing:
-tensor([[-0.9185]], requires_grad=True)
+tensor([[-0.9322]], requires_grad=True)
 Linear layer bias value is: Parameter containing:
-tensor([0.5968], requires_grad=True)</code></pre>
+tensor([-0.1953], requires_grad=True)</code></pre>
 </div>
 </div>
 <p>In addition, you can pass a value to the <code>Linear</code> object as if it were a function, with it returning the transformed value. However, make sure the value you pass to it is a tensor, since that is the datatype it expects.</p>
-<div id="7ee9addf" class="cell" data-execution_count="41">
+<div id="2fe919e6" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> torch.tensor([<span class="fl">0.0</span>]) <span class="co"># create a tensor with a single value of 0</span></span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>t1 <span class="op">=</span> torch.tensor([<span class="fl">1.0</span>]) <span class="co"># create a tensor with a single value of 1</span></span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Value of lin_trans at 0: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(lin_trans(t0)))</span>
 <span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Value of lin_trans at 1: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(lin_trans(t1)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Value of lin_trans at 0: tensor([0.5968], grad_fn=&lt;ViewBackward0&gt;)
-Value of lin_trans at 1: tensor([-0.3217], grad_fn=&lt;ViewBackward0&gt;)</code></pre>
+<pre><code>Value of lin_trans at 0: tensor([-0.1953], grad_fn=&lt;ViewBackward0&gt;)
+Value of lin_trans at 1: tensor([-1.1275], grad_fn=&lt;ViewBackward0&gt;)</code></pre>
 </div>
 </div>
 <p>If we want to plot the output of <code>lin_trans</code>, things get a little bit more complicated. First we have to create a tensor of <code>x</code> values.</p>
-<div id="58ff36a3" class="cell" data-execution_count="42">
+<div id="eca7da47" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create numpy array with 100 values between -10 and 10</span></span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="co"># cast the array to float32 data type for PyTorch compatibility</span></span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>).astype(np.float32)</span>
@@ -1998,117 +1994,117 @@ Data type and shape of x_t: torch.float32, torch.Size([100, 1])</code></pre>
 </div>
 <p>A few things to note here. We assign the numeric data type to be <code>np.float32</code>, which stands for floating point 32-bit. This is the default numeric data type used by tensors in Pytorch. If we don’t assign that, we may get an error due to our bias and weights being of incompatible data types from our inputs. We also have to convert the numpy array <code>x</code> to a tensor, which is done using the <code>torch.tensor</code> function. In addition, it needs to be reshaped to ensure that the first dimension corresponds to the samples (100 in this case), and the second dimension to the number of features (1).</p>
 <p>Now that we have a properly formatted input <code>x_t</code>, we can pass it to <code>lin_trans</code>.</p>
-<div id="2350db99" class="cell" data-execution_count="43">
+<div id="382a667c" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>y_t <span class="op">=</span> lin_trans(x_t)</span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Data type and shape of y: </span><span class="sc">{}</span><span class="st">, </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(y_t.dtype, y_t.shape))</span>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'y: </span><span class="ch">\n</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(y_t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Data type and shape of y: torch.float32, torch.Size([100, 1])
 y: 
-tensor([[ 9.7816],
-        [ 9.5960],
-        [ 9.4105],
-        [ 9.2249],
-        [ 9.0394],
-        [ 8.8538],
-        [ 8.6683],
-        [ 8.4827],
-        [ 8.2972],
-        [ 8.1116],
-        [ 7.9261],
-        [ 7.7405],
-        [ 7.5549],
-        [ 7.3694],
-        [ 7.1838],
-        [ 6.9983],
-        [ 6.8127],
-        [ 6.6272],
-        [ 6.4416],
-        [ 6.2561],
-        [ 6.0705],
-        [ 5.8850],
-        [ 5.6994],
-        [ 5.5139],
-        [ 5.3283],
-        [ 5.1428],
-        [ 4.9572],
-        [ 4.7717],
-        [ 4.5861],
-        [ 4.4006],
-        [ 4.2150],
-        [ 4.0295],
-        [ 3.8439],
-        [ 3.6584],
-        [ 3.4728],
-        [ 3.2873],
-        [ 3.1017],
-        [ 2.9162],
-        [ 2.7306],
-        [ 2.5451],
-        [ 2.3595],
-        [ 2.1740],
-        [ 1.9884],
-        [ 1.8029],
-        [ 1.6173],
-        [ 1.4318],
-        [ 1.2462],
-        [ 1.0607],
-        [ 0.8751],
-        [ 0.6896],
-        [ 0.5040],
-        [ 0.3185],
-        [ 0.1329],
-        [-0.0526],
-        [-0.2382],
-        [-0.4237],
-        [-0.6093],
-        [-0.7948],
-        [-0.9804],
-        [-1.1659],
-        [-1.3515],
-        [-1.5370],
-        [-1.7226],
-        [-1.9081],
-        [-2.0937],
-        [-2.2792],
-        [-2.4648],
-        [-2.6503],
-        [-2.8359],
-        [-3.0214],
-        [-3.2070],
-        [-3.3925],
-        [-3.5781],
-        [-3.7636],
-        [-3.9492],
-        [-4.1347],
-        [-4.3203],
-        [-4.5058],
-        [-4.6914],
-        [-4.8769],
-        [-5.0625],
-        [-5.2480],
-        [-5.4336],
-        [-5.6191],
-        [-5.8047],
-        [-5.9902],
-        [-6.1758],
-        [-6.3613],
-        [-6.5469],
-        [-6.7324],
-        [-6.9180],
-        [-7.1035],
-        [-7.2891],
-        [-7.4746],
-        [-7.6602],
-        [-7.8457],
-        [-8.0313],
-        [-8.2168],
-        [-8.4024],
-        [-8.5879]], grad_fn=&lt;AddmmBackward0&gt;)</code></pre>
+tensor([[ 9.1263],
+        [ 8.9379],
+        [ 8.7496],
+        [ 8.5613],
+        [ 8.3730],
+        [ 8.1847],
+        [ 7.9964],
+        [ 7.8081],
+        [ 7.6197],
+        [ 7.4314],
+        [ 7.2431],
+        [ 7.0548],
+        [ 6.8665],
+        [ 6.6782],
+        [ 6.4898],
+        [ 6.3015],
+        [ 6.1132],
+        [ 5.9249],
+        [ 5.7366],
+        [ 5.5483],
+        [ 5.3600],
+        [ 5.1716],
+        [ 4.9833],
+        [ 4.7950],
+        [ 4.6067],
+        [ 4.4184],
+        [ 4.2301],
+        [ 4.0418],
+        [ 3.8534],
+        [ 3.6651],
+        [ 3.4768],
+        [ 3.2885],
+        [ 3.1002],
+        [ 2.9119],
+        [ 2.7235],
+        [ 2.5352],
+        [ 2.3469],
+        [ 2.1586],
+        [ 1.9703],
+        [ 1.7820],
+        [ 1.5937],
+        [ 1.4053],
+        [ 1.2170],
+        [ 1.0287],
+        [ 0.8404],
+        [ 0.6521],
+        [ 0.4638],
+        [ 0.2754],
+        [ 0.0871],
+        [-0.1012],
+        [-0.2895],
+        [-0.4778],
+        [-0.6661],
+        [-0.8544],
+        [-1.0428],
+        [-1.2311],
+        [-1.4194],
+        [-1.6077],
+        [-1.7960],
+        [-1.9843],
+        [-2.1726],
+        [-2.3610],
+        [-2.5493],
+        [-2.7376],
+        [-2.9259],
+        [-3.1142],
+        [-3.3025],
+        [-3.4909],
+        [-3.6792],
+        [-3.8675],
+        [-4.0558],
+        [-4.2441],
+        [-4.4324],
+        [-4.6207],
+        [-4.8091],
+        [-4.9974],
+        [-5.1857],
+        [-5.3740],
+        [-5.5623],
+        [-5.7506],
+        [-5.9389],
+        [-6.1273],
+        [-6.3156],
+        [-6.5039],
+        [-6.6922],
+        [-6.8805],
+        [-7.0688],
+        [-7.2572],
+        [-7.4455],
+        [-7.6338],
+        [-7.8221],
+        [-8.0104],
+        [-8.1987],
+        [-8.3870],
+        [-8.5754],
+        [-8.7637],
+        [-8.9520],
+        [-9.1403],
+        [-9.3286],
+        [-9.5169]], grad_fn=&lt;AddmmBackward0&gt;)</code></pre>
 </div>
 </div>
 <p><code>lin_trans</code> returns another tensor, which cannot be directly passed to matplotlib. The tensor object has a gradient associated with it, <code>grad_fn=&lt;AddmmBackward0&gt;</code>, that must be removed. In addition, we could convert the numeric array inside the tensor object into a numpy array (use <code>.numpy()</code> to do that), but matplotlib will accept a tensor without the gradient as a valid input, so we can forgo that.</p>
-<div id="577f6d2f" class="cell" data-execution_count="44">
+<div id="e8804cb6" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Here is the first five values of tensor y_t with the gradient removed: </span><span class="ch">\n</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(y_t[:<span class="dv">5</span>].detach()))</span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remove the gradient and convert tensor to numpy array</span></span>
@@ -2116,16 +2112,16 @@ tensor([[ 9.7816],
 <span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Data type and shape of y_dt: </span><span class="sc">{}</span><span class="st">, </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="bu">type</span>(y_dt), y_dt.shape))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Here is the first five values of tensor y_t with the gradient removed: 
-tensor([[9.7816],
-        [9.5960],
-        [9.4105],
-        [9.2249],
-        [9.0394]])
+tensor([[9.1263],
+        [8.9379],
+        [8.7496],
+        [8.5613],
+        [8.3730]])
 Data type and shape of y_dt: &lt;class 'torch.Tensor'&gt;, torch.Size([100, 1])</code></pre>
 </div>
 </div>
 <p>Now we are ready to plot!</p>
-<div id="160f31fb" class="cell" data-execution_count="45">
+<div id="21603bb2" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the linear transformation</span></span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>ax.plot(x_t, y_dt)</span>
@@ -2136,17 +2132,17 @@ Data type and shape of y_dt: &lt;class 'torch.Tensor'&gt;, torch.Size([100, 1])<
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Week4_files/figure-html/cell-46-output-1.png" width="600" height="449" class="figure-img"></p>
+<p><img src="Week4_files/figure-html/cell-46-output-1.png" width="608" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Now that we have implemented the linear function <span class="math inline">b+wx</span>, we have to create the logistic function, <span class="math inline">\frac{1}{1+e^{-z}}</span>. PyTorch has this function built in under the name <code>sigmoid</code>, which is just another name for the logistic function.</p>
-<div id="799e8340" class="cell" data-execution_count="46">
+<div id="b74dfea1" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>log_trans <span class="op">=</span> torch.nn.Sigmoid()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can plot the sigmoid function to make sure it has the same profile as the logistic function we have been working with.</p>
-<div id="2e1d24c2" class="cell" data-execution_count="47">
+<div id="ccdc994a" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the sigmoid transformation</span></span>
 <span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>x_t <span class="op">=</span> torch.tensor(np.linspace(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>).astype(np.float32)).reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
@@ -2165,7 +2161,7 @@ Data type and shape of y_dt: &lt;class 'torch.Tensor'&gt;, torch.Size([100, 1])<
 </div>
 <p>As with the linear transform, we had to format our Numpy array into a tensor that could be passed to the <code>Sigmoid</code> function, and had to then remove the gradient from the tensor returned by <code>Sigmoid</code> to plot it with matplotlib.</p>
 <p>Now we need to chain the linear and sigmoid steps together, to create the logistic model. Pytorch provides the <code>nn.Sequential</code> object for doing this. With it, you pass in order the transforms and functions you want to chain together, and it returns a single object that encapsulates that sequence.</p>
-<div id="61d63ebb" class="cell" data-execution_count="48">
+<div id="30199d00" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>log_mdl <span class="op">=</span> torch.nn.Sequential(</span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>    lin_trans,</span>
 <span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>    log_trans</span>
@@ -2183,12 +2179,12 @@ Data type and shape of y_dt: &lt;class 'torch.Tensor'&gt;, torch.Size([100, 1])<
 )
 Model parameters:
 {'0.weight': Parameter containing:
-tensor([[-0.9185]], requires_grad=True), '0.bias': Parameter containing:
-tensor([0.5968], requires_grad=True)}</code></pre>
+tensor([[-0.9322]], requires_grad=True), '0.bias': Parameter containing:
+tensor([-0.1953], requires_grad=True)}</code></pre>
 </div>
 </div>
 <p>We can pass values to the <code>Sequential</code> object just like we did to the <code>Linear</code> and <code>Sigmoid</code> functions. For instance, if we wanted to plot it we would:</p>
-<div id="187a2770" class="cell" data-execution_count="49">
+<div id="4876cc04" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>y_t <span class="op">=</span> log_mdl(x_t)</span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>ax.plot(x_t, y_t.detach())</span>
@@ -2206,16 +2202,16 @@ tensor([0.5968], requires_grad=True)}</code></pre>
 </div>
 <p>Looks like a logistic model. Since the weights and bias were set randomly, this model will not necessarily perform well on our data set. We have to optimize those model parameters using the cross-entropy loss and gradient descent. PyTorch features functions and objects for handling both of those.</p>
 <p>PyTorch has a suite of loss functions to choose from. You may be tempted to use its <code>CrossEntropyLoss</code> function, since that is what we used for our scratch built code above. However, in PyTorch the <code>CrossEntropyLoss</code> function is designed for measuring loss when multiple categories of events are being decoded (more than 1), and so it would not be appropriate for our binary case, which is just detecting whether or not a cue was present. Instead, we will use the <code>BCELoss</code> function, which stands for <em>binary cross entropy loss</em>. This is used when only a single outcome is being predicted, and if you refer to the <a href="https://pytorch.org/docs/stable/generated/torch.nn.BCELoss.htmld">PyTorch documentation</a> for it, you will see that it is the same equation for cross-entropy loss used above.</p>
-<div id="be3d812a" class="cell" data-execution_count="50">
+<div id="527f1f86" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.BCELoss()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We also have to create a function optimize the parameters based on the loss. To do this in our scratch built version, we hand coded stochastic gradient descent with momentum. PyTorch provides this built-in with their <code>optimizer</code> object. It implements a variety of gradient descent algorithms, including the one we used. To invoke it:</p>
-<div id="78282512" class="cell" data-execution_count="51">
+<div id="7f11843a" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(log_mdl.parameters(), lr<span class="op">=</span><span class="fl">0.001</span>, momentum<span class="op">=</span><span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To use it, we pass the parameters we want to update, and optionally the learning rate and momentum. An optimizer object features a <code>step</code> method, which updates the parameters. Before calling it, we also have to clear any previous gradients that had been calculated, or else they will keep accumulating and throw off the gradient descent process.</p>
 <p>Now that we have the loss function and optimizer, run gradient descent. To do this, we use <code>log_mdl</code> to predict the labels based on the features and then pass them and the true labels to the loss function.</p>
-<div id="781b7af0" class="cell" data-execution_count="52">
+<div id="77648b14" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a batch of data with the dataloader</span></span>
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>erps, lbls <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(erp_dl))</span>
 <span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2227,23 +2223,23 @@ tensor([0.5968], requires_grad=True)}</code></pre>
 <span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb87-10"><a href="#cb87-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Loss: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(loss))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Loss: 31.339096069335938</code></pre>
+<pre><code>Loss: 33.63115692138672</code></pre>
 </div>
 </div>
 <p>Once the loss is calculated, we can use it to update the parameters of our logistic model. In our scratch built version, we had derived the gradient of loss with respect to each parameter (<span class="math inline">\frac{\partial{L}}{\partial{w}}</span> and <span class="math inline">\frac{\partial{L}}{\partial{b}}</span>), which allowed us to explicitly calculate these changes. This is alright for simple decoders, like the logistic model, but becomes prohibitive with more complex ones. Since PyTorch is designed to handle such complex models, it can automatically calculate the gradient for each parameter. The details of this, or the deeper workings of PyTorch as a computation graph engine, are beyond the scope of this course, but for a good overview check out the official PyTorch documentation on <a href="https://pytorch.org/blog/overview-of-pytorch-autograd-engine/"><em>autograd</em></a><em>.</em> This process is known as automatic differentiation.</p>
 <p>What you should know about automatic differentiation in PyTorch is that each function and tensor can have an associated gradient. Indeed, to plot the tensors above we had to remove this gradient using the <code>.detach()</code> method. As you chain tensors and functions together, like we do with <code>nn.Sequential</code>, these gradients can be used to calculate the derivative of each parameter with respect to the loss. which propagates backward for each model parameter. To see the parameters for our logistic model, you just need to call its <code>.parameters()</code> method.</p>
-<div id="0e0bf88d" class="cell" data-execution_count="53">
+<div id="02960579" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the parameters of the logistic model</span></span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(log_mdl.parameters())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>[Parameter containing:
- tensor([[-0.9185]], requires_grad=True),
+ tensor([[-0.9322]], requires_grad=True),
  Parameter containing:
- tensor([0.5968], requires_grad=True)]</code></pre>
+ tensor([-0.1953], requires_grad=True)]</code></pre>
 </div>
 </div>
 <p>Note that the tensor for each parameter has a <code>requires_grad=True</code>, so they are subject to updating. You can also inspect the value of their gradients.</p>
-<div id="e73a075d" class="cell" data-execution_count="54">
+<div id="624b7e0c" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The gradient associated with w: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(log_mdl[<span class="dv">0</span>].weight.grad))</span>
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The gradient associated with b: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(log_mdl[<span class="dv">0</span>].bias.grad))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2252,19 +2248,19 @@ The gradient associated with b: None</code></pre>
 </div>
 </div>
 <p>They show up as <code>None</code> because no loss has been calculated yet and propagated backward towards parameters. To do that, we use the <code>backward</code> method for the loss tensor. This propagates the loss value back through the sigmoid and linear function towards the weight and bias parameters.</p>
-<div id="173ef9d0" class="cell" data-execution_count="55">
+<div id="8ac12bee" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>optimizer.zero_grad()</span>
 <span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>loss.backward()</span>
 <span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The gradient associated with w: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(log_mdl[<span class="dv">0</span>].weight.grad))</span>
 <span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The gradient associated with b: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(log_mdl[<span class="dv">0</span>].bias.grad))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The gradient associated with w: tensor([[-0.4094]])
-The gradient associated with b: tensor([0.1864])</code></pre>
+<pre><code>The gradient associated with w: tensor([[0.0166]])
+The gradient associated with b: tensor([0.0043])</code></pre>
 </div>
 </div>
 <p>Now that we have the gradient of the loss with respect to weight and bias, we can update those parameters.</p>
-<div id="ff616603" class="cell" data-execution_count="56">
+<div id="5188efe5" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print previous values of the parameters</span></span>
 <span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Model parameters before updating:</span><span class="ch">\n</span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="bu">list</span>(log_mdl.parameters())))</span>
 <span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2276,17 +2272,17 @@ The gradient associated with b: tensor([0.1864])</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Model parameters before updating:
 [Parameter containing:
-tensor([[-0.9185]], requires_grad=True), Parameter containing:
-tensor([0.5968], requires_grad=True)]
+tensor([[-0.9322]], requires_grad=True), Parameter containing:
+tensor([-0.1953], requires_grad=True)]
 Model parameters after updating:
 [Parameter containing:
-tensor([[-0.9181]], requires_grad=True), Parameter containing:
-tensor([0.5966], requires_grad=True)]</code></pre>
+tensor([[-0.9322]], requires_grad=True), Parameter containing:
+tensor([-0.1953], requires_grad=True)]</code></pre>
 </div>
 </div>
 <p>Notice that the model parameters change after running <code>optimizer.step</code>. To fit the model, we want to do this repeatedly across many iterations. We can use a for loop for this purpose, and call up different random batches of samples using the <code>DataLoader</code> object.</p>
 <p>To start, let’s reinitialize our logistic model, loss function, and optimizer.</p>
-<div id="abb87df6" class="cell" data-execution_count="57">
+<div id="fc8c467b" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a linear transformation with 1 input, 1 output, and a bias</span></span>
 <span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>lin_trans <span class="op">=</span> torch.nn.Linear(<span class="dv">1</span>, <span class="dv">1</span>, bias<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>log_trans <span class="op">=</span> torch.nn.Sigmoid()</span>
@@ -2300,50 +2296,55 @@ tensor([0.5966], requires_grad=True)]</code></pre>
 <span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(log_mdl.parameters(), lr<span class="op">=</span><span class="fl">0.001</span>, momentum<span class="op">=</span><span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we used stochastic gradient descent to optimize our logistic model across 200 epochs of our data. Each epoch is a run through all the batches in our dataset.</p>
-<div id="99c3152b" class="cell" data-execution_count="58">
+<div id="e22dc8c1" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> []</span>
 <span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
 <span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y_pred and acc reflect the performance for the entire data set that we originally imported</span></span>
 <span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> log_mdl(torch.tensor(X[:,np.newaxis].astype(np.float32))).detach().numpy()<span class="op">&gt;</span><span class="fl">0.5</span></span>
 <span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a>    acc.append(np.mean(y_pred.ravel() <span class="op">==</span> y.ravel())<span class="op">*</span><span class="dv">100</span>)</span>
-<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> erp, lbl <span class="kw">in</span> erp_dl:</span>
-<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>        y_hat <span class="op">=</span> log_mdl(erp.<span class="bu">float</span>())</span>
-<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(y_hat, lbl.<span class="bu">float</span>().reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
-<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
-<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
-<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb98-13"><a href="#cb98-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb98-14"><a href="#cb98-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'Epoch </span><span class="sc">{}</span><span class="st">: loss = </span><span class="sc">{:.4f}</span><span class="st">, accuracy = </span><span class="sc">{:.2f}</span><span class="st">%'</span>.<span class="bu">format</span>(i, loss, acc[<span class="op">-</span><span class="dv">1</span>]))</span>
-<span id="cb98-15"><a href="#cb98-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb98-16"><a href="#cb98-16" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb98-17"><a href="#cb98-17" aria-hidden="true" tabindex="-1"></a>ax.plot(acc)</span>
-<span id="cb98-18"><a href="#cb98-18" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Epoch'</span>)</span>
-<span id="cb98-19"><a href="#cb98-19" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Accuracy (%)'</span>)</span>
-<span id="cb98-20"><a href="#cb98-20" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Training accuracy'</span>)</span>
-<span id="cb98-21"><a href="#cb98-21" aria-hidden="true" tabindex="-1"></a>ax.set_ylim([<span class="dv">0</span>, <span class="dv">105</span>])</span>
-<span id="cb98-22"><a href="#cb98-22" aria-hidden="true" tabindex="-1"></a>ax.grid()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>    epoch_loss <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>    n_batches <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> erp, lbl <span class="kw">in</span> erp_dl:</span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>        y_hat <span class="op">=</span> log_mdl(erp.<span class="bu">float</span>())</span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(y_hat, lbl.<span class="bu">float</span>().reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb98-13"><a href="#cb98-13" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb98-14"><a href="#cb98-14" aria-hidden="true" tabindex="-1"></a>        epoch_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb98-15"><a href="#cb98-15" aria-hidden="true" tabindex="-1"></a>        n_batches <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb98-16"><a href="#cb98-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb98-17"><a href="#cb98-17" aria-hidden="true" tabindex="-1"></a>    avg_loss <span class="op">=</span> epoch_loss <span class="op">/</span> n_batches</span>
+<span id="cb98-18"><a href="#cb98-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb98-19"><a href="#cb98-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'Epoch </span><span class="sc">{}</span><span class="st">: loss = </span><span class="sc">{:.4f}</span><span class="st">, accuracy = </span><span class="sc">{:.2f}</span><span class="st">%'</span>.<span class="bu">format</span>(i, avg_loss, acc[<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb98-20"><a href="#cb98-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-21"><a href="#cb98-21" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb98-22"><a href="#cb98-22" aria-hidden="true" tabindex="-1"></a>ax.plot(acc)</span>
+<span id="cb98-23"><a href="#cb98-23" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb98-24"><a href="#cb98-24" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Accuracy (%)'</span>)</span>
+<span id="cb98-25"><a href="#cb98-25" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Training accuracy'</span>)</span>
+<span id="cb98-26"><a href="#cb98-26" aria-hidden="true" tabindex="-1"></a>ax.set_ylim([<span class="dv">0</span>, <span class="dv">105</span>])</span>
+<span id="cb98-27"><a href="#cb98-27" aria-hidden="true" tabindex="-1"></a>ax.grid()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 0: loss = 0.1872, accuracy = 77.78%
-Epoch 10: loss = 0.4940, accuracy = 85.19%
-Epoch 20: loss = 0.1484, accuracy = 85.19%
-Epoch 30: loss = 0.5490, accuracy = 87.04%
-Epoch 40: loss = 0.2842, accuracy = 87.04%
-Epoch 50: loss = 0.1771, accuracy = 88.89%
-Epoch 60: loss = 0.1490, accuracy = 88.89%
-Epoch 70: loss = 0.3766, accuracy = 87.04%
-Epoch 80: loss = 0.6776, accuracy = 81.48%
-Epoch 90: loss = 0.0201, accuracy = 87.04%
-Epoch 100: loss = 0.3931, accuracy = 87.04%
-Epoch 110: loss = 0.1685, accuracy = 88.89%
-Epoch 120: loss = 0.2342, accuracy = 88.89%
-Epoch 130: loss = 0.3847, accuracy = 87.04%
-Epoch 140: loss = 0.0883, accuracy = 88.89%
-Epoch 150: loss = 0.0343, accuracy = 85.19%
-Epoch 160: loss = 1.1931, accuracy = 87.04%
-Epoch 170: loss = 0.3246, accuracy = 85.19%
-Epoch 180: loss = 0.1490, accuracy = 85.19%
-Epoch 190: loss = 0.3931, accuracy = 87.04%</code></pre>
+<pre><code>Epoch 0: loss = 35.8713, accuracy = 31.48%
+Epoch 10: loss = 0.6489, accuracy = 59.26%
+Epoch 20: loss = 0.6686, accuracy = 14.81%
+Epoch 30: loss = 0.5080, accuracy = 72.22%
+Epoch 40: loss = 0.5790, accuracy = 83.33%
+Epoch 50: loss = 0.4477, accuracy = 88.89%
+Epoch 60: loss = 0.4284, accuracy = 87.04%
+Epoch 70: loss = 0.3905, accuracy = 87.04%
+Epoch 80: loss = 0.4340, accuracy = 87.04%
+Epoch 90: loss = 0.3543, accuracy = 85.19%
+Epoch 100: loss = 0.3591, accuracy = 85.19%
+Epoch 110: loss = 0.3769, accuracy = 87.04%
+Epoch 120: loss = 0.3355, accuracy = 85.19%
+Epoch 130: loss = 0.5065, accuracy = 87.04%
+Epoch 140: loss = 0.3051, accuracy = 87.04%
+Epoch 150: loss = 0.4195, accuracy = 87.04%
+Epoch 160: loss = 0.3235, accuracy = 85.19%
+Epoch 170: loss = 0.4797, accuracy = 87.04%
+Epoch 180: loss = 0.3258, accuracy = 87.04%
+Epoch 190: loss = 0.4149, accuracy = 87.04%</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -2354,7 +2355,7 @@ Epoch 190: loss = 0.3931, accuracy = 87.04%</code></pre>
 </div>
 </div>
 <p>Performance at asymptote is comparable to what we got with Scikit learn and our scratch built code. How do the model parameters, <span class="math inline">w</span> and <span class="math inline">b</span>, compare across the different fits?</p>
-<div id="9813a9bd" class="cell" data-execution_count="59">
+<div id="a6cb0afb" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>w_pt <span class="op">=</span> <span class="bu">float</span>(lin_trans.weight.detach())</span>
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>b_pt <span class="op">=</span> <span class="bu">float</span>(lin_trans.bias.detach())</span>
 <span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2364,11 +2365,11 @@ Epoch 190: loss = 0.3931, accuracy = 87.04%</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Scikit learn model parameters: w=0.05, b=-1.86
 Scratch model parameters: w=0.07, b=-1.98
-PyTorch model parameters: w=0.09, b=-2.45</code></pre>
+PyTorch model parameters: w=0.07, b=-2.05</code></pre>
 </div>
 </div>
 <p>Since the decision threshold for decoding whether a trial had a cue presented depends on both <span class="math inline">w</span> and <span class="math inline">b</span>, it should be easier to compare the fits by plotting the curves of their respective logistic models.</p>
-<div id="a63ca2fb" class="cell" data-execution_count="60">
+<div id="363eacd8" class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a plot with the three logistic fitted models overlaid</span></span>
 <span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>x_vals <span class="op">=</span> np.linspace(np.<span class="bu">min</span>(X), np.<span class="bu">max</span>(X), <span class="dv">100</span>)</span>
 <span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
@@ -2393,12 +2394,31 @@ PyTorch model parameters: w=0.09, b=-2.45</code></pre>
 </div>
 </div>
 <p>Perhaps unsurprisingly, given that the underlying math is similar across all implementations, they have all converged on approximately the same decision boundary.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A note on training vs.&nbsp;testing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Throughout this lecture, we evaluated our models on the same data used to fit them. This is done here for pedagogical simplicity—our focus is on understanding the optimization process itself. However, in practice, you should <strong>always</strong> evaluate model performance on held-out data (a <em>test set</em>) that was not used during training. Evaluating on training data alone can give an overly optimistic estimate of how well your decoder will generalize to new, unseen data. We will cover proper train/test splitting and cross-validation in a later lecture.</p>
+</div>
+</div>
 
 
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The version shown here is the <em>midpoint convexity</em> condition. The general form of Jensen’s inequality states that for a convex function <span class="math inline">f</span> and weights <span class="math inline">\lambda_i \ge 0</span> with <span class="math inline">\sum \lambda_i = 1</span>: <span class="math inline">f\!\left(\sum_i \lambda_i x_i\right) \le \sum_i \lambda_i f(x_i)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

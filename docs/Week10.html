@@ -324,7 +324,7 @@ window.Quarto = {
 <p>Since <a href="https://doi.org/10.1113/jphysiol.1959.sp006308">1959</a> it has been known that neurons in the primary visual cortex respond to moving lines in the visual field. It was a <a href="https://www.youtube.com/watch?v=IOHayh06LJ4">chance observation</a> by Hubel and Wiesel, that lead them to identify the space of stimuli that optimally drive neuronal responses in primary visual cortex. They found that when a bar of light moved across a specific area of the visual field, it would elicit single unit spiking when it occurred at a particular angle. Rotating away from that angle lessened the response. This is known as <em>orientation tuning</em>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/HubelWiesel1959.png" class="img-fluid figure-img"></p>
+<p><img src="./images/HubelWiesel1959.png" class="img-fluid figure-img" alt="Illustration from Hubel and Wiesel's landmark 1959 study showing extracellular recordings from a neuron in cat primary visual cortex as a bar of light is swept across the visual field at different orientations, demonstrating orientation tuning: the neuron fires action potentials most vigorously when the bar is at a preferred angle and falls silent as the orientation rotates away from that preference."></p>
 <figcaption>Hubel and Wiesel 1959</figcaption>
 </figure>
 </div>
@@ -338,7 +338,7 @@ window.Quarto = {
 </ol>
 <p>The data we will work with was collected while mice viewed a wide variety of stimuli, including many drifting gratings. According to their <a href="https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels">white paper</a>, the drifting gratings all had the same contrast (80%) and spatial frequency (0.04 cycles/degree), but varied in their orientation (0-315 in 45 degree increments), and temporal frequency (1, 2, 4, 8, and 15 Hz). We can verify this by loading the stimulus list used in the session we will analyze today.</p>
 <p>First, let’s import the packages we will need.</p>
-<div id="e480c1c8" class="cell" data-execution_count="1">
+<div id="9cc0fb92" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">'..'</span>)</span>
@@ -351,7 +351,7 @@ window.Quarto = {
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we will load in the spike times and restricted ourselves to those that passed quality control last week.</p>
-<div id="4a8d672e" class="cell" data-execution_count="2">
+<div id="929210c5" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize data cache</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>allen_dir <span class="op">=</span> [<span class="st">'data'</span>,<span class="st">'spike_allen'</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -367,12 +367,12 @@ window.Quarto = {
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>spks <span class="op">=</span> spks[spks.index.isin(unit_ids)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we need a table of the stimuli that were presented.</p>
-<div id="022f0da3" class="cell" data-execution_count="3">
+<div id="d78c8a94" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stims_path <span class="op">=</span> os.path.join(<span class="op">*</span>allen_dir,<span class="st">'750332458_stims.csv'</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stims <span class="op">=</span> pd.read_csv(stims_path)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>stims.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52139/3456746282.py:2: DtypeWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_61078/3456746282.py:2: DtypeWarning:
 
 Columns (5,14) have mixed types. Specify dtype option on import or set low_memory=False.
 </code></pre>
@@ -512,7 +512,7 @@ Columns (5,14) have mixed types. Specify dtype option on import or set low_memor
 </div>
 </div>
 <p>Each presented stimulus has an assortment of information associated with it. We are particularly interested in extracting the drifting grating stimuli, so we will filter the dataframe to just have those.</p>
-<div id="0475d9c1" class="cell" data-execution_count="4">
+<div id="8e403626" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dg_stims <span class="op">=</span> stims[stims[<span class="st">'stimulus_name'</span>] <span class="op">==</span> <span class="st">'drifting_gratings'</span>]</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ensure all grating parameters are numeric data type</span></span>
@@ -521,7 +521,7 @@ Columns (5,14) have mixed types. Specify dtype option on import or set low_memor
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>dg_stims[<span class="st">'spatial_frequency'</span>] <span class="op">=</span> pd.to_numeric(dg_stims[<span class="st">'spatial_frequency'</span>])</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>dg_stims[<span class="st">'temporal_frequency'</span>] <span class="op">=</span> pd.to_numeric(dg_stims[<span class="st">'temporal_frequency'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52139/2414997802.py:4: SettingWithCopyWarning:
+<pre><code>/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_61078/2414997802.py:4: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -529,7 +529,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52139/2414997802.py:5: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_61078/2414997802.py:5: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -537,7 +537,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52139/2414997802.py:6: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_61078/2414997802.py:6: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -545,7 +545,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_52139/2414997802.py:7: SettingWithCopyWarning:
+/var/folders/xr/cvz2q4cs7mn5n78kvjyvkb_00000gn/T/ipykernel_61078/2414997802.py:7: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -556,7 +556,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <p>Now let’s confirm that the contrast, spatial frequencies, orientations, and temporal frequencies match those in the white paper.</p>
-<div id="b997220c" class="cell" data-execution_count="5">
+<div id="49cb0327" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list the contrasts</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>contrasts <span class="op">=</span> dg_stims[<span class="st">'contrast'</span>].unique()</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Contrasts used:'</span>,contrasts)</span>
@@ -580,14 +580,14 @@ Temporal frequencies used: [ 4.  2. 15.  8.  1. nan]</code></pre>
 </div>
 </div>
 <p>Looks like they agree. The only problem is that some stimuli have a ‘nan’ (which stands for ‘not a number’) tag for those parameters. Let’s get rid of the drifting grating where their parameters were nan.</p>
-<div id="92cf479b" class="cell" data-execution_count="6">
+<div id="6b3658d3" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove nulls</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dg_stims <span class="op">=</span> dg_stims.dropna(axis<span class="op">=</span><span class="st">'index'</span>, subset<span class="op">=</span>[<span class="st">'contrast'</span>, </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'spatial_frequency'</span>, <span class="st">'orientation'</span>, </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'temporal_frequency'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Having removed the nans, we can now count the how many of each trial type was present. According to the white paper there should be 15 trials for each drifting grating variant.</p>
-<div id="8b8f8a3c" class="cell" data-execution_count="7">
+<div id="cdcc0288" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dg_stim_counts <span class="op">=</span> dg_stims.groupby([<span class="st">'contrast'</span>, <span class="st">'spatial_frequency'</span>, <span class="st">'orientation'</span>, <span class="st">'temporal_frequency'</span>]).size()</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of trials for each unique stimulus:'</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dg_stim_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -638,7 +638,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Great, 15 of each type. According to the white paper, drifting gratings were presented in 3 blocks. Each stimulus was given for 2 seconds (<em>stimulus duration</em>), with 1 second between the stopping of a stimulus and the presentation of the next one (known as the <em>inter-stimulus interval</em>). Let’s confirm this before analyzing spiking activity with respect to stimuli.</p>
-<div id="cd5be925" class="cell" data-execution_count="8">
+<div id="f9d213c8" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get all times when drifting gratings were presented</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dg_times <span class="op">=</span> dg_stims[<span class="st">'start_time'</span>].values</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -660,7 +660,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Here we can see the three blocks when stimuli were presented. Next we will get the duration of stimuli.</p>
-<div id="c8445e27" class="cell" data-execution_count="9">
+<div id="a82a33f5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dg_durs <span class="op">=</span> dg_stims[<span class="st">'duration'</span>].values <span class="co"># convert to seconds</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -687,7 +687,7 @@ dtype: int64</code></pre>
 </div>
 <p>Looks like they are all 2 seconds long.</p>
 <p>Estimating the inter-trial interval is a bit trickier, since we do not have a column in the dataframe that specifies that. Instead, we need to calculate the times between stimuli.</p>
-<div id="cb73c71b" class="cell" data-execution_count="10">
+<div id="ed1a1c1d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the times between stimulus presentation starts</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subtract 2 seconds to account for the duration of the stimulus</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>isi_lengths <span class="op">=</span> np.diff(np.sort(dg_times))<span class="op">-</span><span class="dv">2</span></span>
@@ -719,7 +719,7 @@ dtype: int64</code></pre>
 <h2 class="anchored" data-anchor-id="spiking-in-response-to-a-stimulus">Spiking in response to a stimulus</h2>
 <p>When a stimulus is presented, some neurons will fire action potentials in response to it. Unless they are primary sensory neurons (e.g.&nbsp;rods and cones in the retina), neurons are responding not directly to the stimulus, but instead to the synaptic drive from other neurons that were also activated by the stimulus. Since neurons in the central nervous system receive synaptic inputs from many sources, not all of which are directly tied to stimulus processing, it is common for them to fire action potentials even when no stimulus is present. This <em>spontaneous</em> activity makes the assessment of whether a neuron is stimulus responsive a statistical question.</p>
 <p>To start answering this question, let’s first plot spiking activity of some single units with respect to the presentation of a drifting grating with an orientation of 0 degrees and temporal frequency of 4 Hz.</p>
-<div id="1d53b176" class="cell" data-execution_count="11">
+<div id="0d80634e" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the times of the drifting grating with </span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># with orientation 0 and temporal frequency 4</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>stim_times <span class="op">=</span> dg_stims[(dg_stims[<span class="st">'orientation'</span>]<span class="op">==</span><span class="dv">0</span>)</span>
@@ -773,7 +773,7 @@ dtype: int64</code></pre>
 </div>
 <p>The function <code>window_spikes</code> takes in an array of spike times (<code>spikes</code>) and returns those that were within the time window (<code>window</code>) for each event (<code>events</code>). The returned times come as a list, with an entry for each event. The spike times within the window are converted to times relative to the event. Those that happened before the event have negative times, and those after the event have positive times. This can be seen in the example windowed spike times we printed.</p>
 <p>It would be difficult to appreciate the response of neurons to events if we just looked at lists of these relative spike times. Instead, neuroscientists often visually represent these as <em>spike rasters</em>. In a raster plot, each spike time is marked as a vertically oriented line, with its position along the x-axis reflecting the time. The trial a spike happened on is plotted on the y-axis. This description will make more sense once you see such a plot. We will create a function that does that now.</p>
-<div id="cb48ec14" class="cell" data-execution_count="12">
+<div id="5911e4e5" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># spike raster plot function</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> raster_plot(spikes, ax<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -822,7 +822,7 @@ dtype: int64</code></pre>
 </div>
 <p>Here we have created raster plots of a few selected neurons in response to a drifting grating with orientation = 0 and temporal frequency = 4 Hz. Each exhibits a distinctive modulation of their spiking. The stimulus occurs during the red shaded region. The first unit does not show an obvious response to the stimulus, while the second unit shows a pronounced suppression of its spiking followed by an increase when the stimulus is turned off. Both the third and fourth units show little spiking outside the stimulus period, but strong spiking activity during the stimulus. The third unit responds continuously to the stimulus (referred to sometimes as <em>tonic activation</em>), while the fourth unit exhibits pulsed spiking that may be related to movement in the drifting grating.</p>
 <p>There is a lot of information in this plot, and often we just want to see the mean response of a neuron across all trials. For this, we create a <em>peristimulus time histogram</em> (PSTH). To calculate this, you measure the time each spike has with respect to when a stimulus was delivered. These are binned, just as we did for calculating firing rate across the recording session last week. Let’s create a function to calculate that.</p>
-<div id="d3256b46" class="cell" data-execution_count="13">
+<div id="33b52650" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> psth(spikes, bins):</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Computes the PSTH</span></span>
@@ -883,7 +883,7 @@ dtype: int64</code></pre>
 <h2 class="anchored" data-anchor-id="counting-spikes">Counting spikes</h2>
 <p>A point process is one where discrete events happen at specific times. The spiking data we are working with can be thought of as point process since an action potential is a stereotyped event that is defined by the time it occurs. One way to describe a point process is by counting how many events occur during a particular time. In fact, we already did a similar analysis when we generated our PSTHs by binning the relative spike times using the numpy <code>histogram</code> function.</p>
 <p>To capture the variability in spiking across stimulus presentations, but not overwhelm with the details of the exact spike times on every trial, we will count the number of spikes on each trial. We can use our <code>window_spikes</code> function to perform this, counting the number of spikes in each window that encompasses the presentation of the stimulus.</p>
-<div id="91081fab" class="cell" data-execution_count="14">
+<div id="458403fc" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># counts the spikes in a window</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> spike_count(spikes, events, window):</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -934,7 +934,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Here we see that on each trial the number of spikes fired is different. However, by themselves it is difficult to judge whether these counts reflect stimulus driven spiking, or just spontaneous activity. For that, we have to count the number of spikes in a time period when no stimulus was present. The ideal time to measure that is immediately before the delivery of each stimulus, since influences on spiking that are not stimulus-related should be present prior to stimulus delivery. We will use the 0.5 second period before stimulus delivery for this analysis, since it should be relatively free of spiking driven by the end of the previous stimulus.</p>
-<div id="6446b6a6" class="cell" data-execution_count="15">
+<div id="30d11cd5" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># spike counts during the baseline period</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>window_base <span class="op">=</span> [<span class="op">-</span><span class="fl">0.5</span>, <span class="dv">0</span>]</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'counts_base'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: spike_count(x, stim_times, window_base))</span>
@@ -966,7 +966,7 @@ dtype: int64</code></pre>
 </div>
 <p>In this chart each color is a different unit and the first violin plot is the spike count during the baseline period, while the second is the count during the stimulus. The counts are different between the baseline and the stimulus for each unit, but that should not be the case. The first unit did not respond to the stimulus according to the spike raster plot and PSTH, and yet here it shows spike counts during the stimulus that are above the baseline count.</p>
 <p>The reason for this is that our baseline period only counted spikes for 0.5 sec, while the stimulus period has 2 sec.&nbsp;Thus, even if there is no response to the stimulus and the neuron was spiking spontaneously, one would count more spikes during the 2 second stimulus window over the 0.5 second baseline window. To compensate for this, we should divide the number of spikes by the time we spent measuring them. This is a measure of <em>firing rate</em>, which is the number of spikes emitted per second. We can do this for each trial:</p>
-<div id="369fa5f0" class="cell" data-execution_count="16">
+<div id="38a177e1" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'counts_stim'</span>] <span class="op">=</span> spks[<span class="st">'counts_stim'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x<span class="op">/</span><span class="dv">2</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'counts_base'</span>] <span class="op">=</span> spks[<span class="st">'counts_base'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x<span class="op">/</span><span class="fl">0.5</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -997,7 +997,7 @@ dtype: int64</code></pre>
 </div>
 <p>Converting our spike counts to firing rate has given us results that match what we saw earlier. For the first unit the firing rate during the baseline period overlaps with that during the stimulus.</p>
 <p>Since each baseline period is associated with a particular stimulus, we can modify our plot to connect dots between the baseline and stimulus responses for each trial. Doing this, we can see whether the firing rate systematically changes between the two periods. That is, we can see whether it always increases or decreases during stimulus presentation. Given the dramatic changes in the second, third, and fourth units, this analysis is not very informative. However, it is useful for the first unit, whose firing rate distributions during the baseline and stimulus periods tends to overlap.</p>
-<div id="f38120b9" class="cell" data-execution_count="17">
+<div id="3e9c3edd" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the spike counts and baseline counts for each selected unit</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, <span class="bu">id</span> <span class="kw">in</span> <span class="bu">enumerate</span>(sel_units):</span>
@@ -1026,7 +1026,7 @@ dtype: int64</code></pre>
 </div>
 <p>For the first unit, on many trials the firing rate increased substantially from the baseline in response to the stimulus. For the trials where there was a decrease, the change from baseline was not as pronounced. This suggests that the first unit does respond to the stimulus, but unreliably.</p>
 <p>Another way to visualize the response of neurons to stimuli is to plot the difference between the firing rate during the baseline and stimulus periods. This measure accounts for trial-to-trial variability in the spontaneous activity.</p>
-<div id="967b0525" class="cell" data-execution_count="18">
+<div id="22f76f33" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate stimulus evoked change in firing rate</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'evoked_change'</span>] <span class="op">=</span> spks[<span class="st">'counts_stim'</span>] <span class="op">-</span> spks[<span class="st">'counts_base'</span>]</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1059,7 +1059,7 @@ dtype: int64</code></pre>
 <p>Poisson point processes are everywhere in nature, such as the emission of radioactive particles. If we count the number of events in a given interval for a Poisson point process, it should have the distribution of:</p>
 <p><span class="math display"> P(\text{Counts}=k) = \frac{\lambda^ke^{-\lambda}}{k!} </span></p>
 <p>where <span class="math inline">k</span> is the number of counts we observed and <span class="math inline">\lambda</span> is the mean number of counts we expect. This equation gives the probability, <span class="math inline">P(...)</span>, of observing a certain number of counts given the mean number of counts. Using this function, we can calculate the probability distribution for the responses we measured, assuming they are Poisson.</p>
-<div id="9729ec70" class="cell" data-execution_count="19">
+<div id="97b23349" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poisson_pdf(k, lamb):</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Computes the Poisson probability mass function</span></span>
@@ -1114,7 +1114,7 @@ dtype: int64</code></pre>
 <p>Thus far we have evaluated a neuron’s response to a single type of drifting grating. However, many different types were presented, and for good reason. Neurons respond to some types of gratings more than others, often depending on their orientation. As we discussed earlier, a hallmark of coding in primary visual cortex is the sensitivity of its neurons to oriented bars, with some neurons responding just to vertically oriented ones, others to horizontal, and the rest to everything in between.</p>
 <p>Put more generally, when neurons systematically vary their response to stimuli according to one or more of their parameters, we say they are <em>tuned</em>. When an experimenter delivers a series of stimuli that vary along one or more of their properties (e.g.&nbsp;orientation), while measuring the response of a neuron to them, they can construct a <em>tuning curve</em> or <em>receptive field</em>. For more information about the types of receptive fields throughout the brain, check out my <a href="./supp/RF1Lecture.pdf">lecture on it</a>. If you want to know more about the theory behind constructing receptive fields, I also have a <a href="./supp/RF2Lecture.pdf">lecture on that</a>.</p>
 <p>Since the drifting gratings varied in their orientation and temporal frequency, we can evaluate the tuning of neurons to them. To do this, we will construct a generic class for calculating receptive fields that accepts a dataframe of stimulus onset times and spike times for a single neuron, and returns the mean firing rate for each stimulus type.</p>
-<div id="3afe7a95" class="cell" data-execution_count="20">
+<div id="66bee450" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rf():</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, stims, window):</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
@@ -1237,7 +1237,7 @@ dtype: int64</code></pre>
 <h3 class="anchored" data-anchor-id="orientation-tuning">Orientation tuning</h3>
 <p>Above we analyzed the response of neurons to a single drifting grating and found that they differed in the strength of their response. But, this did not tell us whether individual neurons preferentially responded to certain orientations. To answer this question, we need to measure a neuron’s response to drifting gratings with different orientations.</p>
 <p>Let’s use our <code>rf</code> class to do this for one neuron.</p>
-<div id="2875a820" class="cell" data-execution_count="21">
+<div id="c06a6cde" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the rf object with drifting grating stimuli </span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and a 2 second window, since the stimulus duration is 2 seconds</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>rf_dg <span class="op">=</span> rf(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>])</span>
@@ -1267,7 +1267,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Here we see that the neuron responds preferentially to drifting gratings oriented at 90 and 270 degrees. This double peaked tuning curve is typical of neurons in primary visual cortex. If a neuron responds to lines moving in one direction, often they will also respond to lines moving in the opposite direction. However, this is not always the case. Sometimes one direction is preferred over another. For instance:</p>
-<div id="bdb1b9df" class="cell" data-execution_count="22">
+<div id="0ad13652" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the total spike counts for each orientation</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>rf_dg.compute(spikes<span class="op">=</span>spks.loc[unit_ids[<span class="dv">10</span>],<span class="st">'times'</span>],dims<span class="op">=</span>[<span class="st">'orientation'</span>])</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1304,7 +1304,7 @@ dtype: int64</code></pre>
 <li><span class="math inline">\frac{\left|r_p-r_n\right|}{r_p+r_n+2r_0}</span>: known as the direction index, measures asymmetry in the response. A 0 means there is no asymmetry, while a 1 suggests that only a single peak is present.</li>
 <li><span class="math inline">SD</span>: we will call this the orientation selectivity, which measures the spread of the orientation tuning. A broader tuning has a larger <span class="math inline">SD</span>.</li>
 </ol>
-<div id="872fbcb9" class="cell" data-execution_count="23">
+<div id="3bfb8677" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> curve_func(x, r0, rp, rn, op, sd):</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Computes the orientation tuning curve</span></span>
@@ -1341,7 +1341,7 @@ dtype: int64</code></pre>
 <span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s test how well this function fits the two neurons whose tuning curves we inspected before.</p>
-<div id="af96aed4" class="cell" data-execution_count="24">
+<div id="43bb71ba" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ori <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">360</span>, <span class="dv">100</span>)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, <span class="bu">id</span> <span class="kw">in</span> <span class="bu">enumerate</span>(unit_ids[[<span class="dv">19</span>, <span class="dv">10</span>]]):</span>
@@ -1372,7 +1372,7 @@ dtype: int64</code></pre>
 </div>
 <p>For each neuron we calculated the orientation tuning curve, fitted our characteristic curve to it, and then evaluated fit quality by measuring the coefficient of determination, <span class="math inline">R^2</span>. This is a measure of the degree to which the observed values can be predicted by the fitted curve. If that prediction is perfect, then <span class="math inline">R^2</span> is equal to 1, otherwise it approaches 0 as the relation between the two is completely random. Note that a coefficient of determination equal to 1 does <strong><em>not</em></strong> mean that the observed data points lie exactly on the fitted curve, just that they exactly covary with the fitted curve (as described by a line, <span class="math inline">y=ax+b</span>). The mean squared error, which we talked about several weeks back, measures the distance between the fitted curve and the observed data. But, because its value ranges from 0 to infinity, it is difficult to compare between neurons.</p>
 <p>Taking everything we just did, we can create a function that will fit an orientation tuning curve and return the properties of the tuning curve and its quality of fit.</p>
-<div id="058bea88" class="cell" data-execution_count="25">
+<div id="170e2c86" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit curve to example</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_ori(ori, count):</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -1404,7 +1404,7 @@ dtype: int64</code></pre>
 <span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> popt, rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With the <code>rf</code> class and <code>fit_ori</code> function, we can take our dataframe of spiking data and get the orientation tuning curve properties for every neuron.</p>
-<div id="56154474" class="cell" data-execution_count="26">
+<div id="76e9c70c" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute RF for each unit</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_ori'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: rf(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>]).compute(x, dims<span class="op">=</span>[<span class="st">'orientation'</span>]))</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1420,7 +1420,7 @@ dtype: int64</code></pre>
 <p>Now that we have the orientation tuning properties of every neuron, we can look at their distribution to determine how orientations are coded for at the <em>population</em> <em>level</em>. This is a term you will run into often when decoding from spiking activity. Because each neuron (or cluster of units in a multi-unit) responds to distinct sets of events, their activities can be passed to a multifeature classifier to provide robust decoding. This is similar to what we did with spectral decoding of ECoG data.</p>
 <p>If we want to build a decoder of orientation from this spiking activity, this will depend on whether the preferred orientations across neurons span the entire range, 0-360 degrees. Underrepresented orientations will be more difficult to decode. Moreover, because orientation tuning curves are double peaked, if both peaks have the same amplitude they will not uniquely encode a single orientation. If all the neurons were perfectly symmetric, then it would be impossible to train a classifier that differentiates between orientations from 0-180 and 180-360 degrees (e.g.&nbsp;a symmetric neuron with a preferred orientation at 90 will equally respond to 90+180=270 degrees).</p>
 <p>But before we can evaluate this, we need to determine what proportion of neurons exhibit orientation tuning. The curve fit parameters from an untuned neuron would be uninformative for decoding, so we want to remove those from our population analysis. This requires us to set a threshold for determining if a neuron is sufficiently tuned. To decide on that threshold, we will plot the distribution of the fit, <span class="math inline">R^2</span>.</p>
-<div id="974e0abc" class="cell" data-execution_count="27">
+<div id="5b860c99" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>ax.hist(spks[<span class="st">'rf_ori_fit_rsq'</span>], bins<span class="op">=</span>np.arange(<span class="dv">0</span>, <span class="fl">1.1</span>, <span class="fl">0.1</span>), color<span class="op">=</span><span class="st">'black'</span>)</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'$R^2$ value'</span>)</span>
@@ -1439,7 +1439,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>The distribution of <span class="math inline">R^2</span> values appears to have two components. One is a tight distribution of high <span class="math inline">R^2</span> values clustered above 0.8, while the other is a broadly distributed over the full range of values. We would expect those clustered on the high end have good orientation tuning, while those below do not. While we could draw the cutoff by eye at 0.8, a more principled approach is to fit two Gaussians functions to this distribution and find the point where they cross-over. The Scikit-Learn package provides an estimator for that, <code>GaussianMixture</code>. It tries to fit multiple Gaussian functions to a data distribution. We will not delve deeply into how this works here, but just apply it as a way to set our threshold for declaring a neuron orientation tuned. That threshold will be where the probability of an <span class="math inline">R^2</span> value goes from more likely to be part of the broadly untuned distribution to the high tuned end. Let’s apply that.</p>
-<div id="b88d9512" class="cell" data-execution_count="28">
+<div id="7f810c15" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the GMM</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>gmm <span class="op">=</span> GaussianMixture(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">47</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1470,7 +1470,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Here we got two components that match our intuition about there being a narrow, tuned, distribution on the high end (orange) and a broad untuned distribution (blue) on the low end. Just below <span class="math inline">R^2=0.8</span> the distributions intersect. This is where the threshold should be for declaring a unit tuned. To find that numerically, we can subtract the tuned curve from the untuned curve and find the point where that difference goes from positive to negative.</p>
-<div id="85061ed9" class="cell" data-execution_count="29">
+<div id="d90a2593" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get tuned and untuned curves</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">100</span>)</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>tuned_curve <span class="op">=</span> gmm.weights_[<span class="dv">0</span>]<span class="op">*</span>norm.pdf(x, means[<span class="dv">0</span>], np.sqrt(covs[<span class="dv">0</span>]))</span>
@@ -1495,7 +1495,7 @@ Proportion of tuned units: 60.5%</code></pre>
 </div>
 </div>
 <p>Now that we have the threshold, we can plot the distribution of the orientation tuning properties for those neurons that showed actual tuning.</p>
-<div id="9f6beeac" class="cell" data-execution_count="30">
+<div id="4b9a6eeb" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># classify the units as tuned or untuned</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'tuned'</span>] <span class="op">=</span> spks[<span class="st">'rf_ori_fit_rsq'</span>] <span class="op">&gt;</span> thresh</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1541,7 +1541,7 @@ Proportion of tuned units: 60.5%</code></pre>
 <h3 class="anchored" data-anchor-id="temporal-frequency">Temporal frequency</h3>
 <p>With orientation tuning we found that a characteristic curve could describe the shape in tuned neurons. Is the same stereotyped tuning present for coding of temporal frequency? Do neurons even care about how fast the grating is moving?</p>
 <p>To evaluate this, we can use the <code>rf</code> class to create tuning curves of temporal frequency.</p>
-<div id="1d5781d6" class="cell" data-execution_count="31">
+<div id="bf201d5f" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute temporal frequency RF for each unit</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tf'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: rf(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>]).compute(x, dims<span class="op">=</span>[<span class="st">'temporal_frequency'</span>]))</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tf_emp'</span>] <span class="op">=</span> spks[<span class="st">'rf_tf'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.rf())</span>
@@ -1567,7 +1567,7 @@ Proportion of tuned units: 60.5%</code></pre>
 <p>As we covered earlier in this lecture, the number of spikes evoked by the stimulus on every trial randomly varies. Because of this, the mean number of spikes for each stimulus types varies. If a neuron is tuned, then its mean spike count across stimuli should vary more than that would be predicted by the randomness across trials.</p>
 <p>A simple approach to determine if a tuning curve is significantly different from random is to run an <a href="https://en.wikipedia.org/wiki/Analysis_of_variance">ANOVA</a> on the spike counts across trials and with the stimulus dimension as the factor. The ANOVA determines if the variance in the mean spike count at each stimulus is different from what would be expected from the variance across all trials. However, this test assumes that the data is normally distributed, which ours is not since the spike counts are integers and can only take on positive values.</p>
 <p>Instead we will use a permutation test, which makes no assumptions about the distribution of our data. For this, we will calculate a thousand tuning curves, but with the stimulus identities scrambled. A tuning curve is significant if any point on the observed tuning curve is significantly different from the distribution of permuted tuning curves. If we were to use the standard p &lt; 0.05 threshold for significance, we would risk overestimating the number of significant tuning curves since we are pooling together multiple statistical tests (one for each stimulus type). To prevent this, we will use the Bonferroni correction, which has the significance threshold set to <span class="math inline">0.5/n</span>, where <span class="math inline">n</span> is the number of tests performed. This keeps the rate of falsely claiming an RF is significant at 0.05.</p>
-<div id="f395deec" class="cell" data-execution_count="32">
+<div id="ae917120" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adds a method to the rf class that calculates a permutation test</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rf_perm(rf):</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> perm_test(<span class="va">self</span>, n_perms<span class="op">=</span><span class="dv">100</span>, alpha<span class="op">=</span><span class="fl">0.05</span>):</span>
@@ -1632,7 +1632,7 @@ Proportion of tuned units: 60.5%</code></pre>
 </div>
 <p>We implement the permutation test by adding it as a method to our <code>RF</code> class. It takes in arguments for the number of permutations to run, <code>n_perms</code>, and the significance level, <code>alpha</code>. The closer the significance is to 0, the more stringent the test. The default settings of <code>n_perms=100</code> and <code>alpha=0.05</code> should work well for the temporal frequency tuning curves, which only have 5 levels (1, 2, 4, 8, 15 Hz). This will give us a Bonferroni-corrected alpha value of <span class="math inline">0.05/5 = 0.01</span>, and with 100 permutations that means a point on our observed tuning curve has to be greater or less than all the the permuted ones. The more permutations you use, the longer the analysis takes to run. In general, 100 permutations is on the low side. You should usually run at least 1000 when doing a ‘real’ analysis. That will give a better estimate of the shape of the permuted distribution.</p>
 <p>Next we will recreate the <code>rf</code> objects for the temporal frequency tuning curves using the new class with the <code>perm_test</code>, and then run the test for every neuron.</p>
-<div id="526805f5" class="cell" data-execution_count="33">
+<div id="2d9e5330" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the temporal frequency RF for each unit with permutation test</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tf_perm'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: rf_perm(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>]).compute(x, dims<span class="op">=</span>[<span class="st">'temporal_frequency'</span>]))</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1643,7 +1643,7 @@ Proportion of tuned units: 60.5%</code></pre>
 <span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>spks[[<span class="st">'rf_tf_perm_sig'</span>, <span class="st">'rf_tf_perm_bounds'</span>]] <span class="op">=</span> pd.DataFrame(spks[<span class="st">'rf_tf_perm_res'</span>].tolist(), index<span class="op">=</span>spks.index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>That took a while to run, since we did not calculate the permuted tuning curves in the most efficient way. For the example tuning curves, let’s inspect the significance boundaries for the permuted distributions and see how they compare with the actual ones.</p>
-<div id="88220037" class="cell" data-execution_count="34">
+<div id="c30ce0e0" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot a few units to see how the temporal frequency tuning looks</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>sel_units <span class="op">=</span> unit_ids[[<span class="dv">27</span>,<span class="dv">31</span>,<span class="dv">34</span>,<span class="dv">26</span>]]</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">4</span>,figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">2</span>))</span>
@@ -1665,7 +1665,7 @@ Proportion of tuned units: 60.5%</code></pre>
 </div>
 <p>We can see that all the example neurons show portions of their tuning curves that are either above or below the permuted significance levels (filled in red area). This suggests that the diverse shapes of the temporal frequency tuning curves do not arise from random chance, but instead reflect a diversity of dependencies in tuning.</p>
 <p>Do all neurons show tuning for temporal frequency? To answer that we can get the percentage of neurons that exhibited significance.</p>
-<div id="69692413" class="cell" data-execution_count="35">
+<div id="6338b881" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get signficance of temporal frequency tuning</span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>tf_sig <span class="op">=</span> spks[<span class="st">'rf_tf_perm_sig'</span>].values</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1673,7 +1673,7 @@ Proportion of tuned units: 60.5%</code></pre>
 <span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Proportion of units with significant temporal frequency tuning: </span><span class="sc">{:.1f}</span><span class="st">%'</span>.<span class="bu">format</span>(tf_sig_prop<span class="op">*</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Proportion of units with significant temporal frequency tuning: 76.7%</code></pre>
+<pre><code>Proportion of units with significant temporal frequency tuning: 86.0%</code></pre>
 </div>
 </div>
 <p>The majority of neurons showed significant tuning for temporal frequency. Given the diversity of their tuning curves, it may be possible to decode this aspect of the drifting grating stimuli, in addition to orientation.</p>
@@ -1681,7 +1681,7 @@ Proportion of tuned units: 60.5%</code></pre>
 <section id="orientation-and-temporal-frequency" class="level3">
 <h3 class="anchored" data-anchor-id="orientation-and-temporal-frequency">Orientation and Temporal Frequency</h3>
 <p>So far we have found that the majority of neurons exhibit tuning for orientation or temporal frequency. However, we have examined these independent of each other. To finish things off, we will create two-dimensional receptive fields (the term tuning curve is usually reserved for when only one stimulus dimension is analyzed). Thankfully, our <code>rf</code> class can create receptive fields with multiple dimensions. Let’s use it to analyze the combined tuning for orientation and temporal frequency.</p>
-<div id="52fb872f" class="cell" data-execution_count="36">
+<div id="44d941c1" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute RF for each unit</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tfori'</span>] <span class="op">=</span> spks[<span class="st">'times'</span>].<span class="bu">apply</span>(</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x: rf(dg_stims, [<span class="dv">0</span>, <span class="dv">2</span>]).compute(</span>
@@ -1690,7 +1690,7 @@ Proportion of tuned units: 60.5%</code></pre>
 <span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>spks[<span class="st">'rf_tfori_emp'</span>] <span class="op">=</span> spks[<span class="st">'rf_tfori'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.rf())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Similar to our code above, the only change (besides column names), was the inclusion of both temporal frequency and orientation in the <code>dims</code> argument. Generation of the receptive field is the same, using just the <code>rf</code> method. Since we saw a variety of tuning curves for temporal frequency, it is possible we will see the same when examining these new receptive fields.</p>
-<div id="390bd623" class="cell" data-execution_count="37">
+<div id="994609d1" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lets plot some example units to see how the RF looks</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>sel_units <span class="op">=</span> unit_ids[[<span class="dv">1</span>,<span class="dv">7</span>,<span class="dv">18</span>,<span class="dv">32</span>]]</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">4</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>

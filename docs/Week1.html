@@ -334,7 +334,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="mixing-code-theory-and-practice">Mixing code, theory, and practice</h2>
 <p>Lectures will introduce the theory behind what we do, practical details of how to go about doing it, and code that does the doing. The astounding thing about BCI design is how accessible the algorithms and plentiful the data sources are. Of course, a real BCI system uses specialized hardware implanted in or on a person and is run in near real-time, which is not feasible in a classroom setting.</p>
 <p>We will use Python throughout this course, and publicly available data sets.</p>
-<div id="5c8b7b17" class="cell" data-execution_count="1">
+<div id="0213be7c" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will be the standard set of packages we import for most lectures. </span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -347,11 +347,11 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="general-principles-of-bci-design">General principles of BCI design</h2>
 <p>The goal of BCI is to attribute electrical activity in a subject’s brain to stimuli they received or actions they intended to produce. Grounding this is the fundamental assumption in neuroscience that all we experience and do arises from patterns of activity in the brain. These patterns are manifested at multiple levels, from single neurons to large portions of the cortical surface. Every stimulus produces a chain of activities starting at peripheral receptors, ascending through chains of neurons that eventually reach the neocortex, where they are processed and elaborated, linked with your expectations, memories, and goals. At every level specific groups of neurons are activated reflecting the properties of the stimuli or your cognitive state. Sometimes these trigger actions - e.g.&nbsp;moving your arm - that depends on a chain of activities stretching back from the muscles to your spinal cord, then brain stem, then cortex. Remarkably, in a mouse it only takes the activation of just over a dozen neurons to <a href="https://elifesciences.org/articles/58889">influence perception</a>.</p>
 <p>Given that there is a physical correlate in the brain of what we perceive and do, then it is possible to ‘tap’ them. The limitations are technical such as how well we can extract neural activities and our computational resources for attributing them to the external world. Much work has been spent on these problems. This is often conceptualized in two different ways.</p>
-<p><img src="./images/DecodingEncoding.png" class="img-fluid" alt="Encoding and decoding">.</p>
+<p><img src="./images/DecodingEncoding.png" class="img-fluid" alt="Diagram with two labeled arrows bridging a stimulus/environment on one side and neural activity on the other: an 'encoding' arrow pointing from stimulus to neural activity, and a 'decoding' arrow pointing from neural activity back to the stimulus, illustrating the two complementary frameworks in neuroscience.">.</p>
 <p>One is treat it as an <em>encoding</em> problem, where we try to understand how events in the environment are reflected in neural activities. The other is the <em>decoding</em> approach, where we use neural activities to infer what is happening in the environment. BCIs make extensive use of decoding analyses.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/BCI_Schema.png" class="img-fluid figure-img"></p>
+<p><img src="./images/BCI_Schema.png" class="img-fluid figure-img" alt="Schematic of a brain-computer interface pipeline showing neural signal acquisition flowing into signal preprocessing, then feature extraction, and finally a classification or decoding step that outputs an inference about the intended action or stimulus."></p>
 <figcaption>BCI schema</figcaption>
 </figure>
 </div>
@@ -363,7 +363,7 @@ window.Quarto = {
 <p>The brain is an electrochemical machine that allows vertebrates to interact with a dynamic complex environment. It does this using specialized cells called <em>neurons</em>. They have the ability to receive chemical signals, <em>neurotransmitters</em>, that affect their electrical activity. This activity is transmitted to other neurons via an <em>axon</em>. When multiple neurons are connected together they form a network that supports the transformation of incoming activity and spontaneous generation of new activities.</p>
 <section id="brain-anatomy" class="level3">
 <h3 class="anchored" data-anchor-id="brain-anatomy">Brain anatomy</h3>
-<p>The brain is composed of numerous regions, but its cortex is generally divided into four principal areas: <img src="./images/brain-lobes-anatomy-johnshopkins.jpg" class="img-fluid" alt="brain"></p>
+<p>The brain is composed of numerous regions, but its cortex is generally divided into four principal areas: <img src="./images/brain-lobes-anatomy-johnshopkins.jpg" class="img-fluid" alt="Lateral view of the human brain with the four cortical lobes color-coded and labeled: frontal lobe (anterior), parietal lobe (superior posterior), temporal lobe (inferior lateral), and occipital lobe (posterior)."></p>
 <ol type="1">
 <li>Frontal lobe: Reasoning and motor control</li>
 <li>Parietal lobe: Touch and visual spatial processing</li>
@@ -373,7 +373,7 @@ window.Quarto = {
 <p>Keep in mind these are gross generalizations regarding the function of these areas.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/AnatomyCrosssection.png" class="img-fluid figure-img"></p>
+<p><img src="./images/AnatomyCrosssection.png" class="img-fluid figure-img" alt="Cross-sectional diagram of the head showing the anatomical layers between a scalp EEG electrode and the cortical surface, including skin, fatty tissue, multi-layered skull bone, dura mater, arachnoid, cerebrospinal fluid, and the underlying cortex."></p>
 <figcaption>Brain cross section</figcaption>
 </figure>
 </div>
@@ -383,7 +383,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="neurons">Neurons</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/NeuronSchematic-Hammond.png" class="img-fluid figure-img"></p>
+<p><img src="./images/NeuronSchematic-Hammond.png" class="img-fluid figure-img" alt="Schematic diagram of a neuron showing the cell body (soma) at the center, branching dendrites that receive synaptic inputs, and the long myelinated axon that carries output action potentials toward synaptic terminals on other neurons."></p>
 <figcaption>Neuron schematic</figcaption>
 </figure>
 </div>
@@ -391,14 +391,14 @@ window.Quarto = {
 </section>
 <section id="membranes-and-ions" class="level3">
 <h3 class="anchored" data-anchor-id="membranes-and-ions">Membranes and ions</h3>
-<p><img src="./images/FluidMosaic-Hammond.png" class="img-fluid" alt="Structure of the neuron membrane"> Like all eukaryotic cells, neurons have a lipid membrane that seals in their internal, or <em>intracellular</em>, fluid (also known as cytoplasm) and organelles from the <em>extracellular</em> environment. This membrane also acts as an electrical insulator, blocking the flow of electrical charges across it. Electrical charge in the brain is carried by <em>ions</em> in the intracellular and extracellular fluids (cerebrospinal fluid). Ions are atoms or molecules that are either positively or negatively charged depending on whether they have a fewer or greater number of electrons than protons. The ones that are most determinative of neural activity are Na<sup>+</sup>, K<sup>+</sup>, Cl<sup>-</sup>, and Ca<sup>2+</sup>. Between the intracellular and extracellular fluids, the concentrations of these ions are different. Na<sup>+</sup>,Cl<sup>-</sup>, and Ca<sup>2+</sup> have higher concentrations in the extracellular fluid, while K<sup>+</sup> ions have a higher concentration in the intracellular fluid.</p>
+<p><img src="./images/FluidMosaic-Hammond.png" class="img-fluid" alt="Fluid mosaic model diagram of the neuronal membrane showing a phospholipid bilayer with the hydrophilic heads facing outward toward the intra- and extracellular fluids and hydrophobic tails forming the interior, with embedded protein ion channels spanning the full width of the bilayer."> Like all eukaryotic cells, neurons have a lipid membrane that seals in their internal, or <em>intracellular</em>, fluid (also known as cytoplasm) and organelles from the <em>extracellular</em> environment. This membrane also acts as an electrical insulator, blocking the flow of electrical charges across it. Electrical charge in the brain is carried by <em>ions</em> in the intracellular and extracellular fluids (cerebrospinal fluid). Ions are atoms or molecules that are either positively or negatively charged depending on whether they have a fewer or greater number of electrons than protons. The ones that are most determinative of neural activity are Na<sup>+</sup>, K<sup>+</sup>, Cl<sup>-</sup>, and Ca<sup>2+</sup>. Between the intracellular and extracellular fluids, the concentrations of these ions are different. Na<sup>+</sup>,Cl<sup>-</sup>, and Ca<sup>2+</sup> have higher concentrations in the extracellular fluid, while K<sup>+</sup> ions have a higher concentration in the intracellular fluid.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/Nernst_USMLE.jpg" class="img-fluid figure-img"></p>
+<p><img src="./images/Nernst_USMLE.jpg" class="img-fluid figure-img" alt="Illustration of ion concentration gradients across the neuronal membrane showing high extracellular Na+ and Cl- and high intracellular K+ concentrations, with the resulting resting membrane potential of approximately -70 mV indicated between the two sides."></p>
 <figcaption>Membrane and ions</figcaption>
 </figure>
 </div>
-<div id="5acab753" class="cell" data-execution_count="2">
+<div id="a79ead72" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ion_props <span class="op">=</span> pd.DataFrame({<span class="st">'Ion'</span>: [<span class="st">'Na'</span>, <span class="st">'K'</span>, <span class="st">'Cl'</span>, <span class="st">'Ca'</span>],</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'Out_mM'</span>: [<span class="dv">140</span>, <span class="dv">3</span>, <span class="dv">140</span>, <span class="fl">1.5</span>],</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'In_mM'</span>: [<span class="dv">7</span>, <span class="dv">140</span>, <span class="dv">7</span>, <span class="fl">0.0001</span>],</span>
@@ -418,7 +418,7 @@ Ca      1.5    0.0001       2</code></pre>
 <p>This unequal distribution of ions across the membrane is unstable because ions tend to flow from where they are highly concentrated to where they are less concentrated. To cross the membrane, ions flow through channels, unsurprisingly called <em>ion channels</em>. These are proteins that span the inside and outside of the neuron with a central hole, known as a pore, through which the ions flow. The pore’s shape and charge determine its selectivity for specific ionic species. Additional factors can control the opening of the pore. Some ion channel pores are controlled by the voltage across the membrane, others by substances such as neurotransmitters or hormones that bind to them, or even other ions like Mg<sup>2+</sup>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/NaChannel_Sula2017.jpg" class="img-fluid figure-img"></p>
+<p><img src="./images/NaChannel_Sula2017.jpg" class="img-fluid figure-img" alt="Structural diagram of a voltage-gated sodium ion channel protein from Sula et al. 2017 showing the four transmembrane domains arranged around a central ion-conducting pore, with voltage-sensing helices that control channel gating in response to membrane depolarization."></p>
 <figcaption>Na channel</figcaption>
 </figure>
 </div>
@@ -426,7 +426,7 @@ Ca      1.5    0.0001       2</code></pre>
 <p><span class="math display">E = \frac{RT}{zF}ln\frac{[Out]}{[In]}</span></p>
 <p><span class="math inline">R</span> is the gas constant and <span class="math inline">F</span> is Faraday’s constant, while <span class="math inline">T</span> is temperature in Kelvin and <span class="math inline">z</span> is the charge of the ion. <span class="math inline">[Out]</span> and <span class="math inline">[In]</span> are the extracellular and intracellular concentrations of that ion, respectively.</p>
 <p>Most of the time when an equation is introduced, we will try to translate it into Python. A method that calculates the equilibrium potential of a given ion can be given as:</p>
-<div id="cd50a0ca" class="cell" data-execution_count="3">
+<div id="bfab14e4" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate Nernst equilibrium potential for an ion</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nernst(conco<span class="op">=</span><span class="dv">3</span>, conci<span class="op">=</span><span class="dv">140</span>, z<span class="op">=</span><span class="dv">1</span>, t<span class="op">=</span><span class="dv">310</span>):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calculate Nernst potential for an ion.</span></span>
@@ -452,7 +452,7 @@ Ca      1.5    0.0001       2</code></pre>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (r<span class="op">*</span>t)<span class="op">/</span>(z<span class="op">*</span>f) <span class="op">*</span> np.log(conco<span class="op">/</span>conci) <span class="op">*</span> <span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Using this function and the dataframe of ionic concentrations above, we can calculate the equilibrium potentials for each of the major ionic species found in the nervous system.</p>
-<div id="89dee176" class="cell" data-execution_count="4">
+<div id="d1221c77" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ion_props[<span class="st">'E'</span>] <span class="op">=</span> ion_props.<span class="bu">apply</span>(<span class="kw">lambda</span> ion: nernst(ion[<span class="st">'Out_mM'</span>], ion[<span class="st">'In_mM'</span>], ion[<span class="st">'Charge'</span>]), axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ion_props)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -476,7 +476,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <p>The equilibrium potential, <span class="math inline">E_{r}</span>, behaves like a battery. The ionic current it produces flows through open ion channels, which we will refer to as conductors. As we discussed above, when a neuron is at rest it primarily allows K<sup>+</sup> ions to flow. This passive leakage of ions across the membrane has given the conductance the name <em>leak conductance</em>. This can be schematized below as a battery and conductor in series that bridge the intracellular and extracellular spaces.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/MemBatRes.png" class="img-fluid figure-img"></p>
+<p><img src="./images/MemBatRes.png" class="img-fluid figure-img" alt="Simple electrical circuit diagram of the neuronal membrane at rest, representing the equilibrium potential Er as a battery and the passive ion channel leak as a resistor/conductor in series, bridging the intracellular and extracellular compartments."></p>
 <figcaption>Membrane with battery</figcaption>
 </figure>
 </div>
@@ -484,7 +484,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <p><span class="math display"> V = IR </span></p>
 <p>where <span class="math inline">V</span> is voltage (volts, V), <span class="math inline">I</span> is current (amperes, A), and <span class="math inline">R</span> is resistance (ohms, <span class="math inline">\Omega</span>). Rewriting the equation to solve for <span class="math inline">I</span> gives us: <span class="math display"> I = \frac{V}{R} </span> The inverse of resistance is conductance (siemens, S), so this equation can be rewritten as: <span class="math display"> I = gV </span> Here <span class="math inline">g</span> is the ease with which our conductor allows current to flow. Now, if we include the effect of the reversal potential, <span class="math inline">E_{r}</span> acting as a battery, then the equation can be written as: <span class="math display"> I_{leak} = g_{leak}(V_{m}-E_{r}) \tag{1} </span> Let’s consider the behavior of this equation. It shows that as we increase the ion channel’s conductance, <span class="math inline">g_{leak}</span>, the current will increase as well. It also shows that the magnitude and direction of the current will depend on the membrane voltage, <span class="math inline">V_{m}</span>. If <span class="math inline">V_{m}</span> is below <span class="math inline">E_{r}</span>, current will be negative. If it is above, then it will be positive. As <span class="math inline">V_{m}</span> approaches <span class="math inline">E_{r}</span>, the current gets smaller. When they are equal, no current flows because the electrical forces perfectly balance the concentration gradient.</p>
 <p>Let’s graph these relationships between <span class="math inline">V_{m}</span> and <span class="math inline">I_{leak}</span> by systematically varying <span class="math inline">E_{r}</span> and <span class="math inline">g_{leak}</span>.</p>
-<div id="d9bc7eb9" class="cell" data-execution_count="5">
+<div id="a9c1b9b2" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here are somme realistic parameters for a neuron</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mem_r <span class="op">=</span> <span class="fl">25e3</span> <span class="co"># ohm*cm^2, taken from Egger et al 2020</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>cell_radius <span class="op">=</span> <span class="fl">30e-4</span> <span class="co"># cm, 30 microns, this is larger than the cell body itself to account for membrane from dendrites</span></span>
@@ -512,7 +512,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g <span class="op">*</span> (v <span class="op">-</span> e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ef12a837" class="cell" data-execution_count="6">
+<div id="5018ab85" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine how varying the conductance affects the I-V curve</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>g_factors <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
@@ -539,7 +539,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 </div>
 </div>
 <p>It is evident that increasing the conductance dramatically increases the ionic current. Now let’s examine the effect of equilibrium potential.</p>
-<div id="01f2f137" class="cell" data-execution_count="7">
+<div id="fe8a00cb" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine how varying the equilibrium potential affects the I-V curve</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>e_values <span class="op">=</span> [<span class="op">-</span><span class="fl">0.070</span>, <span class="op">-</span><span class="fl">0.035</span>, <span class="dv">0</span>, <span class="fl">0.035</span>, <span class="fl">0.070</span>]</span>
@@ -578,14 +578,14 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <h3 class="anchored" data-anchor-id="passive-electrical-model-of-the-membrane">Passive electrical model of the membrane</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/MemBatResCap.png" class="img-fluid figure-img"></p>
+<p><img src="./images/MemBatResCap.png" class="img-fluid figure-img" alt="Electrical circuit diagram of the passive neuron membrane model showing the resting potential battery and leak conductance in one branch and the membrane capacitor in a parallel branch, together forming the RC circuit that gives neurons their integrative time constant."></p>
 <figcaption>membrane as capacitor</figcaption>
 </figure>
 </div>
 <p>Expanding our electrical schematic we add the membrane capacitor in parallel with the resting potential battery and conductor. This is the <em>passive</em> electrical model of the membrane. Many classic phenomena of neural integration arise from the passive electrical behavior of its membrane.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/MemRest.png" class="img-fluid figure-img"></p>
+<p><img src="./images/MemRest.png" class="img-fluid figure-img" alt="Electrical circuit of the passive neuronal membrane at steady state rest, showing the capacitor fully charged to the resting potential Er by the battery, with no net current flow through the circuit."></p>
 <figcaption>membrane rest</figcaption>
 </figure>
 </div>
@@ -595,7 +595,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <p>What this means is that the current produced across the capacitor is proportional to the change in voltage.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/MemCharging.png" class="img-fluid figure-img"></p>
+<p><img src="./images/MemCharging.png" class="img-fluid figure-img" alt="RC circuit diagram illustrating membrane charging dynamics when current is injected, showing how the resistor limits the rate at which the capacitor charges, producing a membrane voltage that rises exponentially with time constant tau = RC toward a new steady-state level."></p>
 <figcaption>membrane charging with resistance</figcaption>
 </figure>
 </div>
@@ -610,7 +610,7 @@ Ca      1.5    0.0001       2  128.430326</code></pre>
 <p>This is a differential equation that can be solved to give voltage as a function of time: <span class="math display"> V_{m}(t) = E_{rest}(1-e^{\frac{-t}{\frac{g_{m}}{C_{m}}}}) </span></p>
 <p>Rewriting <span class="math inline">g_{m}</span>, as its inverse, referred to as membrane resistance, <span class="math inline">R_{m}</span>, we get the equation: <span class="math display"> V_{m}(t) = E_{rest}(1-e^{\frac{-t}{R_{m}C_{m}}}) \tag{3}</span></p>
 <p>The product of <span class="math inline">R_{m}</span> and <span class="math inline">C_{m}</span> sets how fast the membrane charges. Larger it is, the slower the membrane capacitor will charge, and the smaller it is, the faster it charges. Given realistic values of <span class="math inline">R_{m}</span> and <span class="math inline">C_{m}</span>, what would be a reasonable time constant to expect from a neuron?</p>
-<div id="09ca19f2" class="cell" data-execution_count="8">
+<div id="d1441754" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate membrane resistance and capacitance</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mem_cap <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># F/cm^2</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cell_c <span class="op">=</span> mem_cap <span class="op">*</span> cell_area <span class="co"># F</span></span>
@@ -627,7 +627,7 @@ Membrane resistance: 221 MOhm
 Membrane time constant: 25 ms</code></pre>
 </div>
 </div>
-<div id="6616e0a7" class="cell" data-execution_count="9">
+<div id="f1ab1a07" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot examples of V changing over time for different RC time constants</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tau_factors <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)</span>
@@ -669,7 +669,7 @@ Membrane time constant: 25 ms</code></pre>
     \end{align}
 </span></p>
 <p>Since we know how the membrane voltage will change, <span class="math inline">\frac{dV_{m}}{dt}</span>, based on its present value, <span class="math inline">V_{m}</span>, and the current injected, <span class="math inline">I_{in}</span>, we can simulate its response. To do this, we will create a class, <code>PassiveNeuron</code>. This class will encapsulate the data and methods needed to simulate the passive properties of a neuron’s membrane.</p>
-<div id="89bf6db7" class="cell" data-execution_count="10">
+<div id="9fc5cc2b" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PassiveNeuron:</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, v_rest<span class="op">=-</span><span class="dv">65</span>, c_m<span class="op">=</span><span class="dv">1</span>, r_m<span class="op">=</span><span class="dv">25</span>, radius<span class="op">=</span><span class="dv">30</span>):</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._vrest <span class="op">=</span> v_rest<span class="op">/</span><span class="dv">1000</span> <span class="co"># mV</span></span>
@@ -771,7 +771,7 @@ Membrane time constant: 25 ms</code></pre>
 <span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> v, i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c0c6f300" class="cell" data-execution_count="11">
+<div id="4d4364ae" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a neuron with default parameters</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pas_nrn <span class="op">=</span> PassiveNeuron()</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sim_dur <span class="op">=</span> <span class="fl">0.2</span> <span class="co"># sec</span></span>
@@ -824,7 +824,7 @@ Membrane time constant: 25 ms</code></pre>
 <p>When we inject a current step into the neuron, the membrane begins to depolarize from its resting potential towards a new voltage. This is accompanied by an strong current crossing the membrane, which reflects the injected current charging up the membrane capacitance. As the membrane capacitance charges up, this current decays because it is offset by the leak current, which flows in the opposite direction of the injected current. The leak current is driven by the difference between <span class="math inline">V_{m}</span> and <span class="math inline">E_{r}</span>. For the leak current to balance out the injected current, the membrane potential must reach:</p>
 <p><span class="math display"> V_{m} = \frac{I_{in}}{g_{leak}}+E_{r}</span></p>
 <p>Thus, a increasing <span class="math inline">g_{leak}</span> (or lowering membrane resistance, <span class="math inline">R_{m}</span>), lowers the change in membrane potential to an injected current. We can see this here:</p>
-<div id="ac1b60de" class="cell" data-execution_count="12">
+<div id="d8c02ea8" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pas_nrn_hig <span class="op">=</span> PassiveNeuron(v_rest<span class="op">=-</span><span class="dv">65</span>, c_m<span class="op">=</span><span class="dv">1</span>, r_m<span class="op">=</span><span class="dv">5</span>, radius<span class="op">=</span><span class="dv">30</span>) <span class="co"># we lowered the membrane resistance, r_m, which increased the membrane conductance, g_m</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pas_v_hig, pas_i_hig <span class="op">=</span> pas_nrn_hig.run(dur<span class="op">=</span>sim_dur, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span>in_step)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v_hig, pas_i_hig, in_step, title<span class="op">=</span><span class="st">'Passive neuron with higher $g_</span><span class="sc">{leak}</span><span class="st">$'</span>)</span>
@@ -846,7 +846,7 @@ g_leak for high g model: 23 nS</code></pre>
 </div>
 <p>Increasing <span class="math inline">g_{leak}</span> lowered the change in membrane potential from around 12 mV to 3 mV. Notice also that <span class="math inline">V_{m}</span> changes much faster now, because the membrane time constant is shorter.</p>
 <p>Increasing the amount of current we inject also increases the change in <span class="math inline">V_{m}</span>.</p>
-<div id="a4d55c20" class="cell" data-execution_count="13">
+<div id="6cf323a8" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>in_step <span class="op">=</span> step_current(t_pts, amp<span class="op">=</span><span class="fl">2e-10</span>) <span class="co"># increase input current by 2x</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pas_v, pas_i <span class="op">=</span> pas_nrn.run(dur<span class="op">=</span>sim_dur, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span>in_step)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plot_sim(t_pts, pas_v, pas_i, in_step, title<span class="op">=</span><span class="st">'Passive neuron with $2xI_</span><span class="sc">{in}</span><span class="st">$'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -859,7 +859,7 @@ g_leak for high g model: 23 nS</code></pre>
 </div>
 </div>
 <p>So far we have been giving positive current injections, which pushes the membrane towards positive values. If <span class="math inline">V_{m}</span> moves towards positive values, we say it is <em>depolarizing</em>. By contrast, if it is pushed towards negative values, it is <em>hyperpolarizing</em>. To hyperpolarize, we inject a negative current.</p>
-<div id="b71a41d2" class="cell" data-execution_count="14">
+<div id="d6331cf1" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># hyperpolarize the membrane potential</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>in_step <span class="op">=</span> step_current(t_pts, amp<span class="op">=-</span><span class="fl">1e-10</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>pas_v, pas_i <span class="op">=</span> pas_nrn.run(dur<span class="op">=</span>sim_dur, dt<span class="op">=</span>sim_dt, inp<span class="op">=</span>in_step)</span>
@@ -879,7 +879,7 @@ g_leak for high g model: 23 nS</code></pre>
 <p>Action potentials are large positive excursions of the membrane potential. They last less than 2 ms and propagate from the cell body down the axon, eventually triggering release of neurotransmitter at the synapse. They are the principal output of neurons and, for the most part, the only information about the state of a neuron that is conveyed to the rest of the network.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/MemAPGeneration.png" class="img-fluid figure-img"></p>
+<p><img src="./images/MemAPGeneration.png" class="img-fluid figure-img" alt="Expanded electrical circuit model of the neuron incorporating voltage-gated Na+ and K+ conductance branches alongside the passive leak conductance and capacitor, representing the Hodgkin-Huxley framework for action potential generation."></p>
 <figcaption>membrane with action potential</figcaption>
 </figure>
 </div>
@@ -905,7 +905,7 @@ A note about coding and neuronal firing
 <section id="creating-a-simplified-active-neuron-model" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-simplified-active-neuron-model">Creating a simplified active neuron model</h3>
 <p>When we include voltage-gated ion channels in a model neuron, it goes from being a passive model to an <em>active model</em>. We can build upon our existing <code>PassiveNeuron</code> class to create an <code>ActiveNeuron</code> class that generates an approximation of action potentials. To do this, we will add the voltage-dependent Na<sup>+</sup> and K<sup>+</sup> currents. This requires specifying the equilibrium potential for those ions, a <span class="math inline">V_{m}</span> threshold that initiates the action potential, and designing voltage- and time-dependent conductances to gate the active currents.</p>
-<div id="04e7a3ad" class="cell" data-execution_count="15">
+<div id="3235639a" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create active neuron class that inheriting from the passive neuron model</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ActiveNeuron(PassiveNeuron):</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, v_thresh<span class="op">=-</span><span class="dv">50</span>, ena<span class="op">=</span><span class="dv">50</span>, ek<span class="op">=-</span><span class="dv">90</span>, gna<span class="op">=</span><span class="fl">8e-8</span>, gk<span class="op">=</span><span class="fl">4e-8</span>, <span class="op">**</span>kwargs):</span>
@@ -941,7 +941,7 @@ A note about coding and neuronal firing
 <span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gen_ap()</span>
 <span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().update_currents(<span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b5396bb2" class="cell" data-execution_count="16">
+<div id="d3781d7f" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an active neuron and deliver a subthreshold and over threshold current</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>act_nrn <span class="op">=</span> ActiveNeuron()</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>sim_dur_act <span class="op">=</span> <span class="fl">0.5</span></span>
@@ -961,7 +961,7 @@ A note about coding and neuronal firing
 </div>
 <p>For this model we set the action potential threshold to -50 mV, and if we depolarize below that level we get the passive subthreshold depolarization that we saw in the previous model. If the current step is increased, then the membrane depolarizes passively until the threshold is reached, at which point an action potential is triggered. The action potential voltage approaches the equilibrium potential for Na<sup>+</sup>, and then quickly reverses towards the equilibrium potential of K<sup>+</sup>. The transmembrane currents associated with the action potential are substantially greater than those from the subthreshold depolarization. This is due to the very high conductance of the voltage-gated channels (Na<sup>+</sup> channel: 80 nS vs.&nbsp;<span class="math inline">g_{leak}</span>: 5 nS).</p>
 <p>More than one action potential is emitted during the 100 ms over-threshold current step. The time between action potentials depends on two factors. First is the refractory period, with a stronger or longer refractory period delaying the time to the next action potential. The other is the strength of the injected current, with a stronger current able to overcome the refractory effect and elicit another action potential sooner. We can explore the effect of current strength by delivering a series of current pulses to our model with increasing amplitudes.</p>
-<div id="6717e5fc" class="cell" data-execution_count="17">
+<div id="3f498c3d" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine how firing rate varies with curent injected</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>act_nrn <span class="op">=</span> ActiveNeuron()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>sim_dur_act <span class="op">=</span> <span class="fl">1.1</span></span>
@@ -994,7 +994,7 @@ A note about coding and neuronal firing
 <p>The ion channels that support synaptic transmission can be incorporated in our circuit model as just another branch, with an equilibrium potential reflecting their ionic permeability and a conductance that depends on number of open ion channels.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/MemBatResCapActSyn.png" class="img-fluid figure-img"></p>
+<p><img src="./images/MemBatResCapActSyn.png" class="img-fluid figure-img" alt="Complete electrical circuit model of the neuron membrane showing the passive leak branch, voltage-gated Na+ and K+ branches for action potential generation, and an additional synaptic conductance branch representing neurotransmitter-gated ion channels, all in parallel with the membrane capacitor."></p>
 <figcaption>Membrane with synapse</figcaption>
 </figure>
 </div>
@@ -1016,7 +1016,7 @@ Modeling a synaptic current
 </div>
 </div>
 <p>We can incorporate synapses into our active model to explore they affect the membrane potential and drive action potentials.</p>
-<div id="ccd6a42b" class="cell" data-execution_count="18">
+<div id="efced10d" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an active neuron with synapse class that inherits from the active neuron model</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SynapticNeuron(ActiveNeuron):</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, esyn<span class="op">=</span><span class="dv">50</span>, gsyn<span class="op">=</span><span class="fl">5e-9</span>, asyn<span class="op">=</span><span class="dv">900</span>, bsyn<span class="op">=</span><span class="dv">500</span>, tdur<span class="op">=</span><span class="dv">3</span>, <span class="op">**</span>kwargs):</span>
@@ -1052,7 +1052,7 @@ Modeling a synaptic current
 <span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gen_syn(prespk<span class="op">=</span>prespk)</span>
 <span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().update_currents(<span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c5761cde" class="cell" data-execution_count="19">
+<div id="e2859a2c" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MODIFY PLOTTING CODE HERE</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_sim_prespk(t, v, i, inp, spk, title<span class="op">=</span><span class="st">''</span>):</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1089,7 +1089,7 @@ Modeling a synaptic current
 <span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>    spk[np.<span class="bu">round</span>(spk_times <span class="op">/</span> sim_dt).astype(<span class="bu">int</span>)] <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="5a057a99" class="cell" data-execution_count="20">
+<div id="ac108c36" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examine response to a single presynaptic spike</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>syn_nrn <span class="op">=</span> SynapticNeuron()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">0.2</span></span>
@@ -1109,7 +1109,7 @@ Modeling a synaptic current
 </div>
 <p>Activating the synapse at 50 ms leads to a rapid negative current that charges the membrane capacitance and depolarizes <span class="math inline">V_{m}</span>. This is soon followed by a decay in the synaptic current, as the proportion of synaptic ion channels that were open shrinks. Within ~10 ms the synaptic current is finished, and replaced by a positive leak current, which is the membrane returning to its resting potential. The rate of this return to rest is determined by the membrane time constant.</p>
 <p>A single synaptic input is usually insufficient to drive an action potential. Typically multiple synaptic events have to be combined in close temporal proximity. We can explore this by delivering two presynaptic spikes and varying the time between them.</p>
-<div id="b43c3b5c" class="cell" data-execution_count="21">
+<div id="98634b32" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># delivery multiple presynaptic spikes with varying inter-spike intervals</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">1.1</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_pts <span class="op">=</span> syn_nrn.get_t_vec(dur<span class="op">=</span>sim_dur_syn, dt<span class="op">=</span>sim_dt)</span>
@@ -1129,7 +1129,7 @@ Modeling a synaptic current
 </div>
 </div>
 <p>The dashed line for the membrane potential plot is the action potential threshold. A single synaptic response is not sufficient to cross this threshold. If two are delivered, they must be close enough together, less than 25 ms between them, to trigger an action potential. Note also that making them closer does not increase the number of action potentials, only one is generated. To elicit multiple action potentials would require a sustained train of presynaptic spikes, such as below:</p>
-<div id="3ccc3d9f" class="cell" data-execution_count="22">
+<div id="55db2a45" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># deliver a train of presynaptic spikes at 40 hz</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>sim_dur_syn <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>t_pts <span class="op">=</span> syn_nrn.get_t_vec(dur<span class="op">=</span>sim_dur_syn, dt<span class="op">=</span>sim_dt)</span>
@@ -1157,7 +1157,7 @@ Modeling a synaptic current
 <p>As we discussed above, the currents flowing across the membrane are composed of ions. Each ion has a charge, and charge produces an electric field that exerts a force on other charges. The force required move a charge through an electric field can be picked up as a potential on an electrode. Since the neuronal lipid membrane is an insulator, our electrode can only pick up the movement of charges across the membrane. If positive charges flow into the neuron, that is a net negative of charge on the outside and a negative potential results. If positive charges flow out of the neuron, that is a net positive charge on the outside, causing a positive potential.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Rall1962.png" class="img-fluid figure-img" width="441"></p>
+<p><img src="images/Rall1962.png" class="img-fluid figure-img" alt="Spatial map from Rall 1962 of extracellular voltage values in millivolts measured at multiple positions around a cat motor neuron during action potential firing, illustrating how the extracellular potential varies with distance and direction from the soma." width="441"></p>
 <figcaption>Extracellular field of a cat motor neuron firing an action potential (numbers are in millivolts). From <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1366481/?page=1">Rall 1962</a>.</figcaption>
 </figure>
 </div>
@@ -1175,7 +1175,7 @@ Modeling a synaptic current
 <p>However, real neurons are not points; they have spatial extent. Currents can enter the neuron at one location (e.g., synaptic current at a dendrite) and leave at another (e.g., leak current at the soma). This spatial separation of inward and outward currents creates a <em>dipole</em>. To capture this, we need a <strong>two-compartment model</strong>: a somatic compartment and a dendritic compartment, connected by an axial resistance.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="./images/DipoleModel.png" class="img-fluid figure-img"></p>
+<p><img src="./images/DipoleModel.png" class="img-fluid figure-img" alt="Diagram of a two-compartment dipole neuron model with a somatic compartment containing active voltage-gated ion channels and a dendritic compartment receiving synaptic inputs, connected by an axial resistance, showing how spatially separated inward synaptic and outward return currents form an electrical dipole that generates a detectable extracellular field."></p>
 <figcaption>Dipole neuron model</figcaption>
 </figure>
 </div>
@@ -1183,7 +1183,7 @@ Modeling a synaptic current
 <p><span class="math display"> I_{axial} = \frac{V_{soma} - V_{dend}}{R_a} </span></p>
 <p>From the perspective of the extracellular space, the current leaving the soma is <span class="math inline">-I_{axial}</span> and the current entering the dendrite is <span class="math inline">+I_{axial}</span> (assuming no other injected currents). These two equal and opposite currents, separated by a distance, generate the extracellular field.</p>
 <p>We will implement this <code>DipoleNeuron</code> class inheriting from <code>SynapticNeuron</code>.</p>
-<div id="ef8d0b06" class="cell" data-execution_count="23">
+<div id="11d507c5" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DipoleNeuron(SynapticNeuron):</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, ra<span class="op">=</span><span class="fl">4e7</span>, rd<span class="op">=</span><span class="dv">25</span>, cd<span class="op">=</span><span class="dv">1</span>, len_d<span class="op">=</span><span class="dv">500</span>, diam_d<span class="op">=</span><span class="dv">2</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(<span class="op">**</span>kwargs)</span>
@@ -1272,7 +1272,7 @@ Modeling a synaptic current
 <span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="va">self</span>._vm<span class="op">*</span><span class="fl">1e3</span>, <span class="va">self</span>._vd<span class="op">*</span><span class="fl">1e3</span>], [<span class="va">self</span>._im<span class="op">*</span><span class="fl">1e9</span>, <span class="va">self</span>._id<span class="op">*</span><span class="fl">1e9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With this class defined, we can explore how a dipole neuron responds to multiple presynaptic spikes, and how the somatic and dendritic potentials and currents evolve over time.</p>
-<div id="34e20962" class="cell" data-execution_count="24">
+<div id="7f1b43d4" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dipole neuron</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dip_nrn <span class="op">=</span> DipoleNeuron(gsyn<span class="op">=</span><span class="fl">7e-9</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1319,7 +1319,7 @@ Modeling a synaptic current
 </div>
 <p>We can see that the somatic and dendritic potentials and currents differ, reflecting the spatial separation of inputs and active conductances. The synaptic inputs at the dendrite lead to inward currents there, while the soma generates action potentials with large transmembrane currents.</p>
 <p>Now that we have a dipole neuron model, we can create a class to simulate extracellular recordings from a sheet of these neurons.</p>
-<div id="2bcc3d9b" class="cell" data-execution_count="25">
+<div id="bddbd0a7" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtracellRec():</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># class for extracellular recording of a sheet of neurons using the DipoleNeuron class</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># user can set the radius of the sheet, the density of neurons, the mean time and standard deviation </span></span>
@@ -1420,12 +1420,12 @@ Modeling a synaptic current
 <section id="modeling-the-relationship-between-electrode-distance-and-recorded-potential" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-the-relationship-between-electrode-distance-and-recorded-potential">Modeling the relationship between electrode distance and recorded potential</h3>
 <p>Now that our simulation class is all setup, let’s use it. We will create a sheet of neurons with a radius of 2 cm and 1000 neurons per cm<sup>2</sup>. Using <code>**kwargs</code>, we are also able to pass arguments to <code>SynapticNeuron</code>, to configure its electrophysiological properties. We will take advantage of this by increasing the synaptic conductance, <code>gsyn</code>, so that action potentials are more reliably driven. The timing of the presynaptic spikes is set by a normal distribution, with the mean time of their emission at 100 ms, and a standard deviation of 5 ms. Since the inputs to our model neurons are generated randomly, and we want to replicate our results, we will fix the random seed of the model to ensure that the same output is generated each time we run it.</p>
-<div id="93f99095" class="cell" data-execution_count="26">
+<div id="b30a0a59" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> ExtracellRec(gsyn<span class="op">=</span><span class="fl">1.5e-8</span>)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>test.run(seed<span class="op">=</span><span class="dv">41</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>That is all it took to run our simulation. The more neurons we include, either by increasing the size of our sheet with the <code>radius</code> parameter or their packing with the <code>density</code> parameter, longer it takes to run. Once the simulation is finished running, we can calculate the extracellular potential for electrodes at different distances from the center of the model. We will choose a couple key values that are relevant to the recordings we will perform. An electrode on the scalp would be ~2 cm away from the surface of the brain. Intracranial surface electrodes that rest on the brain surface are picking up the activity of neurons with 0.5 mm. Lastly, depth electrodes that are inserted into the brain will detect neurons within tens of microns.</p>
-<div id="ec6314cb" class="cell" data-execution_count="27">
+<div id="e99e6d9b" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>elec_dists <span class="op">=</span> [<span class="dv">2</span>, <span class="fl">0.05</span>, <span class="fl">0.0005</span>] <span class="co"># cm</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>dist_labels <span class="op">=</span> [<span class="st">'2 cm'</span>, <span class="st">'0.5 mm'</span>, <span class="st">'5 um'</span>]</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1447,7 +1447,7 @@ Modeling a synaptic current
 </div>
 <p>Each of these distances reveal different features of neural activity. The most obvious difference is that the signals tend to get larger as the electrode is moved closer to the sheet of neurons. At 2 cm, slow potentials, both the slow global signal and the synaptic drive, are evident. Then, moving to 0.5 mm we start to pick up some weak local spiking, and still can reliably detect synaptic currents. Note that the weak spiking we see is concentrated at the peak of the synaptic drive, with numerous overlapping spikes filling in the negative trough made by the depolarizing synaptic current. If we push the electrode to within 10 um of a neuron, the action potential becomes the dominant part of the signal. While the synaptic current is still visible prior to the spike, it is masked by the action potential once that occurs.</p>
 <p>And going a little further, we can push the electrode right against the cell body of the neuron. This is <em>juxtacellular</em> recording, and it has a distinctive appearance where global and synaptic potentials are towered over by the robust currents generated by the action potential.</p>
-<div id="707eff38" class="cell" data-execution_count="28">
+<div id="70cb31a4" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>plt.plot(test._t<span class="op">*</span><span class="fl">1e3</span>, test.calc_extracell(h<span class="op">=</span><span class="fl">0.0001</span>)<span class="op">*</span><span class="fl">1e6</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'1 um'</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (ms)'</span>)</span>
